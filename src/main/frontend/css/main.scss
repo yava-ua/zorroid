@@ -1,0 +1,41 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: Arial, serif;
+  margin: 0;
+  height: 100%;
+  background-color: #fff;
+}
+
+.mainContainer {
+  width: 60%;
+  margin: 0 auto;
+  height: calc(100% - 184px);
+  background: #4a4a4a;
+}
+
+.container {
+  border-width: 1px;
+  margin: 0 10px 10px 10px;
+  border-color: #cccccc;
+  border-style: solid;
+  height: calc(100% - 10px);
+  position: relative;
+  display: block;
+}
+
+
+.subunit {
+  fill: #cdc;
+  &:hover {
+    fill: #ded;
+    cursor: pointer;
+  }
+}
+
+.link {
+  stroke-width: 1px;
+  stroke: black;
+}

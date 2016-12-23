@@ -12,7 +12,7 @@ public class StaticMapsApiRequestParams extends ApiRequestParams {
             throw new IllegalArgumentException("ApiRequestParams must contain 'center' or 'markers'");
         }
 
-        if (!params.containsKey("zoom") && !params.containsKey("zoom")) {
+        if (!params.containsKey("zoom") && !params.containsKey("markers")) {
             throw new IllegalArgumentException("ApiRequestParams must contain 'zoom' or 'markers'");
         }
 

@@ -1,5 +1,7 @@
 package com.yava.zorroid.google.api;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;

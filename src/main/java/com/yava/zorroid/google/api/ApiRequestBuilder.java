@@ -18,7 +18,7 @@ public class ApiRequestBuilder {
 
     public String build(ApiRequestParams apiRequestParams) {
         apiRequestParams.validate();
-        String result = baseUrl + staticMaps + "?" + apiRequestParams.get() + "key=" + key;
+        String result = baseUrl + staticMaps + "?" + apiRequestParams.get() + "k&ey=" + key;
         log.debug("ApiRequestParams url: {}", result);
         return result;
     }

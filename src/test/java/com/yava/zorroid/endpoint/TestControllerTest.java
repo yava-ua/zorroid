@@ -1,5 +1,6 @@
 package com.yava.zorroid.endpoint;
 
+import com.yava.zorroid.main.ZorroidConfig;
 import com.yava.zorroid.model.TestModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = ZorroidConfig.class)
 public class TestControllerTest {
 
     @Autowired
