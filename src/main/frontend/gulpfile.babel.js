@@ -37,12 +37,15 @@ gulp.task('build-scss', (callback) => {
 gulp.task('copy', () => {
     gulp.src(['index.html']).pipe(gulp.dest('build'));
     gulp.src(['json/*.json']).pipe(gulp.dest('build/json'));
+    gulp.src(['images/*.*']).pipe(gulp.dest('build/images'));
+
 });
 
 gulp.task('watch', ['build'], () => {
     livereload.listen();
     gulp.watch('./js/**/*.js', ['build']);
     gulp.watch('./css/**/*.scss', ['build']);
+    gulp.watch('./images/**/*.*', ['build']);
     gulp.watch('./*.html', ['build']);
 });
 

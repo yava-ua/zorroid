@@ -1,12 +1,18 @@
+$strokeWidth: 0.5;
+
 * {
   box-sizing: border-box;
 }
 
 html, body {
-  font-family: Arial, serif;
+  font-family: Calibri, sans-serif;
   margin: 0;
   height: 100%;
   background-color: #fff;
+}
+
+text {
+  user-select: none;
 }
 
 .mainContainer {
@@ -26,16 +32,76 @@ html, body {
   display: block;
 }
 
-
 .subunit {
   fill: #cdc;
+}
+
+.city {
+  stroke-width: 0;
+  fill: #aa4518;
+
   &:hover {
-    fill: #ded;
+    fill: #ff007f;
     cursor: pointer;
+  }
+
+  &.selected {
+    fill: #0dff9e;
   }
 }
 
-.link {
-  stroke-width: 1px;
+.city-label {
+  font-size: 8px;
+  font-weight: normal;
+  fill: #6d96ba;
+  fill-opacity: 0.6;
+}
+
+.city-voronoi {
+  stroke-width: $strokeWidth;
+  stroke: none;
+  fill: none;
+}
+
+.city-manual-links {
+  stroke-width: 0;
+  fill: #21aa18;
+
+  &:hover {
+    fill: #19914d;
+    cursor: pointer;
+  }
+
+  &.selected {
+    fill: #005725;
+  }
+}
+
+.city-manual-links-route {
+  stroke-width: $strokeWidth;
   stroke: black;
+
+}
+
+.link {
+  stroke-width: $strokeWidth;
+  stroke: black;
+  fill: none;
+  stroke-dasharray: 1, 5;
+  stroke-linejoin: round;
+}
+
+.link-label {
+  fill: black;
+  text-anchor: start;
+  stroke-width: 0;
+  font-size: 5px;
+}
+
+.city-all-links {
+  stroke-width: $strokeWidth;
+  stroke: black;
+  fill: none;
+  stroke-dasharray: 1, 5;
+  stroke-linejoin: round;
 }

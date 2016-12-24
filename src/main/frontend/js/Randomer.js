@@ -18,11 +18,8 @@ export default class Randomer {
                 arr.push(idx + 1);
             }
         });
-
-        console.log(arr);
         this.array = arr;
     }
-
 
     pRandom() {
         return this.array[random(1, 100) - 1];
