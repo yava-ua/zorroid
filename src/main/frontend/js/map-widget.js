@@ -10,19 +10,20 @@ function drawMainSvg(container, viewBoxWidth, viewBoxHeight) {
         //.attr("width", "100%")
         //.attr("height", "100%")
         .attr("viewBox", `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
+        .append("g");
 }
 
 export default function MapWidget(container) {
     let self = this;
     this.width = 800;
-    this.height = 450;
+    this.height = 400;
 
     this.cities = [];
     this.routes = [];
 
     this.projection = d3.geoAlbers()
         .center([49, 32])
-        .rotate([-2, 2, -27])
+        .rotate([-7.8, 4, -32])
         .parallels([42, 52])
         .translate([this.width / 2, this.height / 2])
         .scale(2800);
@@ -30,6 +31,14 @@ export default function MapWidget(container) {
     this.fromCity = null;
 
     this.svg = drawMainSvg(container, this.width, this.height);
+
+    function zoomed() {
+        self.svg.attr("transform", d3.event.transform);
+    }
+    let zoom = d3.zoom()
+        .scaleExtent([1, 10])
+        .on("zoom", zoomed);
+    this.svg.call(zoom);
 
     this.path = d3.geoPath()
         .projection(this.projection);
@@ -51,7 +60,8 @@ export default function MapWidget(container) {
 
         // draw map
         let mapOutlines = topojson.feature(ua, ua.objects.subunits);
-        self.svg.selectAll(".subunit")
+        self.svg.append("g").attr("id", "map-ukraine")
+            .selectAll(".subunit")
             .data(mapOutlines.features)
             .enter().append("path")
             .attr("class", d => `subunit ${d.id}`)
@@ -67,7 +77,16 @@ export default function MapWidget(container) {
             };
         });
 
-        let voronoi = d3.voronoi().size([self.width, self.height])(self.cities.map(d => self.projection(d.coordinates)));
+        let voronoi = d3.voronoi()
+            .x(d=> d.coordinates[0])
+            .y(d=> d.coordinates[1])
+            .size([self.width, self.height])(self.cities.map(d => {
+                return {
+                    coordinates: self.projection(d.coordinates),
+                    name: d.name
+                };
+            }));
+
         self.svg
             .append("g")
             .attr("id", "city-voronoi")
@@ -76,6 +95,16 @@ export default function MapWidget(container) {
             .enter().append("path")
             .attr("class", "city-voronoi")
             .attr("d", d=> `M${d.join("L")}Z`);
+        self.svg.append("g").attr("id", "city-all-links").selectAll(`.city-all-links`)
+            .data(voronoi.links())
+            .enter().append("line")
+            .attr("class", "city-all-links")
+            .attr("name", d=> `${d.source.name}-${d.target.name}`)
+            .attr("x1", d => d.source.coordinates[0])
+            .attr("y1", d => d.source.coordinates[1])
+            .attr("x2", d => d.target.coordinates[0])
+            .attr("y2", d => d.target.coordinates[1]);
+
         self.svg.append("g").attr("id", "city-labels")
             .selectAll(".city-label")
             .data(citiesOutline.features)
@@ -150,18 +179,6 @@ export default function MapWidget(container) {
 
         // generate routes
         // self.generateRoutes(citiesOutline);
-
-        console.log();
-
-        self.svg.append("g").attr("id", "city-all-links").selectAll(`.city-all-links`)
-            .data(voronoi.links())
-            .enter().append("line")
-            .attr("class", "city-all-links")
-            .attr("x1", d => d.source[0])
-            .attr("y1", d => d.source[1])
-            .attr("x2", d => d.target[0])
-            .attr("y2", d => d.target[1]);
-
         self.buildLink("Київ", "Полтава", 3);
     });
 }
