@@ -44,20 +44,9 @@ export default function MapWidget(container) {
     let zoom = d3.zoom()
         .scaleExtent([1, 10])
         .on("zoom", zoomed);
-    this.svg.call(zoom);
+    //this.svg.call(zoom);
 
-    this.path = d3.geoPath()
-        .projection(this.projection);
-
-
-    self.svg
-        .append("image")
-        .attr("x", 10)
-        .attr("y", 10)
-        .attr("width", 743 / 25)
-        .attr("height", 200 / 25)
-        .attr("xlink:href", "images/train.svg");
-
+    this.path = d3.geoPath().projection(this.projection);
 
     d3.json("json/ua.json", function (error, ua) {
         if (error) {
@@ -103,15 +92,15 @@ export default function MapWidget(container) {
             .attr("d", d=> `M${d.join("L")}Z`);
 
         // draw all veronoi links
-        self.svg.append("g").attr("id", "city-all-links").selectAll(`.city-all-links`)
-            .data(voronoi.links())
-            .enter().append("line")
-            .attr("class", "city-all-links")
-            .attr("name", d=> `${d.source.name}-${d.target.name}`)
-            .attr("x1", d => d.source.coordinates[0])
-            .attr("y1", d => d.source.coordinates[1])
-            .attr("x2", d => d.target.coordinates[0])
-            .attr("y2", d => d.target.coordinates[1]);
+        // self.svg.append("g").attr("id", "city-all-links").selectAll(`.city-all-links`)
+        //     .data(voronoi.links())
+        //     .enter().append("line")
+        //     .attr("class", "city-all-links")
+        //     .attr("name", d=> `${d.source.name}-${d.target.name}`)
+        //     .attr("x1", d => d.source.coordinates[0])
+        //     .attr("y1", d => d.source.coordinates[1])
+        //     .attr("x2", d => d.target.coordinates[0])
+        //     .attr("y2", d => d.target.coordinates[1]);
 
         self.svg.append("g").attr("id", "city-labels")
             .selectAll(".city-label")
@@ -142,53 +131,35 @@ export default function MapWidget(container) {
             });
 
 
-        self.svg.selectAll(".city")
-            .on("click", d => {
-                let node = d3.select(this);
+        function clickCity(d) {
+            let fromCity = self.fromCity;
+            let toCity = d.properties.name;
 
-                if (!self.fromCity) {
-                    self.fromCity = d.properties.name;
-                    self.svg.select(`.city[name=${self.fromCity}]`)
-                        .classed("selected", true);
-                    return;
-                }
+            if (!fromCity) {
+                self.fromCity = fromCity = toCity;
+                self.svg.select(`.city[name=${fromCity}]`).classed("selected", true);
+                return;
+            }
 
-                if (self.fromCity === d.properties.name) {
-
-                    self.svg.select(`.city[name=${self.fromCity}]`)
-                        .classed("selected", false);
-                    self.fromCity = null;
-                    return;
-                }
-
-
-                let linkLine = {
-                    type: "LineString",
-                    coordinates: [self.cities.find(e=> e.name === self.fromCity).coordinates, self.cities.find(e=> e.name === d.properties.name).coordinates]
-                };
-
-                self.routes.push({
-                    source: self.fromCity,
-                    target: d.properties.name,
-                    distance: d3.geoDistance(self.cities.find(e=> e.name === self.fromCity).coordinates, d.geometry.coordinates)
-                });
-
-                // draw link
-                self.svg
-                    .append("path")
-                    .datum(linkLine)
-                    .attr("d", self.path)
-                    .attr("class", "link");
-
-                self.svg.select(`.city[name=${self.fromCity}]`)
-                    .classed("selected", false);
+            if (fromCity === toCity) {
+                self.svg.select(`.city[name=${fromCity}]`).classed("selected", false);
                 self.fromCity = null;
-            });
+                return;
+            }
+
+            self.buildLink(fromCity, toCity, 2);
+
+            self.svg.select(`.city[name=${fromCity}]`).classed("selected", false);
+            self.fromCity = null;
+        }
+
+        self.svg.selectAll(".city")
+            .on("click", clickCity);
 
         // generate routes
         // self.generateRoutes(citiesOutline);
-        self.buildLink("Київ", "Полтава", 2);
-        self.buildLink("Вінниця", "Черкаси", 3);
+        //self.buildLink("Київ", "Полтава", 2);
+        //self.buildLink("Вінниця", "Черкаси", 3);
     });
 }
 
