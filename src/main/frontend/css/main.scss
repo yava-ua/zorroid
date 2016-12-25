@@ -1,5 +1,11 @@
 $strokeWidth: 0.5;
 
+
+@font-face {
+  font-family: "Yava Font";
+  src: url('../fonts/yava-trains-font.woff');
+}
+
 * {
   box-sizing: border-box;
 }
@@ -51,7 +57,7 @@ text {
   fill: none;
 }
 
-.city-manual-links {
+.city-links {
   stroke-width: 0;
   fill: #21aa18;
 
@@ -65,10 +71,16 @@ text {
   }
 }
 
-.city-manual-links-route {
+.city-route {
   stroke-width: $strokeWidth;
-  stroke: black;
+  stroke: none;
+}
 
+.city-route-text {
+  font-family: "Yava Font", sans-serif;
+  fill: red;
+  text-anchor: start;
+  font-size: 8px;
 }
 
 .link {

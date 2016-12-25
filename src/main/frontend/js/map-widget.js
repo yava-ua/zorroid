@@ -3,16 +3,6 @@ import * as topojson from "topojson";
 import Randomer from "./Randomer";
 
 
-function drawMainSvg(container, viewBoxWidth, viewBoxHeight) {
-    return d3.select(container)
-        .append("svg")
-        .attr("class", "svg")
-        //.attr("width", "100%")
-        //.attr("height", "100%")
-        .attr("viewBox", `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
-        .append("g");
-}
-
 export default function MapWidget(container) {
     let self = this;
     this.width = 800;
@@ -30,11 +20,27 @@ export default function MapWidget(container) {
 
     this.fromCity = null;
 
-    this.svg = drawMainSvg(container, this.width, this.height);
+    let svg = d3.select(container)
+        .append("svg")
+        .attr("class", "svg")
+        //.attr("width", "100%")
+        //.attr("height", "100%")
+        .attr("viewBox", `0 0 ${this.width} ${this.height}`);
+
+    svg.append("defs")
+        .append("style")
+        .attr("type", "text/css")
+        .html(`@font-face {
+                  font-family: "Yava Font";
+                  src: url('./fonts/yava-trains-font.woff');
+               }`);
+
+    this.svg = svg.append("g");
 
     function zoomed() {
         self.svg.attr("transform", d3.event.transform);
     }
+
     let zoom = d3.zoom()
         .scaleExtent([1, 10])
         .on("zoom", zoomed);
@@ -95,6 +101,8 @@ export default function MapWidget(container) {
             .enter().append("path")
             .attr("class", "city-voronoi")
             .attr("d", d=> `M${d.join("L")}Z`);
+
+        // draw all veronoi links
         self.svg.append("g").attr("id", "city-all-links").selectAll(`.city-all-links`)
             .data(voronoi.links())
             .enter().append("line")
@@ -179,7 +187,8 @@ export default function MapWidget(container) {
 
         // generate routes
         // self.generateRoutes(citiesOutline);
-        self.buildLink("Київ", "Полтава", 3);
+        self.buildLink("Київ", "Полтава", 2);
+        self.buildLink("Вінниця", "Черкаси", 3);
     });
 }
 
@@ -211,12 +220,20 @@ MapWidget.prototype.buildLink = function (nameA, nameB, count) {
         });
     }
 
-    let connectionsSelection = self.svg.selectAll(`.city-manual-links-route[name=${nameA}${nameB}]`)
+    let connectionsSelection = self.svg.selectAll(`.city-route[name=${nameA}${nameB}]`)
         .data(connections)
-        .enter().append("line")
-        .attr("class", "city-manual-links-route")
+        .enter().append("path")
+        .attr("id", (d, i) => `city-route-${nameA}-${nameB}-${i}`)
+        .attr("class", "city-route")
         .attr("name", `${nameA}${nameB}`);
 
+    self.svg.selectAll(`.city-route-text[name=${nameA}${nameB}]`)
+        .data(connections)
+        .enter().append("text")
+        .attr("class", "city-route-text")
+        .append("textPath")
+        .attr("xlink:href", (d, i) => `#city-route-${nameA}-${nameB}-${i}`)
+        .text("\ue800");
 
     let cityManualLinkSimulation = d3.forceSimulation()
         .force("link", d3.forceLink().id(d => d.index));
@@ -225,16 +242,19 @@ MapWidget.prototype.buildLink = function (nameA, nameB, count) {
         .nodes(connections)
         .on("tick", () => {
             connectionsSelection
-                .attr("x1", d => d.source === -1 ? self.projection(origin)[0] : connectionCoords[d.source][0])
-                .attr("y1", d => d.source === -1 ? self.projection(origin)[1] : connectionCoords[d.source][1])
-                .attr("x2", d => d.target === count ? self.projection(destination)[0] : connectionCoords[d.target][0])
-                .attr("y2", d => d.target === count ? self.projection(destination)[1] : connectionCoords[d.target][1]);
+            // d=> `M${d.join("L")}Z`
+                .attr("d", d => {
+                    let result = "M";
+                    result = result + (d.source === -1 ? self.projection(origin) : connectionCoords[d.source]) + "L";
+                    result = result + (d.target === count ? self.projection(destination) : connectionCoords[d.target]) + "Z";
+                    return result;
+                });
         });
 
-    self.svg.selectAll(`.city-manual-links[name=${nameA}${nameB}]`)
+    self.svg.selectAll(`.city-links[name=${nameA}${nameB}]`)
         .data(connectionCoords)
         .enter().append("circle")
-        .attr("class", "city-manual-links")
+        .attr("class", "city-links")
         .attr("name", `${nameA}${nameB}`)
         .attr("cx", d => d[0])
         .attr("cy", d => d[1])
@@ -252,13 +272,13 @@ MapWidget.prototype.buildLink = function (nameA, nameB, count) {
 
     function dragEnded(d) {
         d3.select(this).classed("selected", false);
+        cityManualLinkSimulation.alphaTarget(0);
     }
 
     function dragged(d) {
         d3.select(this)
             .attr("cx", d[0] = d3.event.x)
             .attr("cy", d[1] = d3.event.y);
-        cityManualLinkSimulation.alphaTarget(0);
     }
 };
 
