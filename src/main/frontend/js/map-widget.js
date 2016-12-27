@@ -2,14 +2,17 @@ import * as d3 from "d3";
 import * as topojson from "topojson";
 import Randomer from "./Randomer";
 
-
+const maxLinks = 5;
+let cityLinksRandomer = new Randomer([16, 23, 33, 23, 5]);
+let routeCounter = 0;
+let colors = ["green", "red", "blue", "black", "grey", "orange", "white"];
 export default function MapWidget(container) {
     let self = this;
     this.width = 800;
     this.height = 400;
 
     this.cities = [];
-    this.routes = [];
+    this.distanceScale = null;
 
     this.projection = d3.geoAlbers()
         .center([49, 32])
@@ -48,6 +51,35 @@ export default function MapWidget(container) {
 
     this.path = d3.geoPath().projection(this.projection);
 
+    d3.select("#menu-hide-links")
+        .on("click", () => {
+            d3.select("#menu-hide-links").text() === "Hide links"
+                ? d3.select("#menu-hide-links").text("Show links")
+                : d3.select("#menu-hide-links").text("Hide links");
+
+            d3.selectAll(".city-links").classed("hidden", function () {
+                return !d3.select(this).classed("hidden");
+            });
+            d3.selectAll(".city-route").classed("hidden", function () {
+                return !d3.select(this).classed("hidden");
+            });
+        });
+
+    d3.select("#menu-hide-voronoi")
+        .on("click", () => {
+            d3.select("#menu-hide-voronoi").text() === "Hide grid"
+                ? d3.select("#menu-hide-voronoi").text("Show grid")
+                : d3.select("#menu-hide-voronoi").text("Hide grid");
+
+            d3.selectAll(".city-all-links").classed("hidden", function (d) {
+                return !d3.select(this).classed("hidden");
+            });
+            d3.selectAll(".city-voronoi").classed("hidden", function (d) {
+                return !d3.select(this).classed("hidden");
+            });
+
+        });
+
     d3.json("json/ua.json", function (error, ua) {
         if (error) {
             return console.error(error);
@@ -72,7 +104,8 @@ export default function MapWidget(container) {
             };
         });
 
-        let voronoi = d3.voronoi()
+        self.setScales();
+        let cityVeronoi = d3.voronoi()
             .x(d=> d.coordinates[0])
             .y(d=> d.coordinates[1])
             .size([self.width, self.height])(self.cities.map(d => {
@@ -86,21 +119,21 @@ export default function MapWidget(container) {
             .append("g")
             .attr("id", "city-voronoi")
             .selectAll("path")
-            .data(voronoi.polygons())
+            .data(cityVeronoi.polygons())
             .enter().append("path")
             .attr("class", "city-voronoi")
             .attr("d", d=> `M${d.join("L")}Z`);
 
-        // draw all veronoi links
-        // self.svg.append("g").attr("id", "city-all-links").selectAll(`.city-all-links`)
-        //     .data(voronoi.links())
-        //     .enter().append("line")
-        //     .attr("class", "city-all-links")
-        //     .attr("name", d=> `${d.source.name}-${d.target.name}`)
-        //     .attr("x1", d => d.source.coordinates[0])
-        //     .attr("y1", d => d.source.coordinates[1])
-        //     .attr("x2", d => d.target.coordinates[0])
-        //     .attr("y2", d => d.target.coordinates[1]);
+        //draw all veronoi links
+        self.svg.append("g").attr("id", "city-all-links").selectAll(`.city-all-links`)
+            .data(cityVeronoi.links())
+            .enter().append("line")
+            .attr("class", "city-all-links")
+            .attr("name", d=> `${d.source.name}-${d.target.name}`)
+            .attr("x1", d => d.source.coordinates[0])
+            .attr("y1", d => d.source.coordinates[1])
+            .attr("x2", d => d.target.coordinates[0])
+            .attr("y2", d => d.target.coordinates[1]);
 
         self.svg.append("g").attr("id", "city-labels")
             .selectAll(".city-label")
@@ -133,40 +166,58 @@ export default function MapWidget(container) {
 
         function clickCity(d) {
             let fromCity = self.fromCity;
-            let toCity = d.properties.name;
+            let toCity = {
+                name: d.properties.name,
+                coordinates: d.geometry.coordinates,
+            };
 
             if (!fromCity) {
                 self.fromCity = fromCity = toCity;
-                self.svg.select(`.city[name=${fromCity}]`).classed("selected", true);
+                self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", true);
                 return;
             }
 
-            if (fromCity === toCity) {
-                self.svg.select(`.city[name=${fromCity}]`).classed("selected", false);
+            if (fromCity.name === toCity.name) {
+                self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", false);
                 self.fromCity = null;
                 return;
             }
 
-            self.buildLink(fromCity, toCity, 2);
+            let scale = self.distanceScale(d3.geoDistance(fromCity.coordinates, toCity.coordinates));
 
-            self.svg.select(`.city[name=${fromCity}]`).classed("selected", false);
+            self.buildLink(fromCity, toCity, scale, colors[cityLinksRandomer.random(0, colors.length)]);
+
+            self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", false);
             self.fromCity = null;
         }
 
         self.svg.selectAll(".city")
             .on("click", clickCity);
-
-        // generate routes
-        // self.generateRoutes(citiesOutline);
-        //self.buildLink("Київ", "Полтава", 2);
-        //self.buildLink("Вінниця", "Черкаси", 3);
     });
 }
 
-MapWidget.prototype.buildLink = function (nameA, nameB, count) {
+MapWidget.prototype.setScales = function () {
+    let cities = this.cities;
+
+    let fromReferenceA = cities.find(d => d.name === 'Севастополь');
+    let fromReferenceB = cities.find(d => d.name === 'Сімферополь');
+
+    let toReferenceA = cities.find(d => d.name === 'Мукачево');
+    let toReferenceB = cities.find(d => d.name === 'Ізмаїл');
+
+    let min = d3.geoDistance(fromReferenceA.coordinates, fromReferenceB.coordinates);
+    let max = d3.geoDistance(toReferenceA.coordinates, toReferenceB.coordinates);
+
+    this.distanceScale = d3.scaleQuantize()
+        .domain([min, max])
+        .range(d3.range(0, 8));
+
+};
+
+MapWidget.prototype.buildLink = function (cityA, cityB, count, color, connectionType) {
     let self = this;
-    let cityA = self.cities.find(e=> e.name === nameA);
-    let cityB = self.cities.find(e=> e.name === nameB);
+    let nameA = cityA.name;
+    let nameB = cityB.name;
 
     let origin = [cityA.coordinates[0], cityA.coordinates[1]];
     let destination = [cityB.coordinates[0], cityB.coordinates[1]];
@@ -175,36 +226,47 @@ MapWidget.prototype.buildLink = function (nameA, nameB, count) {
     let yD = (cityB.coordinates[1] - cityA.coordinates[1]) / (count + 1);
 
     let connectionCoords = [];
+    connectionCoords.push([origin[0], origin[1]]);
     for (let i = 0; i < count; i++) {
         let cCoords = [cityA.coordinates[0] + (i + 1) * xD, cityA.coordinates[1] + (i + 1) * yD];
         connectionCoords.push(cCoords);
     }
+    connectionCoords.push([destination[0], destination[1]]);
     connectionCoords = connectionCoords.map(d => self.projection(d));
 
     let connections = [];
     // -1 === origin
-    // count === destination
-    for (let i = 0; i <= count; i++) {
+    // 0 === virtual origin
+    // count+1 === virtual destination
+    // count+2 === destination
+
+    for (let i = 0; i <= count + 2; i++) {
         connections.push({
             source: i - 1,
             target: i
         });
     }
 
-    let connectionsSelection = self.svg.selectAll(`.city-route[name=${nameA}${nameB}]`)
+    let routeId = routeCounter++;
+
+    let routeGroup = self.svg.append("g")
+        .attr("name", `route-group-${routeId}-${nameA}-${nameB}`);
+
+    let connectionsSelection = routeGroup.selectAll(`.city-route[name=${nameA}${nameB}]`)
         .data(connections)
         .enter().append("path")
-        .attr("id", (d, i) => `city-route-${nameA}-${nameB}-${i}`)
+        .attr("id", (d, i) => `city-route-${routeId}-${nameA}-${nameB}-${i}`)
         .attr("class", "city-route")
         .attr("name", `${nameA}${nameB}`);
 
-    self.svg.selectAll(`.city-route-text[name=${nameA}${nameB}]`)
+    routeGroup.selectAll(`.city-route-text[name=${nameA}${nameB}]`)
         .data(connections)
         .enter().append("text")
-        .attr("class", "city-route-text")
         .append("textPath")
-        .attr("xlink:href", (d, i) => `#city-route-${nameA}-${nameB}-${i}`)
-        .text("\ue800");
+        .attr("class", "city-route-text")
+        .style("fill", color)
+        .attr("xlink:href", (d, i) => `#city-route-${routeId}-${nameA}-${nameB}-${i}`)
+        .text((d, i) => (i > 0 && i < connections.length - 1) ? "\ue800" : "");
 
     let cityManualLinkSimulation = d3.forceSimulation()
         .force("link", d3.forceLink().id(d => d.index));
@@ -217,12 +279,12 @@ MapWidget.prototype.buildLink = function (nameA, nameB, count) {
                 .attr("d", d => {
                     let result = "M";
                     result = result + (d.source === -1 ? self.projection(origin) : connectionCoords[d.source]) + "L";
-                    result = result + (d.target === count ? self.projection(destination) : connectionCoords[d.target]) + "Z";
+                    result = result + (d.target === count + 2 ? self.projection(destination) : connectionCoords[d.target]);
                     return result;
                 });
         });
 
-    self.svg.selectAll(`.city-links[name=${nameA}${nameB}]`)
+    routeGroup.selectAll(`.city-links[name=${nameA}${nameB}]`)
         .data(connectionCoords)
         .enter().append("circle")
         .attr("class", "city-links")
@@ -253,125 +315,3 @@ MapWidget.prototype.buildLink = function (nameA, nameB, count) {
     }
 };
 
-function drawTrain() {
-    /*
-     let nameA = "Київ";
-     let nameB = "Полтава";
-
-     let trainWidth = 743 / 22;
-     let trainHeight = 200 / 22;
-
-
-     let nodeA = self.svg.select(`.city[name=${nameA}]`);
-     let nodeB = self.svg.select(`.city[name=${nameB}]`);
-
-     let cityA = self.cities.find(e=> e.name === nameA);
-     let cityB = self.cities.find(e=> e.name === nameB);
-
-     let count = 3;
-
-     let xD = (cityB.coordinates[0] - cityA.coordinates[0]) / (count + 1);
-     let yD = (cityB.coordinates[1] - cityA.coordinates[1]) / (count + 1);
-
-     let coords = [];
-     for (let i = 0; i< count; i++) {
-     coords.push([cityA.coordinates[0] + (i + 1) * xD, cityA.coordinates[1] + (i + 1) * yD]);
-     }
-     coords = coords.map(d => self.projection(d));
-
-
-
-     var angleDeg = Math.atan2(cityA.coordinates[1] - cityB.coordinates[1], cityA.coordinates[0] - cityB.coordinates[0]) * 180 / Math.PI;
-
-     self.svg.selectAll(".route-trains")
-     .data(coords)
-     .enter().append("image")
-     .attr("class", "route-trains")
-     .attr("x", d => d[0] -trainWidth/2)
-     .attr("y", d => d[1] - trainHeight /2)
-     .attr("transform", d=> `rotate(${180-angleDeg}, ${d[0]}, ${d[1]})`)
-     .attr("width", trainWidth)
-     .attr("height", trainHeight)
-     .attr("xlink:href", "images/train.svg");
-     */
-}
-
-let lengthRandomer = new Randomer([5, 25, 25, 10, 10, 10, 10, 5]);
-const maxLinks = 5;
-let cityLinksRandomer = new Randomer([16, 23, 33, 23, 5]);
-
-MapWidget.prototype.generateRoutes = function (citiesOutline) {
-    let cityLinks = {
-        /*
-         maxNumberOfLinks: Number
-         linkedTo: array[cityLink]
-         */
-    };
-
-    // generate max number of routes per city
-    this.cities.forEach(d=> {
-        cityLinks[d.name] = {
-            maxNumberOfLinks: cityLinksRandomer.pRandom(),
-            linkedTo: []
-        };
-    });
-
-    // generate routes
-    this.cities.forEach((d, idx) => {
-        let currentCityLink = cityLinks[d.name];
-
-        if (currentCityLink.linkedTo.length >= currentCityLink.maxNumberOfLinks) {
-            // already generated maximum routes
-            return;
-        }
-        let to = getClosestNotLinkedCity(d, this.cities, cityLinks);
-        this.routes.push({
-            source: d.name,
-            target: to.name,
-            distance: d3.geoDistance(d.coordinates, to.coordinates)
-        });
-
-        currentCityLink.linkedTo.push(to.name);
-        cityLinks[to.name].linkedTo.push(d.name);
-    });
-
-    // draw routes
-    let linkLines = this.routes.map((d, i) => {
-        return {
-            type: "LineString",
-            coordinates: [this.cities.find(e=> e.name === d.source).coordinates, this.cities.find(e=> e.name === d.target).coordinates],
-            id: `link-line-${i}`
-        };
-    });
-    let link = this.svg.selectAll(".link")
-        .data(linkLines)
-        .enter().append("path")
-        .attr("d", this.path)
-        .attr("id", d => d.id)
-        .attr("class", "link");
-
-};
-
-function getClosestNotLinkedCity(current, allCities, links) {
-    let filtered = allCities
-        .filter(d => current.name !== d.name)
-        .filter(d => !links[current.name].linkedTo.includes(d.name))
-        .filter(d => !links[d.name].linkedTo.includes(current.name));
-
-    let closest = getClosestCities(current, filtered);
-    return closest[closest.length - 1];
-}
-function getRandomNotLinkedCity(excludes, allCities /* excludes - index in array allCities */) {
-    let idx = lengthRandomer.random(0, allCities.length - 1);
-    if (excludes.includes(idx)) {
-        excludes.push(idx);
-        return getRandomNotLinkedCity(excludes);
-    }
-    return allCities[idx];
-}
-function getClosestCities(current, allCities) {
-    let arr = allCities.slice(0);
-    arr.sort((a, b) => d3.geoDistance(current.coordinates, b.coordinates) - d3.geoDistance(current.coordinates, a.coordinates));
-
-    return arr;
-}

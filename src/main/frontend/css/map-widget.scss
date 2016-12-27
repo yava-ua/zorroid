@@ -1,0 +1,106 @@
+$strokeWidth: 0.5;
+
+@font-face {
+  font-family: "Yava Font";
+  src: url('../fonts/yava-trains-font.woff');
+}
+
+text {
+  user-select: none;
+}
+
+.subunit {
+  fill: #cdc;
+}
+
+.city {
+  stroke-width: 0;
+  fill: #aa4518;
+
+  &:hover {
+    fill: #ff007f;
+    cursor: pointer;
+  }
+
+  &.selected {
+    fill: #0dff9e;
+  }
+}
+
+.city-label {
+  font-size: 8px;
+  font-weight: normal;
+  text-anchor: middle;
+  fill: #6d96ba;
+  fill-opacity: 0.6;
+}
+
+.city-voronoi {
+  stroke-width: $strokeWidth;
+  stroke: blue;
+  fill: none;
+
+  &.hidden {
+    stroke: none;
+  }
+}
+
+.city-links {
+  stroke-width: 0;
+  fill: #21aa18;
+
+  &:hover {
+    fill: #19914d;
+    cursor: pointer;
+  }
+
+  &.selected {
+    fill: #005725;
+  }
+
+  &.hidden {
+    fill: none;
+  }
+}
+
+.city-route {
+  stroke-width: $strokeWidth;
+  stroke: blue;
+  &.hidden {
+    stroke: none;
+  }
+}
+
+.city-route-text {
+  font-family: "Yava Font", sans-serif;
+  fill: red;
+  text-anchor: start;
+  font-size: 7px;
+}
+
+.link {
+  stroke-width: $strokeWidth;
+  stroke: black;
+  fill: none;
+  stroke-dasharray: 1, 5;
+  stroke-linejoin: round;
+}
+
+.link-label {
+  fill: black;
+  text-anchor: start;
+  stroke-width: 0;
+  font-size: 5px;
+}
+
+.city-all-links {
+  stroke-width: $strokeWidth;
+  stroke: black;
+  fill: none;
+  stroke-dasharray: 1, 5;
+  stroke-linejoin: round;
+
+  &.hidden {
+    stroke: none;
+  }
+}

@@ -1,11 +1,3 @@
-$strokeWidth: 0.5;
-
-
-@font-face {
-  font-family: "Yava Font";
-  src: url('../fonts/yava-trains-font.woff');
-}
-
 * {
   box-sizing: border-box;
 }
@@ -14,94 +6,71 @@ html, body {
   font-family: Calibri, sans-serif;
   margin: 0;
   height: 100%;
-  background-color: #fff;
+  background: #ccd1b3;
 }
 
-text {
-  user-select: none;
+.menu-button {
+  top: 5px;
+  left: 5px;
+  position: absolute;
+  font-size: 30px;
+  cursor: pointer;
 }
 
 .container {
-  background: #ccd1b3;
   display: block;
 }
 
-.subunit {
-  fill: #cdc;
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
 }
 
-.city {
-  stroke-width: 0;
-  fill: #aa4518;
+/* The navigation menu links */
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s
+}
 
-  &:hover {
-    fill: #ff007f;
-    cursor: pointer;
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover, .offcanvas a:focus {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#container {
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
   }
-
-  &.selected {
-    fill: #0dff9e;
+  .sidenav a {
+    font-size: 18px;
   }
-}
-
-.city-label {
-  font-size: 8px;
-  font-weight: normal;
-  fill: #6d96ba;
-  fill-opacity: 0.6;
-}
-
-.city-voronoi {
-  stroke-width: $strokeWidth;
-  stroke: none;
-  fill: none;
-}
-
-.city-links {
-  stroke-width: 0;
-  fill: #21aa18;
-
-  &:hover {
-    fill: #19914d;
-    cursor: pointer;
-  }
-
-  &.selected {
-    fill: #005725;
-  }
-}
-
-.city-route {
-  stroke-width: $strokeWidth;
-  stroke: none;
-}
-
-.city-route-text {
-  font-family: "Yava Font", sans-serif;
-  fill: red;
-  text-anchor: start;
-  font-size: 8px;
-}
-
-.link {
-  stroke-width: $strokeWidth;
-  stroke: black;
-  fill: none;
-  stroke-dasharray: 1, 5;
-  stroke-linejoin: round;
-}
-
-.link-label {
-  fill: black;
-  text-anchor: start;
-  stroke-width: 0;
-  font-size: 5px;
-}
-
-.city-all-links {
-  stroke-width: $strokeWidth;
-  stroke: black;
-  fill: none;
-  stroke-dasharray: 1, 5;
-  stroke-linejoin: round;
 }
