@@ -28,4 +28,22 @@ export default class Randomer {
     random(min, max) {
         return random(min, max)
     }
+
+    randomUniqueRange(min, max, quantity) {
+        if (quantity > max - min) {
+            throw new Error("range too low");
+        }
+        let excludes = [];
+        let result = [];
+        let left = quantity;
+        while (left > 0) {
+            let current = random(min, max);
+            if (!excludes.includes(current)) {
+                result.push(current);
+                excludes.push(current);
+                left--;
+            }
+        }
+        return result;
+    }
 }

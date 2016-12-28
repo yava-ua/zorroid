@@ -13,6 +13,7 @@ export default function MapWidget(container) {
 
     this.cities = [];
     this.distanceScale = null;
+    this.cityVeronoi = null;
 
     this.projection = d3.geoAlbers()
         .center([49, 32])
@@ -80,6 +81,11 @@ export default function MapWidget(container) {
 
         });
 
+    d3.select("#menu-generate-routes")
+        .on("click", () => {
+            self.generateRandomRoutes();
+        });
+
     d3.json("json/ua.json", function (error, ua) {
         if (error) {
             return console.error(error);
@@ -105,7 +111,7 @@ export default function MapWidget(container) {
         });
 
         self.setScales();
-        let cityVeronoi = d3.voronoi()
+        self.cityVeronoi = d3.voronoi()
             .x(d=> d.coordinates[0])
             .y(d=> d.coordinates[1])
             .size([self.width, self.height])(self.cities.map(d => {
@@ -119,14 +125,14 @@ export default function MapWidget(container) {
             .append("g")
             .attr("id", "city-voronoi")
             .selectAll("path")
-            .data(cityVeronoi.polygons())
+            .data(self.cityVeronoi.polygons())
             .enter().append("path")
             .attr("class", "city-voronoi")
             .attr("d", d=> `M${d.join("L")}Z`);
 
         //draw all veronoi links
         self.svg.append("g").attr("id", "city-all-links").selectAll(`.city-all-links`)
-            .data(cityVeronoi.links())
+            .data(self.cityVeronoi.links())
             .enter().append("line")
             .attr("class", "city-all-links")
             .attr("name", d=> `${d.source.name}-${d.target.name}`)
@@ -184,7 +190,6 @@ export default function MapWidget(container) {
             }
 
             let scale = self.distanceScale(d3.geoDistance(fromCity.coordinates, toCity.coordinates));
-
             self.buildLink(fromCity, toCity, scale, colors[cityLinksRandomer.random(0, colors.length)]);
 
             self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", false);
@@ -284,14 +289,19 @@ MapWidget.prototype.buildLink = function (cityA, cityB, count, color, connection
                 });
         });
 
-    routeGroup.selectAll(`.city-links[name=${nameA}${nameB}]`)
-        .data(connectionCoords)
+    let connectionPoints = routeGroup.selectAll(`.city-links[name=${nameA}${nameB}]`)
+        .data(connectionCoords);
+
+    connectionPoints
         .enter().append("circle")
         .attr("class", "city-links")
         .attr("name", `${nameA}${nameB}`)
         .attr("cx", d => d[0])
         .attr("cy", d => d[1])
         .attr("r", d => 3)
+        .on("click", function (d, i) {
+            d3.select(this).remove();
+        })
         .call(d3.drag()
             .on("start", dragStarted)
             .on("drag", dragged)
@@ -315,3 +325,64 @@ MapWidget.prototype.buildLink = function (cityA, cityB, count, color, connection
     }
 };
 
+
+MapWidget.prototype.generateRandomRoutes = function () {
+    let self = this;
+
+    // sort cities from left to right, top to bottom
+    let cities = this.cities.slice(0).sort((a, b) => {
+        let xSort = a.coordinates[0] - b.coordinates[0];
+        return xSort ? xSort : a.coordinates[1] - b.coordinates[1];
+    });
+    let allLinks = this.cityVeronoi.links();
+
+
+    let filteredLinks = cities.map(currentCity => {
+        let destinations = [].concat.apply([], allLinks.filter(l => l.source.name === currentCity.name || l.target.name === currentCity.name)
+            .map(l => {
+                return [l.source, l.target];
+            })).filter(l => l.name !== currentCity.name)
+            .map(l => {
+                return {
+                    name: l.name,
+                    // back to not projected coords
+                    coordinates: self.cities.find(d => d.name === l.name).coordinates
+                }
+            });
+
+        destinations = destinations.filter(d => {
+            let equal = d.coordinates[0] === currentCity.coordinates[0];
+            return equal ? d.coordinates[1] > currentCity.coordinates[1] : d.coordinates[0] > currentCity.coordinates[0];
+        });
+
+        return {
+            source: currentCity,
+            targets: destinations
+        };
+    });
+
+    //remove duplicates
+    filteredLinks.forEach((link, i) => {
+        let slice = filteredLinks.slice(0, i);
+        link.targets.forEach((target, idx, array) => {
+            let found = slice.find(d => d.source.name === target.name);
+            if (found) {
+                array.splice(idx, 1);
+            }
+        });
+    });
+
+    filteredLinks.forEach(link => {
+        let from = link.source;
+        let quantity = link.targets.length;
+        let linkColorIdxs = cityLinksRandomer.randomUniqueRange(0, colors.length - 1, quantity);
+
+        link.targets.forEach((destination, idx) => {
+            let to = destination;
+            let scale = self.distanceScale(d3.geoDistance(from.coordinates, to.coordinates));
+            self.buildLink(from, to, scale, colors[linkColorIdxs[idx]]);
+        })
+    });
+
+
+};

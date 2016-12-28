@@ -1,3 +1,5 @@
 .idea/
 .mvn/
-
+pathfinder.iml
+target/
+src/main/frontend/build/
