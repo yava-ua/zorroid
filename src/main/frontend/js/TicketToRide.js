@@ -1,14 +1,16 @@
 import * as d3 from "d3";
 import * as topojson from "topojson";
 import Randomer from "./Randomer";
+import Exporter from 'd3-save-svg';
 
 const maxLinks = 5;
 let cityLinksRandomer = new Randomer([16, 23, 33, 23, 5]);
 let routeCounter = 0;
-let colors = ["green", "red", "blue", "black", "grey", "orange", "white"];
-export default function MapWidget(container) {
+let colors = ["firebrick", "whitesmoke", "olivedrab", "teal", "darkslategrey", "gold", "mediumpurple"];
+
+export default function TicketToRide(container) {
     let self = this;
-    this.width = 800;
+    this.width = 620;
     this.height = 400;
 
     this.cities = [];
@@ -20,13 +22,13 @@ export default function MapWidget(container) {
         .rotate([-7.8, 4, -32])
         .parallels([42, 52])
         .translate([this.width / 2, this.height / 2])
-        .scale(2800);
+        .scale(2780);
 
     this.fromCity = null;
 
     let svg = d3.select(container)
         .append("svg")
-        .attr("class", "svg")
+        .attr("id", "ticket-to-ride")
         //.attr("width", "100%")
         //.attr("height", "100%")
         .attr("viewBox", `0 0 ${this.width} ${this.height}`);
@@ -39,6 +41,20 @@ export default function MapWidget(container) {
                   src: url('./fonts/yava-trains-font.woff');
                }`);
 
+    svg.append("defs")
+        .append("pattern")
+        .attr("id", "background")
+        .attr("patternUnits", "userSpaceOnUse")
+        .attr("width", this.width)
+        .attr("height", this.height)
+        .append("image")
+        .attr("xlink:href", "./images/bg-04.jpg")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", this.width)
+        //.attr("height", this.height);
+
+
     this.svg = svg.append("g");
 
     function zoomed() {
@@ -48,43 +64,54 @@ export default function MapWidget(container) {
     let zoom = d3.zoom()
         .scaleExtent([1, 10])
         .on("zoom", zoomed);
-    //this.svg.call(zoom);
+    this.svg.call(zoom);
 
     this.path = d3.geoPath().projection(this.projection);
 
     d3.select("#menu-hide-links")
-        .on("click", () => {
-            d3.select("#menu-hide-links").text() === "Hide links"
-                ? d3.select("#menu-hide-links").text("Show links")
-                : d3.select("#menu-hide-links").text("Hide links");
-
-            d3.selectAll(".city-links").classed("hidden", function () {
-                return !d3.select(this).classed("hidden");
-            });
-            d3.selectAll(".city-route").classed("hidden", function () {
-                return !d3.select(this).classed("hidden");
-            });
+        .on("click.map", () => {
+            if (d3.select("#menu-hide-links").text() === "Hide links") {
+                d3.select("#menu-hide-links").text("Show links");
+                d3.selectAll(".city-links").classed("hidden", true);
+                d3.selectAll(".city-route").classed("hidden", true);
+            } else {
+                d3.select("#menu-hide-links").text("Hide links");
+                d3.selectAll(".city-links").classed("hidden", false);
+                d3.selectAll(".city-route").classed("hidden", false);
+            }
         });
 
     d3.select("#menu-hide-voronoi")
-        .on("click", () => {
-            d3.select("#menu-hide-voronoi").text() === "Hide grid"
-                ? d3.select("#menu-hide-voronoi").text("Show grid")
-                : d3.select("#menu-hide-voronoi").text("Hide grid");
-
-            d3.selectAll(".city-all-links").classed("hidden", function (d) {
-                return !d3.select(this).classed("hidden");
-            });
-            d3.selectAll(".city-voronoi").classed("hidden", function (d) {
-                return !d3.select(this).classed("hidden");
-            });
+        .on("click.map", () => {
+            if (d3.select("#menu-hide-voronoi").text() === "Hide grid") {
+                d3.select("#menu-hide-voronoi").text("Show grid");
+                d3.selectAll(".city-all-links").classed("hidden", true);
+                d3.selectAll(".city-voronoi").classed("hidden", true);
+            } else {
+                d3.select("#menu-hide-voronoi").text("Hide grid");
+                d3.selectAll(".city-all-links").classed("hidden", false);
+                d3.selectAll(".city-voronoi").classed("hidden", false);
+            }
 
         });
 
     d3.select("#menu-generate-routes")
-        .on("click", () => {
+        .on("click.map", () => {
             self.generateRandomRoutes();
         });
+
+    d3.select("#export").on("click", () => {
+        let cfg = {
+            filename: 'TicketToRide',
+        };
+        Exporter.embedRasterImages(d3.select('#ticket-to-ride').node());
+
+        setTimeout(() => {
+            //let rastering finish
+            Exporter.save(d3.select('#ticket-to-ride').node(), cfg);
+        }, 2000);
+
+    });
 
     d3.json("json/ua.json", function (error, ua) {
         if (error) {
@@ -98,7 +125,8 @@ export default function MapWidget(container) {
             .data(mapOutlines.features)
             .enter().append("path")
             .attr("class", d => `subunit ${d.id}`)
-            .attr("d", self.path);
+            .attr("d", self.path)
+            .style("fill", "url(#background)");
 
 
         //draw cities and city labels
@@ -127,14 +155,14 @@ export default function MapWidget(container) {
             .selectAll("path")
             .data(self.cityVeronoi.polygons())
             .enter().append("path")
-            .attr("class", "city-voronoi")
+            .attr("class", "city-voronoi hidden")
             .attr("d", d=> `M${d.join("L")}Z`);
 
         //draw all veronoi links
         self.svg.append("g").attr("id", "city-all-links").selectAll(`.city-all-links`)
             .data(self.cityVeronoi.links())
             .enter().append("line")
-            .attr("class", "city-all-links")
+            .attr("class", "city-all-links hidden")
             .attr("name", d=> `${d.source.name}-${d.target.name}`)
             .attr("x1", d => d.source.coordinates[0])
             .attr("y1", d => d.source.coordinates[1])
@@ -201,7 +229,7 @@ export default function MapWidget(container) {
     });
 }
 
-MapWidget.prototype.setScales = function () {
+TicketToRide.prototype.setScales = function () {
     let cities = this.cities;
 
     let fromReferenceA = cities.find(d => d.name === 'Севастополь');
@@ -219,7 +247,7 @@ MapWidget.prototype.setScales = function () {
 
 };
 
-MapWidget.prototype.buildLink = function (cityA, cityB, count, color, connectionType) {
+TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connectionType) {
     let self = this;
     let nameA = cityA.name;
     let nameB = cityB.name;
@@ -326,7 +354,7 @@ MapWidget.prototype.buildLink = function (cityA, cityB, count, color, connection
 };
 
 
-MapWidget.prototype.generateRandomRoutes = function () {
+TicketToRide.prototype.generateRandomRoutes = function () {
     let self = this;
 
     // sort cities from left to right, top to bottom
@@ -375,12 +403,16 @@ MapWidget.prototype.generateRandomRoutes = function () {
     filteredLinks.forEach(link => {
         let from = link.source;
         let quantity = link.targets.length;
-        let linkColorIdxs = cityLinksRandomer.randomUniqueRange(0, colors.length - 1, quantity);
+
+        let linkColorIdxs = cityLinksRandomer.randomUniqueRange(0, colors.length, Math.max(quantity, maxLinks));
+        let randomRoutesIdxs = cityLinksRandomer.randomUniqueRange(0, link.targets.length, link.targets.length);
 
         link.targets.forEach((destination, idx) => {
-            let to = destination;
-            let scale = self.distanceScale(d3.geoDistance(from.coordinates, to.coordinates));
-            self.buildLink(from, to, scale, colors[linkColorIdxs[idx]]);
+            if (randomRoutesIdxs.includes(idx)) {
+                let to = destination;
+                let scale = self.distanceScale(d3.geoDistance(from.coordinates, to.coordinates));
+                self.buildLink(from, to, scale, colors[linkColorIdxs[idx]]);
+            }
         })
     });
 

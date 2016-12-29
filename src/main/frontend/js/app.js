@@ -1,3 +1,4 @@
-import MapWidget from "./map-widget";
+import TicketToRide from "./TicketToRide";
+import './Navigation';
 
-new MapWidget("#container");
+new TicketToRide("#container");

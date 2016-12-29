@@ -8,41 +8,20 @@
 
 <body>
 
-<span class="menu-button" onclick="openNav();">&#9776; Menu</span>
+<span id="menu-open" class="menu-button">&#9776; Menu</span>
 
 <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="window.closeNav();">&times;</a>
-    <a href="javascript:void(0)" id="menu-hide-links" onclick="window.closeNav();">Hide links</a>
-    <a href="javascript:void(0)" id="menu-hide-voronoi" onclick="window.closeNav();">Hide grid</a>
-    <a href="javascript:void(0)" id="menu-minimise-dots" onclick="window.closeNav();">Minimize dots</a>
-    <a href="javascript:void(0)" id="menu-generate-routes" onclick="window.closeNav();">Generate routes</a>
-    <a href="javascript:void(0)" id="menu-reset" onclick="window.closeNav();">Reset</a>
-    <a href="javascript:void(0)" id="export" onclick="window.closeNav();">Export</a>
+    <a id="menu-close" class="closebtn">&times;</a>
+    <a id="menu-hide-links">Hide links</a>
+    <a id="menu-hide-voronoi">Show grid</a>
+    <a id="menu-minimise-dots">Minimize dots</a>
+    <a id="menu-generate-routes">Generate routes</a>
+    <a id="menu-reset">Reset</a>
+    <a id="export">Export</a>
 </div>
 
-
-<div id="container" class="container">
-</div>
+<div id="container" class="container"></div>
 
 <script type="text/javascript" src="./js/app.js"></script>
-
-<script type="text/javascript">
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
-        document.getElementById("container").style.marginLeft = "250px";
-        document.getElementById("container").style.backgroundColor = "#000";
-        document.getElementById("container").style.opacity = "0.7";
-        document.getElementById("container").style.width = "calc(100% - 250px)";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-        document.getElementById("container").style.marginLeft = "0";
-        document.getElementById("container").style.backgroundColor = "#ccd1b3";
-        document.getElementById("container").style.opacity = "1";
-        document.getElementById("container").style.width = "100%";
-
-    }
-</script>
 </body>
 </html>

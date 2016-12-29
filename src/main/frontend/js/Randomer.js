@@ -44,6 +44,7 @@ export default class Randomer {
                 left--;
             }
         }
+        console.log(`Range: [${min}, ${max}] Quantity: ${quantity}. Result: ${result}`);
         return result;
     }
 }

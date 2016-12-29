@@ -5,12 +5,17 @@ $strokeWidth: 0.5;
   src: url('../fonts/yava-trains-font.woff');
 }
 
+svg {
+  height: 100%;
+}
+
 text {
   user-select: none;
 }
 
 .subunit {
-  fill: #cdc;
+  fill: transperent;
+  fill-opacity: 0.6;
 }
 
 .city {
@@ -31,12 +36,13 @@ text {
   font-size: 8px;
   font-weight: normal;
   text-anchor: middle;
-  fill: #6d96ba;
+  fill: white;
   fill-opacity: 0.6;
 }
 
 .city-voronoi {
-  stroke-width: $strokeWidth;
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1px;
   stroke: blue;
   fill: none;
 
@@ -65,7 +71,9 @@ text {
 
 .city-route {
   stroke-width: $strokeWidth;
-  stroke: blue;
+  stroke: rgba(110, 110, 110, 0.6);
+  stroke-dasharray: 1, 1;
+  fill: none;
   &.hidden {
     stroke: none;
   }
