@@ -52,7 +52,7 @@ export default function TicketToRide(container) {
         .attr("x", 0)
         .attr("y", 0)
         .attr("width", this.width)
-        //.attr("height", this.height);
+        .attr("height", this.height);
 
 
     this.svg = svg.append("g");
@@ -363,7 +363,6 @@ TicketToRide.prototype.generateRandomRoutes = function () {
         return xSort ? xSort : a.coordinates[1] - b.coordinates[1];
     });
     let allLinks = this.cityVeronoi.links();
-
 
     let filteredLinks = cities.map(currentCity => {
         let destinations = [].concat.apply([], allLinks.filter(l => l.source.name === currentCity.name || l.target.name === currentCity.name)
