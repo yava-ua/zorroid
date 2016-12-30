@@ -7,6 +7,14 @@ const maxLinks = 5;
 let cityLinksRandomer = new Randomer([16, 23, 33, 23, 5]);
 let routeCounter = 0;
 let colors = ["firebrick", "whitesmoke", "olivedrab", "teal", "darkslategrey", "gold", "mediumpurple"];
+const train = {
+    width: 26,
+    height: 8
+};
+
+function angleRad(p1, p2) {
+    return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+}
 
 export default function TicketToRide(container) {
     let self = this;
@@ -247,6 +255,147 @@ TicketToRide.prototype.setScales = function () {
 
 };
 
+let ids = {
+    index: 0,
+};
+
+TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, origin, destination, connectionCoords, connections, routeId) {
+    let self = this;
+    let nameA = cityA.name;
+    let nameB = cityB.name;
+
+    let routeGroup = self.svg.select(`g[name="route-group-${routeId}-${nameA}-${nameB}"]`);
+
+    // connection link ------------------------------------------------------------
+    var connectionDotsSelection = routeGroup.selectAll(`.city-route[name=${nameA}${nameB}]`)
+        .data(connections, d => d.id);
+    var connectionDots = connectionDotsSelection
+        .enter().append("path")
+        .merge(connectionDotsSelection)
+        .attr("id", (d, i) => d.id)
+        .attr("class", "city-route")
+        .attr("name", `${nameA}${nameB}`);
+    connectionDotsSelection.exit().remove();
+    // connection link end ------------------------------------------------------------
+
+    // trains ------------------------------------------------------------
+    var connectionTrainsSelection = routeGroup.selectAll(`.city-route-train[name=${nameA}${nameB}]`)
+        .data(connections, d => d.id);
+    var connectionTrains = connectionTrainsSelection
+        .enter().append("rect")
+        .merge(connectionTrainsSelection)
+        .attr("id", d => `train-${d.id}`)
+        .attr("class", "city-route-train")
+        .attr("name", `${nameA}${nameB}`)
+        .attr("width", train.width)
+        .attr("height", train.height)
+        .style("fill", color);
+
+    connectionTrainsSelection.exit().remove();
+    // trains end ------------------------------------------------------------
+
+    // circles ------------------------------------------------------------
+    var connectionPoints = routeGroup.selectAll(`.city-links[name=${nameA}${nameB}]`)
+        .data(connectionCoords, d => d.id);
+
+    connectionPoints
+        .enter().append("circle")
+        .merge(connectionPoints)
+        .attr("class", "city-links")
+        .attr("id", d => `circle-${d.id}`)
+        .attr("name", `${nameA}${nameB}`)
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y)
+        .attr("r", d => 3)
+        .call(d3.drag()
+            .on("start", dragStarted)
+            .on("drag", dragged)
+            .on("end", dragEnded));
+
+    connectionPoints.exit().remove();
+    // circles end ------------------------------------------------------------
+
+    var cityManualLinkSimulation = d3.forceSimulation()
+        .force("link", d3.forceLink().id(d => d.id));
+
+    cityManualLinkSimulation
+        .nodes(connections, d => d.id)
+        .on("tick", () => {
+            connectionDots
+                .attr("d", d => {
+                    let path = "M";
+                    if (d.source.first) {
+                        path += "" + self.projection(origin) + "L";
+                    }
+                    path += `${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
+
+                    if (d.target.last) {
+                        path += "L" + self.projection(destination);
+                    }
+                    return path;
+                });
+            connectionTrains
+                .attr("transform", (d, i) => {
+                    let x = (d.source.x + d.target.x - train.width) / 2;
+                    let y = (d.source.y + d.target.y - train.height) / 2;
+                    let angle = angleRad(d.source, d.target);
+                    return `translate(${x}, ${y}) rotate(${angle}, ${train.width / 2},${train.height / 2})`;
+                })
+        });
+
+    // drag functions
+    function dragStarted(d) {
+        d3.select(this).raise().classed("selected", true);
+        cityManualLinkSimulation.alphaTarget(0.3).restart();
+    }
+
+    function dragEnded(d) {
+        d3.select(this).classed("selected", false);
+        cityManualLinkSimulation.alphaTarget(0);
+    }
+
+    function dragged(d) {
+        d3.select(this)
+            .attr("cx", d.x = d3.event.x)
+            .attr("cy", d.y = d3.event.y);
+    }
+
+    routeGroup.selectAll(`.city-route-train[name=${nameA}${nameB}]`)
+        .on("click", function (d, i) {
+            if (i === 0 && connections.length === 1) {
+                d3.select(this.parentNode).remove();
+                return;
+            }
+
+            //remove link
+            if (i !== 0) {
+                connections[i - 1].target = connections[i].target;
+            }
+
+            // regenerate id
+            //connections[i] = null;
+            connections.splice(i, 1);
+            connectionCoords.splice(i, 1);
+            if (i === 0) {
+                connectionCoords[0].first = true;
+            }
+            self.drawLink(cityA, cityB, count, color, origin, destination, connectionCoords, connections, routeId);
+        });
+
+    routeGroup.selectAll(`.city-links[name=${nameA}${nameB}]`)
+        .on("click", function (d, idx) {
+            let point = connectionCoords[idx];
+
+            connectionCoords.splice(idx, 0, {
+                x: connectionCoords[idx].x,
+                y: connectionCoords[idx].y,
+                id: `midpoint-${nameA}-${nameB}-${ids.index++}`
+            });
+            self.drawLink(cityA, cityB, count, color, origin, destination, connectionCoords, connections, routeId);
+        });
+
+};
+
 TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connectionType) {
     let self = this;
     let nameA = cityA.name;
@@ -265,92 +414,30 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connect
         connectionCoords.push(cCoords);
     }
     connectionCoords.push([destination[0], destination[1]]);
-    connectionCoords = connectionCoords.map(d => self.projection(d));
+    connectionCoords = connectionCoords.map(d => self.projection(d)).map((d, i, arr) => {
+        return {
+            x: d[0],
+            y: d[1],
+            id: `midpoint-${nameA}-${nameB}-${ids.index++}`,
+            first: i === 0,
+            last: i === arr.length - 1
+        };
+    });
 
     let connections = [];
-    // -1 === origin
-    // 0 === virtual origin
-    // count+1 === virtual destination
-    // count+2 === destination
-
-    for (let i = 0; i <= count + 2; i++) {
+    for (let i = 0; i < connectionCoords.length - 1; i++) {
         connections.push({
-            source: i - 1,
-            target: i
+            source: connectionCoords[i],
+            target: connectionCoords[i + 1],
+            id: `city-route-${nameA}-${nameB}-${ids.index++}`
         });
     }
-
     let routeId = routeCounter++;
 
     let routeGroup = self.svg.append("g")
         .attr("name", `route-group-${routeId}-${nameA}-${nameB}`);
 
-    let connectionsSelection = routeGroup.selectAll(`.city-route[name=${nameA}${nameB}]`)
-        .data(connections)
-        .enter().append("path")
-        .attr("id", (d, i) => `city-route-${routeId}-${nameA}-${nameB}-${i}`)
-        .attr("class", "city-route")
-        .attr("name", `${nameA}${nameB}`);
-
-    routeGroup.selectAll(`.city-route-text[name=${nameA}${nameB}]`)
-        .data(connections)
-        .enter().append("text")
-        .append("textPath")
-        .attr("class", "city-route-text")
-        .style("fill", color)
-        .attr("xlink:href", (d, i) => `#city-route-${routeId}-${nameA}-${nameB}-${i}`)
-        .text((d, i) => (i > 0 && i < connections.length - 1) ? "\ue800" : "");
-
-    let cityManualLinkSimulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(d => d.index));
-
-    cityManualLinkSimulation
-        .nodes(connections)
-        .on("tick", () => {
-            connectionsSelection
-            // d=> `M${d.join("L")}Z`
-                .attr("d", d => {
-                    let result = "M";
-                    result = result + (d.source === -1 ? self.projection(origin) : connectionCoords[d.source]) + "L";
-                    result = result + (d.target === count + 2 ? self.projection(destination) : connectionCoords[d.target]);
-                    return result;
-                });
-        });
-
-    let connectionPoints = routeGroup.selectAll(`.city-links[name=${nameA}${nameB}]`)
-        .data(connectionCoords);
-
-    connectionPoints
-        .enter().append("circle")
-        .attr("class", "city-links")
-        .attr("name", `${nameA}${nameB}`)
-        .attr("cx", d => d[0])
-        .attr("cy", d => d[1])
-        .attr("r", d => 3)
-        .on("click", function (d, i) {
-            d3.select(this).remove();
-        })
-        .call(d3.drag()
-            .on("start", dragStarted)
-            .on("drag", dragged)
-            .on("end", dragEnded));
-
-    // drag functions
-    function dragStarted(d) {
-        d3.select(this).raise().classed("selected", true);
-        cityManualLinkSimulation.alphaTarget(0.3).restart();
-    }
-
-    function dragEnded(d) {
-        d3.select(this).classed("selected", false);
-        cityManualLinkSimulation.alphaTarget(0);
-    }
-
-    function dragged(d) {
-        d3.select(this)
-            .attr("cx", d[0] = d3.event.x)
-            .attr("cy", d[1] = d3.event.y);
-    }
+    this.drawLink(cityA, cityB, count, color, origin, destination, connectionCoords, connections, routeId);
 };
 
 
