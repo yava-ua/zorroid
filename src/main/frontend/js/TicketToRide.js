@@ -115,7 +115,7 @@ export default function TicketToRide(container) {
         Exporter.embedRasterImages(d3.select('#ticket-to-ride').node());
 
         setTimeout(() => {
-            //let rastering finish
+            //let rasterizing finish
             Exporter.save(d3.select('#ticket-to-ride').node(), cfg);
         }, 2000);
 
@@ -268,7 +268,7 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, origin, 
 
     // connection link ------------------------------------------------------------
     var connectionDotsSelection = routeGroup.selectAll(`.city-route[name=${nameA}${nameB}]`)
-        .data(connections, d => d.id);
+        .data(connections, d => d.index);
     var connectionDots = connectionDotsSelection
         .enter().append("path")
         .merge(connectionDotsSelection)
@@ -280,11 +280,10 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, origin, 
 
     // trains ------------------------------------------------------------
     var connectionTrainsSelection = routeGroup.selectAll(`.city-route-train[name=${nameA}${nameB}]`)
-        .data(connections, d => d.id);
+        .data(connections, d => d.index);
     var connectionTrains = connectionTrainsSelection
         .enter().append("rect")
         .merge(connectionTrainsSelection)
-        .attr("id", d => `train-${d.id}`)
         .attr("class", "city-route-train")
         .attr("name", `${nameA}${nameB}`)
         .attr("width", train.width)
@@ -296,13 +295,12 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, origin, 
 
     // circles ------------------------------------------------------------
     var connectionPoints = routeGroup.selectAll(`.city-links[name=${nameA}${nameB}]`)
-        .data(connectionCoords, d => d.id);
+        .data(connectionCoords, d => d.index);
 
     connectionPoints
         .enter().append("circle")
         .merge(connectionPoints)
         .attr("class", "city-links")
-        .attr("id", d => `circle-${d.id}`)
         .attr("name", `${nameA}${nameB}`)
         .attr("cx", d => d.x)
         .attr("cy", d => d.y)
@@ -388,8 +386,7 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, origin, 
 
             connectionCoords.splice(idx, 0, {
                 x: connectionCoords[idx].x,
-                y: connectionCoords[idx].y,
-                id: `midpoint-${nameA}-${nameB}-${ids.index++}`
+                y: connectionCoords[idx].y
             });
             self.drawLink(cityA, cityB, count, color, origin, destination, connectionCoords, connections, routeId);
         });
@@ -418,7 +415,6 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connect
         return {
             x: d[0],
             y: d[1],
-            id: `midpoint-${nameA}-${nameB}-${ids.index++}`,
             first: i === 0,
             last: i === arr.length - 1
         };
@@ -429,7 +425,6 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connect
         connections.push({
             source: connectionCoords[i],
             target: connectionCoords[i + 1],
-            id: `city-route-${nameA}-${nameB}-${ids.index++}`
         });
     }
     let routeId = routeCounter++;
