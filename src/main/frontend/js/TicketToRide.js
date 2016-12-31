@@ -381,13 +381,17 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, origin, 
         });
 
     routeGroup.selectAll(`.city-links[name=${nameA}${nameB}]`)
-        .on("click", function (d, idx) {
-            let point = connectionCoords[idx];
-
-            connectionCoords.splice(idx, 0, {
-                x: connectionCoords[idx].x,
-                y: connectionCoords[idx].y
+        .on("click", function (d, i) {
+            connectionCoords.splice(i, 0, {
+                x: connectionCoords[i].x,
+                y: connectionCoords[i].y
             });
+
+            connections.splice(i, 0, {
+                source: connectionCoords[i],
+                target: connectionCoords[i+1]
+            });
+            connections[i - 1].target = connectionCoords[i];
             self.drawLink(cityA, cityB, count, color, origin, destination, connectionCoords, connections, routeId);
         });
 
