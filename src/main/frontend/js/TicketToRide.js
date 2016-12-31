@@ -146,7 +146,6 @@ export default function TicketToRide(container) {
             };
         });
 
-        self.setScales();
         self.cityVeronoi = d3.voronoi()
             .x(d=> d.coordinates[0])
             .y(d=> d.coordinates[1])
@@ -156,6 +155,7 @@ export default function TicketToRide(container) {
                     name: d.name
                 };
             }));
+        self.setScales();
 
         self.svg
             .append("g")
@@ -238,25 +238,17 @@ export default function TicketToRide(container) {
 }
 
 TicketToRide.prototype.setScales = function () {
-    let cities = this.cities;
-
-    let fromReferenceA = cities.find(d => d.name === 'Севастополь');
-    let fromReferenceB = cities.find(d => d.name === 'Сімферополь');
-
-    let toReferenceA = cities.find(d => d.name === 'Мукачево');
-    let toReferenceB = cities.find(d => d.name === 'Ізмаїл');
-
-    let min = d3.geoDistance(fromReferenceA.coordinates, fromReferenceB.coordinates);
-    let max = d3.geoDistance(toReferenceA.coordinates, toReferenceB.coordinates);
+    let distances = this.cityVeronoi
+        .links()
+        .map(l => {
+            let from = this.cities.find(d => d.name === l.source.name);
+            let to = this.cities.find(d => d.name === l.target.name);
+            return d3.geoDistance(from.coordinates, to.coordinates);
+        });
 
     this.distanceScale = d3.scaleQuantize()
-        .domain([min, max])
+        .domain(d3.extent(distances))
         .range(d3.range(0, 8));
-
-};
-
-let ids = {
-    index: 0,
 };
 
 TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, origin, destination, connectionCoords, connections, routeId) {
@@ -389,7 +381,7 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, origin, 
 
             connections.splice(i, 0, {
                 source: connectionCoords[i],
-                target: connectionCoords[i+1]
+                target: connectionCoords[i + 1]
             });
             connections[i - 1].target = connectionCoords[i];
             self.drawLink(cityA, cityB, count, color, origin, destination, connectionCoords, connections, routeId);
@@ -433,7 +425,7 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connect
     }
     let routeId = routeCounter++;
 
-    let routeGroup = self.svg.append("g")
+    self.svg.append("g")
         .attr("name", `route-group-${routeId}-${nameA}-${nameB}`);
 
     this.drawLink(cityA, cityB, count, color, origin, destination, connectionCoords, connections, routeId);
