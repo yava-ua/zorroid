@@ -1,0 +1,29 @@
+$strokeWidth: 0.5;
+
+svg#map-ukraine {
+    height: 100%;
+    width: 100%;
+
+  .countries {
+    stroke: olive;
+  }
+
+
+  .regions {
+    fill: olive;
+    stroke: black;
+    stroke-dasharray: 1 5;
+
+    &:hover {
+      fill: red;
+    }
+  }
+
+  .waters, .waterways {
+    fill: none;
+    stroke: blue;
+    opacity: 0.6;
+  }
+
+
+}
