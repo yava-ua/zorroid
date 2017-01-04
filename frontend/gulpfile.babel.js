@@ -34,9 +34,10 @@ gulp.task('build-scss', (callback) => {
     callback();
 });
 
+
 gulp.task('copy', () => {
     gulp.src(['index.html']).pipe(gulp.dest('build'));
-    gulp.src(['json/*.json']).pipe(gulp.dest('build/json'));
+    gulp.src(['static/*.*']).pipe(gulp.dest('build/static'));
     gulp.src(['fonts/*.*']).pipe(gulp.dest('build/fonts'));
     gulp.src(['images/*.*']).pipe(gulp.dest('build/images'));
 
@@ -45,6 +46,7 @@ gulp.task('copy', () => {
 gulp.task('watch', ['build'], () => {
     livereload.listen();
     gulp.watch('./js/**/*.js', ['build']);
+    gulp.watch('./static/*.*', ['build']);
     gulp.watch('./css/**/*.scss', ['build']);
     gulp.watch('./fonts/*.*', ['build']);
     gulp.watch('./images/**/*.*', ['build']);

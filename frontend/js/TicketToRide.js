@@ -115,7 +115,7 @@ export default function TicketToRide(container) {
 
     });
 
-    d3.json("json/ua.json", function (error, ua) {
+    d3.json("static/ua.json", function (error, ua) {
         if (error) {
             return console.error(error);
         }

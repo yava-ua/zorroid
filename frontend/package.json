@@ -1,7 +1,7 @@
 {
-  "name": "sportsbook-dashboard",
+  "name": "pathfinder",
   "version": "0.1.0",
-  "description": "Sportsbook dashboard",
+  "description": "Ticket to Ride",
   "main": "app.js",
   "dependencies": {
     "d3": "^4.4.0",
@@ -41,12 +41,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mobenga/sportsbook-dashboard.git"
+    "url": "https://github.com/yavaua/pathfinder.git"
   },
   "author": "Sportsbook dashboard team",
   "license": "Playtech Sports",
   "bugs": {
-    "url": "https://github.com/Mobenga/sportsbook-dashboard/issues"
+    "url": "https://github.com/yavaua/pathfinder/issues"
   },
-  "homepage": "https://github.com/Mobenga/sportsbook-dashboard#readme"
+  "homepage": "https://github.com/yavaua/pathfinder#readme"
 }

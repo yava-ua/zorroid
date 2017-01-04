@@ -1,28 +1,32 @@
 $strokeWidth: 0.5;
+$region-color: #61805f;
+$border: #4a4a4a;
+$waters: rgba(43, 59, 148, 0.88);
+
 
 svg#map-ukraine {
     height: 100%;
     width: 100%;
 
   .countries {
-    stroke: olive;
+    stroke: $region-color;
+    fill: none;
   }
 
 
   .regions {
-    fill: olive;
-    stroke: black;
-    stroke-dasharray: 1 5;
+    fill: $region-color;
+    stroke: $border;
+    stroke-dasharray: 10 5;
 
     &:hover {
-      fill: red;
+      fill: darken($region-color, 10%);
     }
   }
 
   .waters, .waterways {
     fill: none;
-    stroke: blue;
-    opacity: 0.6;
+    stroke: $waters;
   }
 
 
