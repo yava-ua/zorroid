@@ -1,8 +1,4 @@
-function random(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+import {random} from "./Utils";
 
 export default class Randomer {
     constructor(probabilityArr) {
@@ -15,36 +11,13 @@ export default class Randomer {
         let arr = [];
         probabilityArr.forEach((d, idx) => {
             for (let i = 0; i < d; i++) {
-                arr.push(idx + 1);
+                arr.push(idx);
             }
         });
         this.array = arr;
     }
 
     pRandom() {
-        return this.array[random(1, 100) - 1];
-    }
-
-    random(min, max) {
-        return random(min, max)
-    }
-
-    randomUniqueRange(min, max, quantity) {
-        if (quantity > max - min) {
-            throw new Error("range too low");
-        }
-        let excludes = [];
-        let result = [];
-        let left = quantity;
-        while (left > 0) {
-            let current = random(min, max);
-            if (!excludes.includes(current)) {
-                result.push(current);
-                excludes.push(current);
-                left--;
-            }
-        }
-        //console.log(`Range: [${min}, ${max}] Quantity: ${quantity}. Result: ${result}`);
-        return result;
+        return this.array[random(0, 100) - 1];
     }
 }
