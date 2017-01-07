@@ -24,7 +24,7 @@ let linkGroup = 0;
 
 const SCALE_DURATION = 1000;
 const MIN_SCALE = 1;
-const MAX_SCALE = 30;
+const MAX_SCALE = 5;
 
 export default function TicketToRide(container) {
     let self = this;
@@ -50,18 +50,18 @@ export default function TicketToRide(container) {
         //.attr("height", "100%")
         .attr("viewBox", `0 0 ${this.width} ${this.height}`);
 
-    svg.append("defs")
-        .append("pattern")
-        .attr("id", "background")
-        .attr("patternUnits", "userSpaceOnUse")
-        .attr("width", this.width)
-        .attr("height", this.height)
-        .append("image")
-        .attr("href", "./images/bg-04.jpg")
-        .attr("x", 0)
-        .attr("y", 0)
-        //.attr("width", this.width)
-        .attr("height", this.height);
+    // svg.append("defs")
+    //     .append("pattern")
+    //     .attr("id", "background")
+    //     .attr("patternUnits", "userSpaceOnUse")
+    //     .attr("width", this.width)
+    //     .attr("height", this.height)
+    //     .append("image")
+    //     .attr("href", "./images/bg-04.jpg")
+    //     .attr("x", 0)
+    //     .attr("y", 0)
+    //     //.attr("width", this.width)
+    //     .attr("height", this.height);
 
     this.svg = svg.append("g");
 
@@ -141,6 +141,13 @@ export default function TicketToRide(container) {
             self.generateRandomLinks();
         });
 
+    d3.select("#menu-reset")
+        .on("click.map", () => {
+            self.svg.selectAll("g[name^='link-group']")
+                .remove();
+            linkGroup = 0;
+        });
+
     d3.select("#export").on("click", () => {
         let cfg = {
             filename: 'TicketToRide',
@@ -167,9 +174,8 @@ export default function TicketToRide(container) {
             .data(mapOutlines.features)
             .enter().append("path")
             .attr("class", d => `subunit ${d.id}`)
-            .attr("d", self.path)
-            .style("fill", "url(#background)");
-
+            .attr("d", self.path);
+            //.style("fill", "url(#background)");
 
         //draw cities and city labels
         let citiesOutline = topojson.feature(ua, ua.objects.places);
@@ -227,7 +233,7 @@ export default function TicketToRide(container) {
             .enter()
             .append("circle")
             .attr("transform", d => `translate( ${self.projection(d.geometry.coordinates)} )`)
-            .attr("r", 3)
+            .attr("r", 5)
             .attr("name", d => d.properties.name)
             .attr("class", "city");
         d3.forceSimulation(citiesOutline.features)
@@ -427,11 +433,13 @@ TicketToRide.prototype.drawLink = function (params) {
     // drag functions
     function dragStarted(d) {
         d3.select(this).raise().classed("selected", true);
+        d3.select(this).style("cursor", "move");
         cityManualLinkSimulation.alphaTarget(0.3).restart();
     }
 
     function dragEnded(d) {
         d3.select(this).classed("selected", false);
+        d3.select(this).style("cursor", "pointer");
         cityManualLinkSimulation.alphaTarget(0);
     }
 
