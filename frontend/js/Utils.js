@@ -27,3 +27,9 @@ export function random(min, max) {
 export function angleRad(p1, p2) {
     return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
 }
+
+export function appendButton(selection, name, buttonClass) {
+    return selection.append('div')
+        .classed(`map-button ${buttonClass}`, true)
+        .text(name);
+}

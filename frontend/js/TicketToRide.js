@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson";
 import Randomer from "./Randomer";
-import {random, randomUniqueRange, angleRad} from "./Utils";
+import {random, randomUniqueRange, angleRad, appendButton} from "./Utils";
 import Exporter from "d3-save-svg";
 
 const maxLinks = 5;
@@ -20,6 +20,11 @@ const trainCarriage = {
 };
 
 let linkGroup = 0;
+
+
+const SCALE_DURATION = 1000;
+const MIN_SCALE = 1;
+const MAX_SCALE = 30;
 
 export default function TicketToRide(container) {
     let self = this;
@@ -60,14 +65,47 @@ export default function TicketToRide(container) {
 
     this.svg = svg.append("g");
 
+    let currentScale = 1;
+
+    function zoomRatio(power) {
+        return Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale * Math.pow(2, power)));
+    }
+
     function zoomed() {
         self.svg.attr("transform", d3.event.transform);
+        currentScale = d3.event.transform.k;
+    }
+
+    function zoomIn() {
+        if (currentScale < MAX_SCALE) {
+            svg.transition().duration(500).call(zoom.scaleTo, 1.5 * zoomRatio(0.2));
+        }
+    }
+
+    function zoomOut() {
+        if (currentScale > MIN_SCALE) {
+            svg.transition().duration(500).call(zoom.scaleTo, zoomRatio(-0.2) / 1.5);
+        }
+    }
+
+    function resetMap() {
+        self.svg.transition().duration(SCALE_DURATION).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
     }
 
     let zoom = d3.zoom()
-        .scaleExtent([1, 10])
+        .scaleExtent([MIN_SCALE, MAX_SCALE])
         .on("zoom", zoomed);
     this.svg.call(zoom);
+
+
+    //Zoom buttons
+    const resetButton = appendButton(d3.select(container), 'Reset', 'resetButton');
+    resetButton.on('click', resetMap);
+    const zoomInButton = appendButton(d3.select(container), '+', 'zoomInButton');
+    zoomInButton.on('click', zoomIn);
+    const zoomOutButton = appendButton(d3.select(container), '-', 'zoomOutButton');
+    zoomOutButton.on('click', zoomOut);
+
 
     this.path = d3.geoPath().projection(this.projection);
 
@@ -247,7 +285,19 @@ TicketToRide.prototype.setScales = function () {
         .range(d3.range(0, 8));
 };
 
-TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, connectionType, origin, destination, connectionCoords, connections, linkId) {
+TicketToRide.prototype.drawLink = function (params) {
+    let cityA = params.cityA;
+    let cityB = params.cityB;
+    let count = params.count;
+    let color = params.color;
+    let connectionType = params.connectionType;
+    let origin = params.origin;
+    let destination = params.destination;
+    let connectionCoords = params.connectionCoords;
+    let connections = params.connections;
+    let linkId = params.linkId;
+
+
     let self = this;
     let nameA = cityA.name;
     let nameB = cityB.name;
@@ -305,9 +355,9 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, connecti
         .attr("name", `${nameA}${nameB}`)
         .attr("class", "city-link-circles")
         .attr("r", d => 3)
+        .merge(connectionPoints)
         .attr("cx", d => d.x)
         .attr("cy", d => d.y)
-        .merge(connectionPoints)
         .call(d3.drag()
             .on("start", dragStarted)
             .on("drag", dragged)
@@ -410,7 +460,18 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, connecti
             if (i === 0) {
                 connectionCoords[0].first = true;
             }
-            self.drawLink(cityA, cityB, count, color, origin, connectionType, destination, connectionCoords, connections, linkId);
+            self.drawLink({
+                cityA: cityA,
+                cityB: cityB,
+                count: count,
+                color: color,
+                connectionType: connectionType,
+                origin: origin,
+                destination: destination,
+                connectionCoords: connectionCoords,
+                connections: connections,
+                linkId: linkId
+            });
         });
 
     linkGroup.selectAll(`.city-link-circles[name=${nameA}${nameB}]`)
@@ -436,7 +497,18 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, connecti
                 connectionCoords[1].fy = null;
 
             }
-            self.drawLink(cityA, cityB, count, color, connectionType, origin, destination, connectionCoords, connections, linkId);
+            self.drawLink({
+                cityA: cityA,
+                cityB: cityB,
+                count: count,
+                color: color,
+                connectionType: connectionType,
+                origin: origin,
+                destination: destination,
+                connectionCoords: connectionCoords,
+                connections: connections,
+                linkId: linkId
+            });
         });
 
 };
@@ -480,7 +552,18 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connect
     self.svg.append("g")
         .attr("name", `link-group-${linkGroupId}-${nameA}-${nameB}`);
 
-    this.drawLink(cityA, cityB, count, color, connectionType, origin, destination, connectionCoords, connections, linkGroupId);
+    this.drawLink({
+        cityA: cityA,
+        cityB: cityB,
+        count: count,
+        color: color,
+        connectionType: connectionType,
+        origin: origin,
+        destination: destination,
+        connectionCoords: connectionCoords,
+        connections: connections,
+        linkId: linkGroupId
+    });
 };
 
 TicketToRide.prototype.generateRandomLinks = function () {
