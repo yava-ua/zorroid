@@ -222,7 +222,7 @@ export default function TicketToRide(container) {
             }
 
             let scale = self.distanceScale(d3.geoDistance(fromCity.coordinates, toCity.coordinates));
-            self.buildLink(fromCity, toCity, scale, colors[random(0, colors.length)]);
+            self.buildLink(fromCity, toCity, scale, colors[random(0, colors.length)], connectionTypes[connectionTypeRandomer.pRandom()]);
 
             self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", false);
             self.fromCity = null;
@@ -289,7 +289,7 @@ TicketToRide.prototype.drawLink = function (cityA, cityB, count, color, connecti
             .attr("name", `${nameA}${nameB}`)
             .attr("width", trainCarriage.width)
             .attr("height", trainCarriage.height)
-            .attr("link:href", "images/train.svg#svg2")
+            .attr("link:href", "#train.svg")
             .merge(connectionTrainCarriagesSelection);
 
         connectionTrainCarriagesSelection.exit().remove();
