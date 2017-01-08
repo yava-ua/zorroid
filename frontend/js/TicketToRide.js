@@ -32,6 +32,7 @@ export default function TicketToRide(container) {
     this.height = 800;
 
     this.cities = [];
+    this.builtLinks = [];
     this.distanceScale = null;
     this.cityVeronoi = null;
 
@@ -452,6 +453,7 @@ TicketToRide.prototype.drawLink = function (params) {
     linkGroup.selectAll(`.city-link-train[name=${nameA}${nameB}]`)
         .on("click", function (d, i) {
             if (i === 0 && connections.length === 1) {
+                self.removeFromBuiltLinks(cityA, cityB);
                 d3.select(this.parentNode).remove();
                 return;
             }
@@ -521,10 +523,49 @@ TicketToRide.prototype.drawLink = function (params) {
 
 };
 
+function buildUnidirectionalLink(all, from, to) {
+    let containsFrom = all.find(el => el.source.name === from.name);
+    if (!containsFrom) {
+        all.push({
+            source: from,
+            targets: [{
+                target: to,
+                quantity: 1
+            }]
+        });
+    } else {
+        let containsTo = containsFrom.targets.find(el => el.target.name === to.name);
+        if (!containsTo) {
+            containsFrom.targets.push({
+                target: to,
+                quantity: 1
+            });
+        } else {
+            containsTo.quantity++;
+        }
+    }
+}
+function removeUnidirectionalLink(all, from, to) {
+    // implement
+}
+
+TicketToRide.prototype.addToBuiltLinks = function (from, to) {
+    buildUnidirectionalLink(this.builtLinks, from, to);
+    buildUnidirectionalLink(this.builtLinks, to, from);
+};
+
+TicketToRide.prototype.removeFromBuiltLinks = function (from, to) {
+    removeUnidirectionalLink(this.builtLinks, from, to);
+    removeUnidirectionalLink(this.builtLinks, to, from);
+};
+
+
 TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connectionType) {
     let self = this;
     let nameA = cityA.name;
     let nameB = cityB.name;
+
+    this.addToBuiltLinks(cityA, cityB);
 
     let origin = [cityA.coordinates[0], cityA.coordinates[1]];
     let destination = [cityB.coordinates[0], cityB.coordinates[1]];
@@ -628,27 +669,12 @@ TicketToRide.prototype.generateRandomLinks = function () {
         let linkColorIdxs = randomUniqueRange(0, colors.length, Math.max(quantity, maxLinks));
         let randomLinksIdxs = randomUniqueRange(0, link.targets.length, link.targets.length);
 
-        let currentBuiltLink = {
-            source: link.source,
-            targets: []
-        };
         link.targets.forEach((destination, idx) => {
             if (randomLinksIdxs.includes(idx)) {
                 let to = destination;
                 let scale = self.distanceScale(d3.geoDistance(from.coordinates, to.coordinates));
-                currentBuiltLink.targets.push(to);
-
                 self.buildLink(from, to, scale, colors[linkColorIdxs[idx]], connectionTypes[connectionTypeRandomer.pRandom()]);
             }
         });
-        builtLinks.push(currentBuiltLink);
     });
-
-    this.builtLinks = builtLinks;
-};
-
-TicketToRide.prototype.generateRandomRoutes = function () {
-    let links = this.builtLinks;
-
-
 };
