@@ -146,6 +146,7 @@ export default function TicketToRide(container) {
         .on("click.map", () => {
             self.svg.selectAll("g[name^='link-group']")
                 .remove();
+            self.builtLinks = [];
             linkGroup = 0;
         });
 
