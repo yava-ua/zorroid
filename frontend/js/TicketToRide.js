@@ -296,7 +296,6 @@ TicketToRide.prototype.setScales = function () {
 TicketToRide.prototype.drawLink = function (params) {
     let cityA = params.cityA;
     let cityB = params.cityB;
-    let count = params.count;
     let color = params.color;
     let connectionType = params.connectionType;
     let origin = params.origin;
@@ -454,7 +453,7 @@ TicketToRide.prototype.drawLink = function (params) {
     linkGroup.selectAll(`.city-link-train[name=${nameA}${nameB}]`)
         .on("click", function (d, i) {
             if (i === 0 && connections.length === 1) {
-                self.removeFromBuiltLinks(cityA, cityB);
+                self.removeLinks(cityA, cityB, linkId);
                 d3.select(this.parentNode).remove();
                 return;
             }
@@ -471,10 +470,11 @@ TicketToRide.prototype.drawLink = function (params) {
             if (i === 0) {
                 connectionCoords[0].first = true;
             }
+
+            self.updateLink(cityA, cityB, linkId, connections.length);
             self.drawLink({
                 cityA: cityA,
                 cityB: cityB,
-                count: count,
                 color: color,
                 connectionType: connectionType,
                 origin: origin,
@@ -508,10 +508,11 @@ TicketToRide.prototype.drawLink = function (params) {
                 connectionCoords[1].fy = null;
 
             }
+
+            self.updateLink(cityA, cityB, linkId, connections.length);
             self.drawLink({
                 cityA: cityA,
                 cityB: cityB,
-                count: count,
                 color: color,
                 connectionType: connectionType,
                 origin: origin,
@@ -524,59 +525,70 @@ TicketToRide.prototype.drawLink = function (params) {
 
 };
 
-function buildUnidirectionalLink(all, from, to) {
+function updateUnidirectionalLinkWeight(all, from, id, weight) {
+    let containsFrom = all.find(el => el.source.name === from.name);
+    let containsTo = containsFrom.targets.find(el => el.id === id);
+    containsTo.weight = weight;
+}
+function addUnidirectionalLink(all, from, to, weight, id) {
     let containsFrom = all.find(el => el.source.name === from.name);
     if (!containsFrom) {
         all.push({
             source: from,
             targets: [{
                 target: to,
-                quantity: 1
+                id: id,
+                weight: weight
             }]
         });
     } else {
-        let containsTo = containsFrom.targets.find(el => el.target.name === to.name);
+        let containsTo = containsFrom.targets.find(el => el.id === id);
         if (!containsTo) {
             containsFrom.targets.push({
                 target: to,
-                quantity: 1
+                id: id,
+                weight: weight
             });
-        } else {
-            containsTo.quantity++;
         }
     }
 }
-function removeUnidirectionalLink(all, from, to) {
-    // implement
+function removeUnidirectionalLink(all, from, id) {
+    let containsFrom = all.find(el => el.source.name === from.name);
+    containsFrom.targets = containsFrom.targets.filter(el => el.id !== id);
+    if (containsFrom.targets.length === 0) {
+        all = all.filter(el => el.source.name !== from.name);
+    }
+    return all;
 }
 
-TicketToRide.prototype.addToBuiltLinks = function (from, to) {
-    buildUnidirectionalLink(this.builtLinks, from, to);
-    buildUnidirectionalLink(this.builtLinks, to, from);
+TicketToRide.prototype.addLink = function (from, to, weight, id) {
+    addUnidirectionalLink(this.builtLinks, from, to, weight, id);
+    addUnidirectionalLink(this.builtLinks, to, from, weight, id);
+};
+TicketToRide.prototype.updateLink = function (from, to, id, weight) {
+    updateUnidirectionalLinkWeight(this.builtLinks, from, id, weight);
+    updateUnidirectionalLinkWeight(this.builtLinks, to, id, weight);
+};
+TicketToRide.prototype.removeLinks = function (from, to, id) {
+    this.builtLinks = removeUnidirectionalLink(this.builtLinks, from, id);
+    this.builtLinks = removeUnidirectionalLink(this.builtLinks, to, id);
 };
 
-TicketToRide.prototype.removeFromBuiltLinks = function (from, to) {
-    removeUnidirectionalLink(this.builtLinks, from, to);
-    removeUnidirectionalLink(this.builtLinks, to, from);
-};
 
-
-TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connectionType) {
+TicketToRide.prototype.buildLink = function (cityA, cityB, initialSize, color, connectionType) {
     let self = this;
     let nameA = cityA.name;
     let nameB = cityB.name;
 
-    this.addToBuiltLinks(cityA, cityB);
-
     let origin = [cityA.coordinates[0], cityA.coordinates[1]];
     let destination = [cityB.coordinates[0], cityB.coordinates[1]];
 
-    let xD = (cityB.coordinates[0] - cityA.coordinates[0]) / (count + 1);
-    let yD = (cityB.coordinates[1] - cityA.coordinates[1]) / (count + 1);
+    let xD = (cityB.coordinates[0] - cityA.coordinates[0]) / (initialSize + 1);
+    let yD = (cityB.coordinates[1] - cityA.coordinates[1]) / (initialSize + 1);
 
     let connectionCoords = [];
     connectionCoords.push([origin[0], origin[1]]);
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < initialSize; i++) {
         let cCoords = [cityA.coordinates[0] + (i + 1) * xD, cityA.coordinates[1] + (i + 1) * yD];
         connectionCoords.push(cCoords);
     }
@@ -599,13 +611,14 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, count, color, connect
     }
     let linkGroupId = linkGroup++;
 
+    this.addLink(cityA, cityB, connections.length, linkGroupId);
+
     self.svg.append("g")
         .attr("name", `link-group-${linkGroupId}-${nameA}-${nameB}`);
 
     this.drawLink({
         cityA: cityA,
         cityB: cityB,
-        count: count,
         color: color,
         connectionType: connectionType,
         origin: origin,
