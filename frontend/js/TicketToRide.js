@@ -674,8 +674,6 @@ TicketToRide.prototype.generateRandomLinks = function () {
         });
     });
 
-    let builtLinks = [];
-
     filteredLinks.forEach(link => {
         let from = link.source;
         let quantity = link.targets.length;
