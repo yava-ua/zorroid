@@ -20,6 +20,10 @@ export default class Graph {
         this.vertexIdFunction = vertexIdFn;
     }
 
+    isEmpty() {
+        return this.vertices.length === 0 || this.arcs.length === 0;
+    }
+
     findVertexById(vertexId) {
         return this.vertices.find(el => this.vertexIdFunction(el) === vertexId);
     }

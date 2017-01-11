@@ -27,6 +27,8 @@ const SCALE_DURATION = 1000;
 const MIN_SCALE = 1;
 const MAX_SCALE = 5;
 
+const singleCityDestinationsSelector = "g#single-city-destinations";
+
 export default function TicketToRide(container) {
     let self = this;
     this.width = 1240;
@@ -66,6 +68,7 @@ export default function TicketToRide(container) {
     //     .attr("height", this.height);
 
     this.svg = svg.append("g");
+    this.linkGroupsSelector = null;
 
     let currentScale = 1;
 
@@ -77,19 +80,16 @@ export default function TicketToRide(container) {
         self.svg.attr("transform", d3.event.transform);
         currentScale = d3.event.transform.k;
     }
-
     function zoomIn() {
         if (currentScale < MAX_SCALE) {
             svg.transition().duration(500).call(zoom.scaleTo, 1.5 * zoomRatio(0.2));
         }
     }
-
     function zoomOut() {
         if (currentScale > MIN_SCALE) {
             svg.transition().duration(500).call(zoom.scaleTo, zoomRatio(-0.2) / 1.5);
         }
     }
-
     function resetMap() {
         self.svg.transition().duration(SCALE_DURATION).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
     }
@@ -97,9 +97,6 @@ export default function TicketToRide(container) {
     let zoom = d3.zoom()
         .scaleExtent([MIN_SCALE, MAX_SCALE])
         .on("zoom", zoomed);
-    this.svg.call(zoom)
-        .on("dblclick.zoom", null);
-
 
     //Zoom buttons
     const resetButton = appendButton(d3.select(container), 'Reset', 'resetButton');
@@ -146,7 +143,7 @@ export default function TicketToRide(container) {
 
     d3.select("#menu-reset")
         .on("click.map", () => {
-            self.svg.selectAll("g[name^='link-group']")
+            self.linkGroupsSelector.selectAll("g[name^='link-group']")
                 .remove();
             this.builtLinks = null;
             self.builtLinks = new Graph((d) => d.name);
@@ -167,9 +164,7 @@ export default function TicketToRide(container) {
     });
 
     d3.select("#dijkstra").on("click", () => {
-
         self.builtLinks.findDijkstraRoutes(self.builtLinks.vertices[0]);
-
     });
 
 
@@ -187,7 +182,10 @@ export default function TicketToRide(container) {
             .enter().append("path")
             .attr("class", d => `subunit ${d.id}`)
             .attr("d", self.path);
-            //.style("fill", "url(#background)");
+        //.style("fill", "url(#background)");
+
+        self.svg.select("g#map")
+            .call(zoom);
 
         //draw cities and city labels
         let citiesOutline = topojson.feature(ua, ua.objects.places);
@@ -258,6 +256,12 @@ export default function TicketToRide(container) {
             });
 
 
+        self.svg.append("g")
+            .attr("id", "link-groups");
+        self.linkGroupsSelector = self.svg.select("g#link-groups");
+        self.svg.append("g")
+            .attr("id", "single-city-destinations");
+
         function clickCity(d) {
             let fromCity = self.fromCity;
             let toCity = {
@@ -272,42 +276,6 @@ export default function TicketToRide(container) {
             }
 
             if (fromCity.name === toCity.name) {
-
-                // draw routes
-
-                let origin = self.builtLinks.findVertexById(fromCity.name);
-                let routes = randomUniqueRange(0, self.builtLinks.vertices.length - 1, 5).map(d => {
-                    return {
-                        source: self.projection(origin.coordinates),
-                        target: self.projection(self.builtLinks.vertices[d].coordinates)
-                    };
-                });
-
-                let path = self.svg.append("g")
-                    .attr("name", "city-destinations");
-
-                path.selectAll(".city-destinations")
-                    .data(routes)
-                    .enter()
-                        .append("path")
-                        .attr("d", d => {
-                            let dx = d.target[0] - d.source[0];
-                            let dy = d.target[1] - d.source[1],
-                            dr = Math.sqrt(dx * dx + dy * dy);
-                        return `M${d.source[0]},${d.source[1]}A${dr},${dr} 0 0,1 ${d.target[0]}, ${d.target[1]}`;
-                    })
-                    .attr("class", "city-destinations")
-                    .transition()
-                    .duration(1500)
-                    .attrTween("stroke-dasharray", function () {
-                        let length = this.getTotalLength();
-                        return t => d3.interpolateString(`0, ${length}`, `${length}, 0`)(t);
-                    })
-                ;
-
-
-
-
                 self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", false);
                 self.fromCity = null;
                 return;
@@ -320,8 +288,53 @@ export default function TicketToRide(container) {
             self.fromCity = null;
         }
 
+        function mouseOverCity(d) {
+            if (self.builtLinks.isEmpty()) {
+                return;
+            }
+
+            let fromCity = {
+                name: d.properties.name,
+                coordinates: d.geometry.coordinates,
+            };
+
+            let origin = self.builtLinks.findVertexById(fromCity.name);
+            let routes = randomUniqueRange(0, self.builtLinks.vertices.length - 1, 5).map(d => {
+                return {
+                    source: self.projection(origin.coordinates),
+                    target: self.projection(self.builtLinks.vertices[d].coordinates)
+                };
+            });
+
+            self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations")
+                .data(routes)
+                .enter()
+                .append("path")
+                .attr("d", d => {
+                    let dx = d.target[0] - d.source[0];
+                    let dy = d.target[1] - d.source[1],
+                        dr = Math.sqrt(dx * dx + dy * dy);
+                    return `M${d.source[0]},${d.source[1]}A${dr},${dr} 0 0,1 ${d.target[0]}, ${d.target[1]}`;
+                })
+                .attr("class", "city-destinations")
+                .transition()
+                .duration(1500)
+                .ease(d3.easeCircleOut)
+                .attrTween("stroke-dasharray", function () {
+                    let length = this.getTotalLength();
+                    return t => d3.interpolateString(`0, ${length}`, `${length}, 0`)(t);
+                });
+        }
+
+        function mouseOutCity() {
+            self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations").remove();
+        }
+
         self.svg.selectAll(".city")
-            .on("click", clickCity);
+            .on("click.destinations", mouseOverCity)
+            .on("mouseout", mouseOutCity)
+            .on("click.builder", clickCity);
+
     });
 }
 
@@ -355,7 +368,8 @@ TicketToRide.prototype.drawLink = function (params) {
     let nameA = cityA.name;
     let nameB = cityB.name;
 
-    let linkGroup = self.svg.select(`g[name="link-group-${linkId}-${nameA}-${nameB}"]`);
+
+    let linkGroup = self.linkGroupsSelector.select(`g[name="link-group-${linkId}-${nameA}-${nameB}"]`);
 
     // connection link ------------------------------------------------------------
     let connectionDotsSelection = linkGroup.selectAll(`.city-link-outline[name=${nameA}${nameB}]`)
@@ -412,9 +426,9 @@ TicketToRide.prototype.drawLink = function (params) {
         .attr("cx", d => d.x)
         .attr("cy", d => d.y)
         .call(d3.drag()
-            .on("start", dragStarted)
-            .on("drag", dragged)
-            .on("end", dragEnded));
+            .on("start.circle", dragStarted)
+            .on("drag.circle", dragged)
+            .on("end.circle", dragEnded));
 
     connectionPoints.exit().remove();
     // circles end ------------------------------------------------------------
@@ -497,7 +511,7 @@ TicketToRide.prototype.drawLink = function (params) {
     }
 
     linkGroup.selectAll(`.city-link-train[name=${nameA}${nameB}]`)
-        .on("click", function (d, i) {
+        .on("click.train", function (d, i) {
             if (i === 0 && connections.length === 1) {
                 self.builtLinks.removeArc(linkId);
                 d3.select(this.parentNode).remove();
@@ -532,7 +546,7 @@ TicketToRide.prototype.drawLink = function (params) {
         });
 
     linkGroup.selectAll(`.city-link-circles[name=${nameA}${nameB}]`)
-        .on("click", function (d, i) {
+        .on("click.city", function (d, i) {
             connectionCoords.splice(i, 0, {
                 x: connectionCoords[i].x,
                 y: connectionCoords[i].y
@@ -609,7 +623,8 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, initialSize, color, c
 
     this.builtLinks.addArc(cityA, cityB, linkGroupId, connections.length);
 
-    self.svg.append("g")
+    self.linkGroupsSelector
+        .append("g")
         .attr("name", `link-group-${linkGroupId}-${nameA}-${nameB}`);
 
     this.drawLink({
