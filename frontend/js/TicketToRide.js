@@ -3,6 +3,7 @@ import * as topojson from "topojson";
 import Randomer from "./Randomer";
 import {random, randomUniqueRange, angleRad, appendButton} from "./Utils";
 import Exporter from "d3-save-svg";
+import Graph from "./Graph"
 
 const maxLinks = 5;
 const connectionTypes = ["track", "ferriage", "tunnel"];
@@ -32,7 +33,7 @@ export default function TicketToRide(container) {
     this.height = 800;
 
     this.cities = [];
-    this.builtLinks = [];
+    this.builtLinks = new Graph((d) => d.name);
     this.distanceScale = null;
     this.cityVeronoi = null;
 
@@ -96,7 +97,8 @@ export default function TicketToRide(container) {
     let zoom = d3.zoom()
         .scaleExtent([MIN_SCALE, MAX_SCALE])
         .on("zoom", zoomed);
-    this.svg.call(zoom);
+    this.svg.call(zoom)
+        .on("dblclick.zoom", null);
 
 
     //Zoom buttons
@@ -146,7 +148,8 @@ export default function TicketToRide(container) {
         .on("click.map", () => {
             self.svg.selectAll("g[name^='link-group']")
                 .remove();
-            self.builtLinks = [];
+            this.builtLinks = null;
+            self.builtLinks = new Graph((d) => d.name);
             linkGroup = 0;
         });
 
@@ -162,6 +165,13 @@ export default function TicketToRide(container) {
         }, 2000);
 
     });
+
+    d3.select("#dijkstra").on("click", () => {
+
+        self.builtLinks.findDijkstraRoutes(self.builtLinks.vertices[0]);
+
+    });
+
 
     d3.json("static/ua.json", function (error, ua) {
         if (error) {
@@ -262,6 +272,42 @@ export default function TicketToRide(container) {
             }
 
             if (fromCity.name === toCity.name) {
+
+                // draw routes
+
+                let origin = self.builtLinks.findVertexById(fromCity.name);
+                let routes = randomUniqueRange(0, self.builtLinks.vertices.length - 1, 5).map(d => {
+                    return {
+                        source: self.projection(origin.coordinates),
+                        target: self.projection(self.builtLinks.vertices[d].coordinates)
+                    };
+                });
+
+                let path = self.svg.append("g")
+                    .attr("name", "city-destinations");
+
+                path.selectAll(".city-destinations")
+                    .data(routes)
+                    .enter()
+                        .append("path")
+                        .attr("d", d => {
+                            let dx = d.target[0] - d.source[0];
+                            let dy = d.target[1] - d.source[1],
+                            dr = Math.sqrt(dx * dx + dy * dy);
+                        return `M${d.source[0]},${d.source[1]}A${dr},${dr} 0 0,1 ${d.target[0]}, ${d.target[1]}`;
+                    })
+                    .attr("class", "city-destinations")
+                    .transition()
+                    .duration(1500)
+                    .attrTween("stroke-dasharray", function () {
+                        let length = this.getTotalLength();
+                        return t => d3.interpolateString(`0, ${length}`, `${length}, 0`)(t);
+                    })
+                ;
+
+
+
+
                 self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", false);
                 self.fromCity = null;
                 return;
@@ -453,7 +499,7 @@ TicketToRide.prototype.drawLink = function (params) {
     linkGroup.selectAll(`.city-link-train[name=${nameA}${nameB}]`)
         .on("click", function (d, i) {
             if (i === 0 && connections.length === 1) {
-                self.removeLinks(cityA, cityB, linkId);
+                self.builtLinks.removeArc(linkId);
                 d3.select(this.parentNode).remove();
                 return;
             }
@@ -471,7 +517,7 @@ TicketToRide.prototype.drawLink = function (params) {
                 connectionCoords[0].first = true;
             }
 
-            self.updateLink(cityA, cityB, linkId, connections.length);
+            self.builtLinks.updateArcWeight(linkId, connections.length);
             self.drawLink({
                 cityA: cityA,
                 cityB: cityB,
@@ -509,7 +555,7 @@ TicketToRide.prototype.drawLink = function (params) {
 
             }
 
-            self.updateLink(cityA, cityB, linkId, connections.length);
+            self.builtLinks.updateArcWeight(linkId, connections.length);
             self.drawLink({
                 cityA: cityA,
                 cityB: cityB,
@@ -524,56 +570,6 @@ TicketToRide.prototype.drawLink = function (params) {
         });
 
 };
-
-function updateUnidirectionalLinkWeight(all, from, id, weight) {
-    let containsFrom = all.find(el => el.source.name === from.name);
-    let containsTo = containsFrom.targets.find(el => el.id === id);
-    containsTo.weight = weight;
-}
-function addUnidirectionalLink(all, from, to, weight, id) {
-    let containsFrom = all.find(el => el.source.name === from.name);
-    if (!containsFrom) {
-        all.push({
-            source: from,
-            targets: [{
-                target: to,
-                id: id,
-                weight: weight
-            }]
-        });
-    } else {
-        let containsTo = containsFrom.targets.find(el => el.id === id);
-        if (!containsTo) {
-            containsFrom.targets.push({
-                target: to,
-                id: id,
-                weight: weight
-            });
-        }
-    }
-}
-function removeUnidirectionalLink(all, from, id) {
-    let containsFrom = all.find(el => el.source.name === from.name);
-    containsFrom.targets = containsFrom.targets.filter(el => el.id !== id);
-    if (containsFrom.targets.length === 0) {
-        all = all.filter(el => el.source.name !== from.name);
-    }
-    return all;
-}
-
-TicketToRide.prototype.addLink = function (from, to, weight, id) {
-    addUnidirectionalLink(this.builtLinks, from, to, weight, id);
-    addUnidirectionalLink(this.builtLinks, to, from, weight, id);
-};
-TicketToRide.prototype.updateLink = function (from, to, id, weight) {
-    updateUnidirectionalLinkWeight(this.builtLinks, from, id, weight);
-    updateUnidirectionalLinkWeight(this.builtLinks, to, id, weight);
-};
-TicketToRide.prototype.removeLinks = function (from, to, id) {
-    this.builtLinks = removeUnidirectionalLink(this.builtLinks, from, id);
-    this.builtLinks = removeUnidirectionalLink(this.builtLinks, to, id);
-};
-
 
 TicketToRide.prototype.buildLink = function (cityA, cityB, initialSize, color, connectionType) {
     let self = this;
@@ -611,7 +607,7 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, initialSize, color, c
     }
     let linkGroupId = linkGroup++;
 
-    this.addLink(cityA, cityB, connections.length, linkGroupId);
+    this.builtLinks.addArc(cityA, cityB, linkGroupId, connections.length);
 
     self.svg.append("g")
         .attr("name", `link-group-${linkGroupId}-${nameA}-${nameB}`);

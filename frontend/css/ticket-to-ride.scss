@@ -102,6 +102,12 @@ svg#ticket-to-ride {
     stroke-linejoin: round;
   }
 
+  .city-destinations {
+    stroke: red;
+    stroke-width: 1px;
+    fill: none;
+  }
+
 }
 
 .map-button {
@@ -111,6 +117,7 @@ svg#ticket-to-ride {
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+  user-select: none;
   background-color: #ffffff;
   border-radius: 3px;
   margin: 0 5px;
