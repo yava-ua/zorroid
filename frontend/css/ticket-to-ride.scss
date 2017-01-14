@@ -1,5 +1,6 @@
 $strokeWidth: 0.5;
 
+
 svg#ticket-to-ride {
   height: 100%;
   width: 100%;
@@ -8,9 +9,18 @@ svg#ticket-to-ride {
     user-select: none;
   }
 
-  .subunit {
+  .countries {
     fill-opacity: 0.6;
-    fill: teal;
+    fill: rgba(0, 154, 172, 0.6);
+    stroke: #6e6e6e;
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .regions {
+    fill: none;
+    stroke: black;
+    stroke-dasharray: 10 5;
   }
 
   .city {
@@ -31,7 +41,7 @@ svg#ticket-to-ride {
     font-size: 12px;
     font-weight: normal;
     text-anchor: middle;
-    fill: white;
+    fill: black;
     fill-opacity: 0.6;
   }
 

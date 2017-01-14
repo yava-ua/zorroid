@@ -3,13 +3,23 @@ import * as topojson from "topojson";
 import Randomer from "./Randomer";
 import {random, randomUniqueRange, angleRad, appendButton} from "./Utils";
 import Exporter from "d3-save-svg";
-import Graph from "./Graph"
+import Graph from "./Graph";
 
 const SCALE_DURATION = 1000;
 const MIN_SCALE = 1;
 const MAX_SCALE = 5;
 const maxLinks = 5;
-const connectionTypes = ["track", "ferriage", "tunnel"];
+const CONNECTION_TYPES = ["track", "ferriage", "tunnel"];
+const CONNECTION_TYPE_IMAGES = ["", "train.svg", "bridge.svg"];
+const CONNECTION_TYPE_IMAGE_FILL = ["", "none", "black"];
+const connectionTypes = {
+    track: CONNECTION_TYPES[0],
+    ferriage: CONNECTION_TYPES[1],
+    tunnel: CONNECTION_TYPES[2],
+    getByIndex: (i) => CONNECTION_TYPES[i],
+    getImage: type => CONNECTION_TYPE_IMAGES[CONNECTION_TYPES.indexOf(type)],
+    getFillColor: type => CONNECTION_TYPE_IMAGE_FILL[CONNECTION_TYPES.indexOf(type)]
+};
 const connectionTypeRandomer = new Randomer([45, 30, 25]);
 const colors = ["firebrick", "whitesmoke", "olivedrab", "teal", "darkslategrey", "gold", "mediumpurple"];
 const train = {
@@ -21,11 +31,15 @@ const trainCarriage = {
     height: 8
 };
 const singleCityDestinationsSelector = "g#single-city-destinations";
-
+const Maps = {
+    Ukraine: "ua.json",
+    Ukraine2: "ua-2.json"
+};
 let linkGroup = 0;
 
 export default function TicketToRide(container) {
     let self = this;
+    this.container = container;
     this.width = 1240;
     this.height = 800;
 
@@ -45,8 +59,6 @@ export default function TicketToRide(container) {
     let svg = d3.select(container)
         .append("svg")
         .attr("id", "ticket-to-ride")
-        //.attr("width", "100%")
-        //.attr("height", "100%")
         .attr("viewBox", `0 0 ${this.width} ${this.height}`);
 
     // svg.append("defs")
@@ -63,30 +75,10 @@ export default function TicketToRide(container) {
     //     .attr("height", this.height);
 
     this.svg = svg.append("g");
+    this.setZoom();
+
     this.linkGroupsSelector = null;
 
-    let currentScale = 1;
-
-    function zoomRatio(power) {
-        return Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale * Math.pow(2, power)));
-    }
-    function zoomed() {
-        self.svg.attr("transform", d3.event.transform);
-        currentScale = d3.event.transform.k;
-    }
-    function zoomIn() {
-        if (currentScale < MAX_SCALE) {
-            svg.transition().duration(500).call(zoom.scaleTo, 1.5 * zoomRatio(0.2));
-        }
-    }
-    function zoomOut() {
-        if (currentScale > MIN_SCALE) {
-            svg.transition().duration(500).call(zoom.scaleTo, zoomRatio(-0.2) / 1.5);
-        }
-    }
-    function resetMap() {
-        self.svg.transition().duration(SCALE_DURATION).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
-    }
     function clickCity(d) {
         let fromCity = self.fromCity;
         let toCity = {
@@ -96,27 +88,29 @@ export default function TicketToRide(container) {
 
         if (!fromCity) {
             self.fromCity = fromCity = toCity;
-            self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", true);
+            self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", true);
             return;
         }
 
         if (fromCity.name === toCity.name) {
-            self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", false);
+            self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", false);
             self.fromCity = null;
             return;
         }
 
         let scale = self.distanceScale(d3.geoDistance(fromCity.coordinates, toCity.coordinates));
-        self.buildLink(fromCity, toCity, scale, colors[random(0, colors.length)], connectionTypes[connectionTypeRandomer.pRandom()]);
+        self.buildLink(fromCity, toCity, scale, colors[random(0, colors.length)], connectionTypes.getByIndex([connectionTypeRandomer.pRandom()]));
 
-        self.svg.select(`.city[name=${fromCity.name}]`).classed("selected", false);
+        self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", false);
         self.fromCity = null;
     }
+
     function hideCityDestinations() {
         self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations").remove();
     }
+
     function showCityDestinations(d) {
-        hideCityDestinations();
+        //hideCityDestinations();
         if (self.builtLinks.isEmpty()) {
             return;
         }
@@ -127,24 +121,32 @@ export default function TicketToRide(container) {
         };
 
         let origin = self.builtLinks.findVertexById(fromCity.name);
-        let routes = randomUniqueRange(0, self.builtLinks.vertices.length - 1, 5).map(d => {
+        let dijkstra = self.builtLinks.findDijkstraRoutes(fromCity);
+
+        let routes = randomUniqueRange(0, self.builtLinks.vertices.length - 1, random(1, 7)).map(d => {
             return {
                 source: self.projection(origin.coordinates),
-                target: self.projection(self.builtLinks.vertices[d].coordinates)
+                target: self.projection(self.builtLinks.vertices[d].coordinates),
+                targetName: self.builtLinks.vertices[d].name
             };
         });
 
-        self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations")
-            .data(routes)
+        let cityDestinationsSelection = self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations")
+            .data(routes, d => d.index);
+        cityDestinationsSelection
             .enter()
             .append("path")
+            .attr("class", "city-destinations")
+            .merge(cityDestinationsSelection)
+            .attr("id", (d, i) => `city-destination-${i}`)
             .attr("d", d => {
                 let dx = d.target[0] - d.source[0];
                 let dy = d.target[1] - d.source[1],
                     dr = Math.sqrt(dx * dx + dy * dy);
-                return `M${d.source[0]},${d.source[1]}A${dr},${dr} 0 0,1 ${d.target[0]}, ${d.target[1]}`;
+                let invert = d.target[0] > d.source[0];
+
+                return `M${d.source[0]},${d.source[1]} A ${dr} ${dr} 0 0 ${+invert} ${d.target[0]},${d.target[1]}`;
             })
-            .attr("class", "city-destinations")
             .transition()
             .duration(1500)
             .ease(d3.easeCircleOut)
@@ -152,79 +154,89 @@ export default function TicketToRide(container) {
                 let length = this.getTotalLength();
                 return t => d3.interpolateString(`0, ${length}`, `${length}, 0`)(t);
             });
+        cityDestinationsSelection.exit().remove();
+
+        // let cityDestinationsLabelsSelection = self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations-labels")
+        //                         .data(routes, d => d.index);
+        //
+        // cityDestinationsLabelsSelection
+        //     .enter()
+        //     .append("text")
+        //     .attr("class", "city-destinations-labels")
+        //     .append("textPath")
+        //     .merge(cityDestinationsLabelsSelection.selectAll("textPath"))
+        //     .attr("xlink:href", (d, i) => `#city-destination-${i}`)
+        //     .text((d, i) => {
+        //         let res = dijkstra.distances[d.targetName];
+        //         let prefix = "--- --- ";
+        //         return d3.range(res).map(d => "").join(prefix) + `->  ${res}`;
+        //     });
+        //
+        // cityDestinationsLabelsSelection.exit().remove();
+
     }
+
     function hideCityLinks(state) {
         d3.selectAll(".city-link-circles").classed("hidden", state);
         d3.selectAll(".city-link-outline").classed("hidden", state);
     }
+
     function hideCityVoronoi(state) {
         d3.selectAll(".city-voronoi-links").classed("hidden", state);
         d3.selectAll(".city-voronoi").classed("hidden", state);
     }
 
-    let zoom = d3.zoom()
-        .scaleExtent([MIN_SCALE, MAX_SCALE])
-        .on("zoom", zoomed);
-
-    //Zoom buttons
-    const resetButton = appendButton(d3.select(container), 'Reset', 'resetButton');
-    resetButton.on('click', resetMap);
-    const zoomInButton = appendButton(d3.select(container), '+', 'zoomInButton');
-    zoomInButton.on('click', zoomIn);
-    const zoomOutButton = appendButton(d3.select(container), '-', 'zoomOutButton');
-    zoomOutButton.on('click', zoomOut);
-
     this.path = d3.geoPath().projection(this.projection);
 
     d3.select("#menu-map-mode").on("click.map", () => {
-            if (d3.select("#menu-map-mode").text() === "Viewer") {
-                d3.select("#menu-map-mode").text("Editor");
+        if (d3.select("#menu-map-mode").text() === "Viewer") {
+            d3.select("#menu-map-mode").text("Editor");
 
-                self.buildViewerMenu();
+            self.buildViewerMenu();
 
-                self.svg.selectAll(".city")
-                    .on("click.destinations", showCityDestinations)
-                    .on("click.builder", null);
-                hideCityLinks(true);
+            self.svg.selectAll(".city")
+                .on("click.destinations", showCityDestinations)
+                .on("click.builder", null);
+            hideCityLinks(true);
 
-            } else {
-                d3.select("#menu-map-mode").text("Viewer");
-                self.svg.selectAll(".city")
-                    .on("click.destinations", null)
-                    .on("click.builder", clickCity);
+        } else {
+            d3.select("#menu-map-mode").text("Viewer");
+            self.svg.selectAll(".city")
+                .on("click.destinations", null)
+                .on("click.builder", clickCity);
 
-                hideCityDestinations();
-            }
-        });
+            hideCityDestinations();
+        }
+    });
     d3.select("#menu-hide-links").on("click.map", () => {
-            if (d3.select("#menu-hide-links").text() === "Hide links") {
-                d3.select("#menu-hide-links").text("Show links");
-                hideCityLinks(true)
-            } else {
-                d3.select("#menu-hide-links").text("Hide links");
-                hideCityLinks(false);
-            }
-        });
+        if (d3.select("#menu-hide-links").text() === "Hide links") {
+            d3.select("#menu-hide-links").text("Show links");
+            hideCityLinks(true)
+        } else {
+            d3.select("#menu-hide-links").text("Hide links");
+            hideCityLinks(false);
+        }
+    });
     d3.select("#menu-hide-voronoi").on("click.map", () => {
-            if (d3.select("#menu-hide-voronoi").text() === "Hide grid") {
-                d3.select("#menu-hide-voronoi").text("Show grid");
-                hideCityVoronoi(true);
-            } else {
-                d3.select("#menu-hide-voronoi").text("Hide grid");
-                hideCityVoronoi(false);
-            }
+        if (d3.select("#menu-hide-voronoi").text() === "Hide grid") {
+            d3.select("#menu-hide-voronoi").text("Show grid");
+            hideCityVoronoi(true);
+        } else {
+            d3.select("#menu-hide-voronoi").text("Hide grid");
+            hideCityVoronoi(false);
+        }
 
-        });
+    });
     d3.select("#menu-generate-links").on("click.map", () => {
-            self.generateRandomLinks();
-        });
+        self.generateRandomLinks();
+    });
     d3.select("#menu-reset").on("click.map", () => {
-            self.linkGroupsSelector.selectAll("g[name^='link-group']")
-                .remove();
-            this.builtLinks = null;
-            self.builtLinks = new Graph((d) => d.name);
-            linkGroup = 0;
-        });
+        self.linkGroupsSelector.selectAll("g[name^='link-group']")
+            .remove();
+        this.builtLinks = null;
+        self.builtLinks = new Graph((d) => d.name);
+        linkGroup = 0;
+    });
     d3.select("#export").on("click.map", () => {
         let cfg = {
             filename: 'TicketToRide',
@@ -241,27 +253,33 @@ export default function TicketToRide(container) {
         self.builtLinks.findDijkstraRoutes(self.builtLinks.vertices[0]);
     });
 
-    d3.json("static/ua.json", function (error, ua) {
+    d3.json("static/" + Maps.Ukraine2, function (error, topoMap) {
         if (error) {
             return console.error(error);
         }
 
         // draw map
-        let mapOutlines = topojson.feature(ua, ua.objects.subunits);
-        self.projection.fitExtent([[0, 0], [self.width, self.height]], mapOutlines);
+        let mapOutlines = topojson.feature(topoMap, topoMap.objects.countries);
+        self.projection.fitExtent([[3, 3], [self.width - 3, self.height - 3]], mapOutlines.features.find(d => d.properties.name === "Ukraine"));
         self.svg.append("g").attr("id", "map")
-            .selectAll(".subunit")
+            .selectAll(".countries")
             .data(mapOutlines.features)
             .enter().append("path")
-            .attr("class", d => `subunit ${d.id}`)
+            .attr("class", d => `countries ${d.id}`)
             .attr("d", self.path);
         //.style("fill", "url(#background)");
-
-        self.svg.select("g#map")
-            .call(zoom);
+        if (topoMap.objects.regions) {
+            let regions = topojson.feature(topoMap, topoMap.objects.regions);
+            self.svg.append("g").attr("id", "regions")
+                .selectAll(".regions")
+                .data(regions.features)
+                .enter().append("path")
+                .attr("class", "regions")
+                .attr("d", self.path);
+        }
 
         //draw cities and city labels
-        let citiesOutline = topojson.feature(ua, ua.objects.places);
+        let citiesOutline = topojson.feature(topoMap, topoMap.objects.cities);
         self.cities = citiesOutline.features.map(d => {
             return {
                 name: d.properties.name,
@@ -306,7 +324,7 @@ export default function TicketToRide(container) {
             .enter().append("text")
             .attr("class", "city-label")
             .attr("transform", d => `translate( ${self.projection(d.geometry.coordinates)} )`)
-            .attr("dy", ".3em")
+            .attr("dy", ".9em")
             .text(function (d) {
                 return d.properties.name;
             });
@@ -339,6 +357,50 @@ export default function TicketToRide(container) {
     });
 }
 
+TicketToRide.prototype.setZoom = function () {
+    let self = this;
+    let currentScale = 1;
+
+    function zoomRatio(power) {
+        return Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale * Math.pow(2, power)));
+    }
+
+    function zoomed() {
+        self.svg.attr("transform", d3.event.transform);
+        currentScale = d3.event.transform.k;
+    }
+
+    function zoomIn() {
+        if (currentScale < MAX_SCALE) {
+            self.svg.transition().duration(500).call(zoom.scaleTo, 1.5 * zoomRatio(0.2));
+        }
+    }
+
+    function zoomOut() {
+        if (currentScale > MIN_SCALE) {
+            self.svg.transition().duration(500).call(zoom.scaleTo, zoomRatio(-0.2) / 1.5);
+        }
+    }
+
+    function resetMap() {
+        self.svg.transition().duration(SCALE_DURATION).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
+    }
+
+    let zoom = d3.zoom()
+        .scaleExtent([MIN_SCALE, MAX_SCALE])
+        .on("zoom", zoomed);
+
+    //Zoom buttons
+    const resetButton = appendButton(d3.select(this.container), 'Reset', 'resetButton');
+    resetButton.on('click', resetMap);
+    const zoomInButton = appendButton(d3.select(this.container), '+', 'zoomInButton');
+    zoomInButton.on('click', zoomIn);
+    const zoomOutButton = appendButton(d3.select(this.container), '-', 'zoomOutButton');
+    zoomOutButton.on('click', zoomOut);
+
+    self.svg.call(zoom);
+};
+
 TicketToRide.prototype.buildViewerMenu = function () {
     let leftMenuCities = d3.select("#menu-right-cities");
     leftMenuCities.selectAll(".menu-right-city").remove();
@@ -346,7 +408,7 @@ TicketToRide.prototype.buildViewerMenu = function () {
         .data(this.builtLinks.vertices)
         .enter()
         .append("a")
-        .attr("class","menu-right-city")
+        .attr("class", "menu-right-city")
         .html(d => d.name);
 
 };
@@ -365,6 +427,17 @@ TicketToRide.prototype.setScales = function () {
         .range(d3.range(0, 8));
 };
 
+function drawConnectionType(selection, connectionType, nameA, nameB) {
+    selection
+        .enter().append("use")
+        .attr("class", "city-link-train-carriage")
+        .style("--fill-color", connectionTypes.getFillColor(connectionType))
+        .attr("name", `${nameA}${nameB}`)
+        .attr("width", trainCarriage.width)
+        .attr("height", trainCarriage.height)
+        .attr("link:href", "#" + connectionTypes.getImage(connectionType));
+}
+
 TicketToRide.prototype.drawLink = function (params) {
     let cityA = params.cityA;
     let cityB = params.cityB;
@@ -382,10 +455,10 @@ TicketToRide.prototype.drawLink = function (params) {
     let nameB = cityB.name;
 
 
-    let linkGroup = self.linkGroupsSelector.select(`g[name="link-group-${linkId}-${nameA}-${nameB}"]`);
+    let linkGroup = self.linkGroupsSelector.select(`g[name='link-group-${linkId}-${nameA}-${nameB}']`);
 
     // connection link ------------------------------------------------------------
-    let connectionDotsSelection = linkGroup.selectAll(`.city-link-outline[name=${nameA}${nameB}]`)
+    let connectionDotsSelection = linkGroup.selectAll(`.city-link-outline[name='${nameA}${nameB}']`)
         .data(connections, d => d.index);
     let connectionDots = connectionDotsSelection
         .enter().append("path")
@@ -397,7 +470,7 @@ TicketToRide.prototype.drawLink = function (params) {
     // connection link end ------------------------------------------------------------
 
     // trains ------------------------------------------------------------
-    let connectionTrainsSelection = linkGroup.selectAll(`.city-link-train[name=${nameA}${nameB}]`)
+    let connectionTrainsSelection = linkGroup.selectAll(`.city-link-train[name='${nameA}${nameB}']`)
         .data(connections, d => d.index);
     let connectionTrains = connectionTrainsSelection
         .enter().append("rect")
@@ -409,25 +482,15 @@ TicketToRide.prototype.drawLink = function (params) {
         .merge(connectionTrainsSelection);
     connectionTrainsSelection.exit().remove();
 
-    if (connectionType === connectionTypes[1] || connectionType === connectionTypes[2]) {
-        let connectionTrainCarriagesSelection = linkGroup.selectAll(`.city-link-train-carriage[name=${nameA}${nameB}]`)
-            .data(connections, d => d.index);
-        var connectionTrainCarriages = connectionTrainCarriagesSelection
-            .enter().append("use")
-            .attr("class", "city-link-train-carriage")
-            .style("--fill-color", connectionType === connectionTypes[1] ? "black" : "white")
-            .attr("name", `${nameA}${nameB}`)
-            .attr("width", trainCarriage.width)
-            .attr("height", trainCarriage.height)
-            .attr("link:href", "#train.svg")
-            .merge(connectionTrainCarriagesSelection);
 
-        connectionTrainCarriagesSelection.exit().remove();
-    }
+    let connectionTrainCarriagesSelection = linkGroup.selectAll(`.city-link-train-carriage[name='${nameA}${nameB}']`)
+        .data(connections, d => d.index);
+    drawConnectionType(connectionTrainCarriagesSelection, connectionType, nameA, nameB);
+    connectionTrainCarriagesSelection.exit().remove();
     // trains end ------------------------------------------------------------
 
     // circles ------------------------------------------------------------
-    let connectionPoints = linkGroup.selectAll(`.city-link-circles[name=${nameA}${nameB}]`)
+    let connectionPoints = linkGroup.selectAll(`.city-link-circles[name='${nameA}${nameB}']`)
         .data(connectionCoords, d => d.index);
 
     connectionPoints
@@ -465,7 +528,7 @@ TicketToRide.prototype.drawLink = function (params) {
     //     .force("charge", d3.forceManyBody().strength(-30))
     //     .nodes(connectionCoords, d => d.index)
     //     .on("tick", () => {
-    //         linkGroup.selectAll(`.city-link-circles[name=${nameA}${nameB}]`)
+    //         linkGroup.selectAll(`.city-link-circles[name='${nameA}${nameB}']`)
     //             .attr("cx", d => d.x)
     //             .attr("cy", d => d.y);
     //     });
@@ -493,8 +556,10 @@ TicketToRide.prototype.drawLink = function (params) {
                     let angle = angleRad(d.source, d.target);
                     return `translate(${x}, ${y}) rotate(${angle}, ${train.width / 2},${train.height / 2})`;
                 });
-            if (connectionTrainCarriages) {
-                connectionTrainCarriages
+
+            let connectionTrainCarriagesSelection = linkGroup.selectAll(`.city-link-train-carriage[name='${nameA}${nameB}']`);
+            if (!connectionTrainCarriagesSelection.empty()) {
+                connectionTrainCarriagesSelection
                     .attr("transform", d => {
                         let x = (d.source.x + d.target.x - trainCarriage.width) / 2;
                         let y = (d.source.y + d.target.y - trainCarriage.height) / 2;
@@ -523,7 +588,7 @@ TicketToRide.prototype.drawLink = function (params) {
             .attr("cy", d.y = d3.event.y);
     }
 
-    linkGroup.selectAll(`.city-link-train[name=${nameA}${nameB}]`)
+    linkGroup.selectAll(`.city-link-train[name='${nameA}${nameB}']`)
         .on("click.train", function (d, i) {
             if (i === 0 && connections.length === 1) {
                 self.builtLinks.removeArc(linkId);
@@ -558,7 +623,7 @@ TicketToRide.prototype.drawLink = function (params) {
             });
         });
 
-    linkGroup.selectAll(`.city-link-circles[name=${nameA}${nameB}]`)
+    linkGroup.selectAll(`.city-link-circles[name='${nameA}${nameB}']`)
         .on("click.city", function (d, i) {
             connectionCoords.splice(i, 0, {
                 x: connectionCoords[i].x,
@@ -709,7 +774,7 @@ TicketToRide.prototype.generateRandomLinks = function () {
             if (randomLinksIdxs.includes(idx)) {
                 let to = destination;
                 let scale = self.distanceScale(d3.geoDistance(from.coordinates, to.coordinates));
-                self.buildLink(from, to, scale, colors[linkColorIdxs[idx]], connectionTypes[connectionTypeRandomer.pRandom()]);
+                self.buildLink(from, to, scale, colors[linkColorIdxs[idx]], connectionTypes.getByIndex([connectionTypeRandomer.pRandom()]));
             }
         });
     });
