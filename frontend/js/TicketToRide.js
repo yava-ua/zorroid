@@ -21,8 +21,6 @@ const connectionTypes = {
     getFillColor: type => CONNECTION_TYPE_IMAGE_FILL[CONNECTION_TYPES.indexOf(type)]
 };
 const connectionTypeRandomer = new Randomer([45, 30, 25]);
-// red green white
-const colorsRandomer = new Randomer([10, 10, 10, 10, 10, 10, 10, 10, 20]);
 const colors = ["#b11700",  "#e17b0c", "#e5d331", "#7c9434", "#4591c5", "#e7a7ca", "#2a2126", "#f1f5f6", "#808080"];
 const train = {
     width: 34,
