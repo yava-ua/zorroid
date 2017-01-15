@@ -21,7 +21,9 @@ const connectionTypes = {
     getFillColor: type => CONNECTION_TYPE_IMAGE_FILL[CONNECTION_TYPES.indexOf(type)]
 };
 const connectionTypeRandomer = new Randomer([45, 30, 25]);
-const colors = ["firebrick", "whitesmoke", "olivedrab", "teal", "darkslategrey", "gold", "mediumpurple"];
+// red green white
+const colorsRandomer = new Randomer([10, 10, 10, 10, 10, 10, 10, 10, 20]);
+const colors = ["#b11700",  "#e17b0c", "#e5d331", "#7c9434", "#4591c5", "#e7a7ca", "#2a2126", "#f1f5f6", "#808080"];
 const train = {
     width: 34,
     height: 10
@@ -54,7 +56,11 @@ export default function TicketToRide(container) {
         .parallels([42, 52])
         .translate([this.width / 2, this.height / 2]);
 
-    this.fromCity = null;
+    this.editorState = {
+        fromCity: null,
+        connectionType: connectionTypes.track,
+        color: colors[0]
+    };
 
     let svg = d3.select(container)
         .append("svg")
@@ -80,29 +86,32 @@ export default function TicketToRide(container) {
     this.linkGroupsSelector = null;
 
     function clickCity(d) {
-        let fromCity = self.fromCity;
+        let fromCity = self.editorState.fromCity;
         let toCity = {
             name: d.properties.name,
             coordinates: d.geometry.coordinates,
         };
 
         if (!fromCity) {
-            self.fromCity = fromCity = toCity;
+            self.editorState.fromCity = fromCity = toCity;
             self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", true);
             return;
         }
 
         if (fromCity.name === toCity.name) {
             self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", false);
-            self.fromCity = null;
+            self.editorState.fromCity = null;
             return;
         }
 
         let scale = self.distanceScale(d3.geoDistance(fromCity.coordinates, toCity.coordinates));
-        self.buildLink(fromCity, toCity, scale, colors[random(0, colors.length)], connectionTypes.getByIndex([connectionTypeRandomer.pRandom()]));
+
+        let color = self.editorState.color;
+        let connectionType = self.editorState.connectionType;
+        self.buildLink(fromCity, toCity, scale, color, connectionType);
 
         self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", false);
-        self.fromCity = null;
+        self.editorState.fromCity = null;
     }
 
     function hideCityDestinations() {
@@ -252,6 +261,12 @@ export default function TicketToRide(container) {
     d3.select("#dijkstra").on("click.map", () => {
         self.builtLinks.findDijkstraRoutes(self.builtLinks.vertices[0]);
     });
+    d3.select("#selector-connection-type").on("change.map", function () {
+        self.editorState.connectionType = this.value;
+    });
+    d3.select("#selector-color").on("change.map", function () {
+        self.editorState.color = colors[this.selectedIndex];
+    });
 
     d3.json("static/" + Maps.Ukraine2, function (error, topoMap) {
         if (error) {
@@ -265,7 +280,7 @@ export default function TicketToRide(container) {
             .selectAll(".countries")
             .data(mapOutlines.features)
             .enter().append("path")
-            .attr("class", d => `countries ${d.id}`)
+            .attr("class", d => `countries ${d.properties.ADM0_A3}`)
             .attr("d", self.path);
         //.style("fill", "url(#background)");
         if (topoMap.objects.regions) {
@@ -400,19 +415,6 @@ TicketToRide.prototype.setZoom = function () {
 
     self.svg.call(zoom);
 };
-
-TicketToRide.prototype.buildViewerMenu = function () {
-    let leftMenuCities = d3.select("#menu-right-cities");
-    leftMenuCities.selectAll(".menu-right-city").remove();
-    leftMenuCities.selectAll(".menu-right-city")
-        .data(this.builtLinks.vertices)
-        .enter()
-        .append("a")
-        .attr("class", "menu-right-city")
-        .html(d => d.name);
-
-};
-
 TicketToRide.prototype.setScales = function () {
     let distances = this.cityVeronoi
         .links()
@@ -427,15 +429,30 @@ TicketToRide.prototype.setScales = function () {
         .range(d3.range(0, 8));
 };
 
-function drawConnectionType(selection, connectionType, nameA, nameB) {
+TicketToRide.prototype.buildViewerMenu = function () {
+    let leftMenuCities = d3.select("#menu-right-cities");
+    leftMenuCities.selectAll(".menu-right-city").remove();
+    leftMenuCities.selectAll(".menu-right-city")
+        .data(this.builtLinks.vertices)
+        .enter()
+        .append("a")
+        .attr("class", "menu-right-city")
+        .html(d => d.name);
+
+};
+
+function drawConnectionType(selection, connectionType, nameA, nameB, color) {
+    let image = "#" + connectionTypes.getImage(connectionType);
+    let fillColor = connectionType === connectionTypes.ferriage ? d3.color(color).darker(1) : connectionTypes.getFillColor(connectionType);
+
     selection
         .enter().append("use")
         .attr("class", "city-link-train-carriage")
-        .style("--fill-color", connectionTypes.getFillColor(connectionType))
+        .style("--fill-color", fillColor)
         .attr("name", `${nameA}${nameB}`)
         .attr("width", trainCarriage.width)
         .attr("height", trainCarriage.height)
-        .attr("link:href", "#" + connectionTypes.getImage(connectionType));
+        .attr("link:href", (d, i) => connectionType === connectionTypes.ferriage && i > 1 ? "" : image);
 }
 
 TicketToRide.prototype.drawLink = function (params) {
@@ -485,7 +502,7 @@ TicketToRide.prototype.drawLink = function (params) {
 
     let connectionTrainCarriagesSelection = linkGroup.selectAll(`.city-link-train-carriage[name='${nameA}${nameB}']`)
         .data(connections, d => d.index);
-    drawConnectionType(connectionTrainCarriagesSelection, connectionType, nameA, nameB);
+    drawConnectionType(connectionTrainCarriagesSelection, connectionType, nameA, nameB, color);
     connectionTrainCarriagesSelection.exit().remove();
     // trains end ------------------------------------------------------------
 
@@ -662,7 +679,6 @@ TicketToRide.prototype.drawLink = function (params) {
         });
 
 };
-
 TicketToRide.prototype.buildLink = function (cityA, cityB, initialSize, color, connectionType) {
     let self = this;
     let nameA = cityA.name;
@@ -717,7 +733,6 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, initialSize, color, c
         linkId: linkGroupId
     });
 };
-
 TicketToRide.prototype.generateRandomLinks = function () {
     let self = this;
 
@@ -774,7 +789,9 @@ TicketToRide.prototype.generateRandomLinks = function () {
             if (randomLinksIdxs.includes(idx)) {
                 let to = destination;
                 let scale = self.distanceScale(d3.geoDistance(from.coordinates, to.coordinates));
-                self.buildLink(from, to, scale, colors[linkColorIdxs[idx]], connectionTypes.getByIndex([connectionTypeRandomer.pRandom()]));
+
+                let connectionType = connectionTypes.getByIndex([connectionTypeRandomer.pRandom()]);
+                self.buildLink(from, to, scale, colors[linkColorIdxs[idx]], connectionType);
             }
         });
     });

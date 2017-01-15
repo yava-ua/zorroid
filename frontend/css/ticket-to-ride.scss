@@ -11,10 +11,36 @@ svg#ticket-to-ride {
 
   .countries {
     fill-opacity: 0.6;
-    fill: rgba(0, 154, 172, 0.6);
+    fill: rgb(0, 154, 172);
     stroke: #6e6e6e;
     stroke-width: 1px;
     vector-effect: non-scaling-stroke;
+
+    &.UKR {
+      fill: rgb(0, 154, 172);
+    }
+    &.RUS {
+      fill: #d1de33;
+    }
+    &.BLR {
+      fill: #deb342;
+    }
+    &.POL {
+      fill: #de7f3a;
+    }
+    &.SVK {
+      fill: #de7867;
+    }
+    &.HUN {
+      fill: burlywood;
+    }
+    &.ROU {
+      fill: #fffa63;
+    }
+    &.MDA {
+      fill: #de879b;
+    }
+
   }
 
   .regions {

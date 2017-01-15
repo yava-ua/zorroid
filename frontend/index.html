@@ -648,25 +648,42 @@
     </defs>
 </svg>
 
+<span id="menu-open" class="menu-button left no-print">&#9776; Menu</span>
+<span id="menu-sub" class="menu-button right no-print">&#9776; Viewer</span>
 
-<span id="menu-open" class="menu-button left">&#9776; Menu</span>
-<span id="menu-sub" class="menu-button right">&#9776; Viewer</span>
+<div class="editor-tools no-print">
+    <label for="selector-connection-type"></label><select id="selector-connection-type">
+        <option>track</option>
+        <option>ferriage</option>
+        <option>tunnel</option>
+    </select>
 
-<div id="navigation-left" class="sidenav left">
-    <a id="menu-close" class="closebtn">&times;</a>
-    <a id="menu-map-mode">Viewer</a>
-    <a id="menu-hide-links">Hide links</a>
-    <a id="menu-hide-voronoi">Show grid</a>
-    <a id="menu-generate-links">Generate links</a>
-    <a id="menu-reset">Reset</a>
+    <label for="selector-color"></label><select id="selector-color">
+        <option>firebrick</option>
+        <option>chockolate</option>
+        <option>goldenrod</option>
+        <option>olivedrab</option>
+        <option>steelblue</option>
+        <option>plum</option>
+        <option>darkslategrey</option>
+        <option>whitesmoke</option>
+        <option>grey</option>
+    </select>
 </div>
-<div id="navigation-right" class="sidenav right">
-    <a id="navigation-right-close" class="closebtn">&times;</a>
-    <div id="menu-right-cities" class="menu-right-cities">
 
-    </div>
-    <a id="dijkstra">Dijkstra</a>
-    <a id="export">Export</a>
+<div id="navigation-left" class="sidenav left no-print">
+    <a href="#" id="menu-close" class="closebtn">&times;</a>
+    <a href="#" id="menu-map-mode">Viewer</a>
+    <a href="#" id="menu-hide-links">Hide links</a>
+    <a href="#" id="menu-hide-voronoi">Show grid</a>
+    <a href="#" id="menu-generate-links">Generate links</a>
+    <a href="#" id="menu-reset">Reset</a>
+</div>
+<div id="navigation-right" class="sidenav right no-print">
+    <a href="#" id="navigation-right-close" class="closebtn">&times;</a>
+    <a href="#" id="dijkstra">Dijkstra</a>
+    <a href="#" id="export">Export</a>
+    <div id="menu-right-cities" class="menu-right-cities"></div>
 </div>
 
 
