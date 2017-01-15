@@ -1,5 +1,5 @@
 {
-  "name": "pathfinder",
+  "name": "Ticket To Ride",
   "version": "0.1.0",
   "description": "Ticket to Ride",
   "main": "app.js",
@@ -41,12 +41,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yavaua/pathfinder.git"
+    "url": "https://github.com/yava-ua/zorroid.git"
   },
-  "author": "Sportsbook dashboard team",
-  "license": "Playtech Sports",
+  "author": "Yaroslav Boychuk",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yavaua/pathfinder/issues"
+    "url": "https://github.com/yava-ua/zorroid/issues"
   },
-  "homepage": "https://github.com/yavaua/pathfinder#readme"
+  "homepage": "https://github.com/yava-ua/zorroid#readme"
 }
