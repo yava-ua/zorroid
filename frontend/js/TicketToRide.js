@@ -7,8 +7,8 @@ import Graph from "./Graph";
 
 const SCALE_DURATION = 1000;
 const MIN_SCALE = 1;
-const MAX_SCALE = 5;
-const maxLinks = 5;
+const MAX_SCALE = 8;
+const MAX_LINKS = 2;
 const CONNECTION_TYPES = ["track", "ferriage", "tunnel"];
 const CONNECTION_TYPE_IMAGES = ["", "train.svg", "bridge.svg"];
 const CONNECTION_TYPE_IMAGE_FILL = ["", "none", "black"];
@@ -21,7 +21,7 @@ const connectionTypes = {
     getFillColor: type => CONNECTION_TYPE_IMAGE_FILL[CONNECTION_TYPES.indexOf(type)]
 };
 const connectionTypeRandomer = new Randomer([45, 30, 25]);
-const colors = ["#b11700",  "#e17b0c", "#e5d331", "#7c9434", "#4591c5", "#e7a7ca", "#2a2126", "#f1f5f6", "#808080"];
+const colors = ["#b11700", "#e17b0c", "#e5d331", "#7c9434", "#4591c5", "#e7a7ca", "#2a2126", "#f1f5f6", "#808080"];
 const train = {
     width: 34,
     height: 10
@@ -37,6 +37,146 @@ const Maps = {
 };
 let linkGroup = 0;
 
+function clickCity(d, self) {
+    let fromCity = self.editorState.fromCity;
+    let toCity = {
+        name: d.properties.name,
+        coordinates: d.geometry.coordinates,
+    };
+
+    if (!fromCity) {
+        self.editorState.fromCity = fromCity = toCity;
+        self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", true);
+        return;
+    }
+
+    if (fromCity.name === toCity.name) {
+        self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", false);
+        self.editorState.fromCity = null;
+        return;
+    }
+
+    let scale = self.distanceScale(d3.geoDistance(fromCity.coordinates, toCity.coordinates));
+
+    let color = self.editorState.color;
+    let connectionType = self.editorState.connectionType;
+    self.buildLink(fromCity, toCity, scale, color, connectionType);
+
+    self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", false);
+    self.editorState.fromCity = null;
+}
+function hideCityDestinations(self) {
+    self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations").remove();
+}
+function showCityDestinations(d, self) {
+    //hideCityDestinations();
+    if (self.builtLinks.isEmpty()) {
+        return;
+    }
+
+    let fromCity = {
+        name: d.properties.name,
+        coordinates: d.geometry.coordinates,
+    };
+
+    let origin = self.builtLinks.findVertexById(fromCity.name);
+    let dijkstra = self.builtLinks.findDijkstraRoutes(fromCity);
+
+    let routes = randomUniqueRange(0, self.builtLinks.vertices.length - 1, random(1, 7)).map(d => {
+        return {
+            source: self.projection(origin.coordinates),
+            target: self.projection(self.builtLinks.vertices[d].coordinates),
+            targetName: self.builtLinks.vertices[d].name
+        };
+    });
+
+    let cityDestinationsSelection = self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations")
+        .data(routes, d => d.index);
+    cityDestinationsSelection
+        .enter()
+        .append("path")
+        .attr("class", "city-destinations")
+        .merge(cityDestinationsSelection)
+        .attr("id", (d, i) => `city-destination-${i}`)
+        .attr("d", d => {
+            let dx = d.target[0] - d.source[0];
+            let dy = d.target[1] - d.source[1],
+                dr = Math.sqrt(dx * dx + dy * dy);
+            let invert = d.target[0] > d.source[0];
+
+            return `M${d.source[0]},${d.source[1]} A ${dr} ${dr} 0 0 ${+invert} ${d.target[0]},${d.target[1]}`;
+        })
+        .transition()
+        .duration(1500)
+        .ease(d3.easeCircleOut)
+        .attrTween("stroke-dasharray", function () {
+            let length = this.getTotalLength();
+            return t => d3.interpolateString(`0, ${length}`, `${length}, 0`)(t);
+        });
+    cityDestinationsSelection.exit().remove();
+
+    // let cityDestinationsLabelsSelection = self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations-labels")
+    //                         .data(routes, d => d.index);
+    //
+    // cityDestinationsLabelsSelection
+    //     .enter()
+    //     .append("text")
+    //     .attr("class", "city-destinations-labels")
+    //     .append("textPath")
+    //     .merge(cityDestinationsLabelsSelection.selectAll("textPath"))
+    //     .attr("xlink:href", (d, i) => `#city-destination-${i}`)
+    //     .text((d, i) => {
+    //         let res = dijkstra.distances[d.targetName];
+    //         let prefix = "--- --- ";
+    //         return d3.range(res).map(d => "").join(prefix) + `->  ${res}`;
+    //     });
+    //
+    // cityDestinationsLabelsSelection.exit().remove();
+
+}
+function hideCityLinks(state, self) {
+    d3.selectAll(".city-link-circles").classed("hidden", state);
+    d3.selectAll(".city-link-outline").classed("hidden", state);
+}
+function hideCityVoronoi(state, self) {
+    d3.selectAll(".city-voronoi-links").classed("hidden", state);
+    d3.selectAll(".city-voronoi").classed("hidden", state);
+}
+
+function zoomRatio(power, currentScale) {
+    return Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale * Math.pow(2, power)));
+}
+function zoomed(self) {
+    self.svg.attr("transform", d3.event.transform);
+    self.currentScale = d3.event.transform.k;
+}
+function zoomIn(self, zoom) {
+    if (self.currentScale < MAX_SCALE) {
+        self.svg.transition().duration(500).call(zoom.scaleTo, 1.5 * zoomRatio(0.2, self.currentScale));
+    }
+}
+function zoomOut(self, zoom) {
+    if (self.currentScale > MIN_SCALE) {
+        self.svg.transition().duration(500).call(zoom.scaleTo, zoomRatio(-0.2, self.currentScale) / 1.5);
+    }
+}
+function resetMap(self, zoom) {
+    self.svg.transition().duration(SCALE_DURATION).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
+}
+
+function backgroundImage(self, defs, code) {
+    defs.append("pattern")
+        .attr("id", `background-${code}`)
+        .attr("patternUnits", "userSpaceOnUse")
+        .attr("width", self.width)
+        .attr("height", self.height)
+        .append("image")
+        .attr("href", "./images/bg-04.jpg")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", self.width)
+        .attr("height", self.height)
+}
 export default function TicketToRide(container) {
     let self = this;
     this.container = container;
@@ -64,134 +204,9 @@ export default function TicketToRide(container) {
         .append("svg")
         .attr("id", "ticket-to-ride")
         .attr("viewBox", `0 0 ${this.width} ${this.height}`);
-
-    // svg.append("defs")
-    //     .append("pattern")
-    //     .attr("id", "background")
-    //     .attr("patternUnits", "userSpaceOnUse")
-    //     .attr("width", this.width)
-    //     .attr("height", this.height)
-    //     .append("image")
-    //     .attr("href", "./images/bg-04.jpg")
-    //     .attr("x", 0)
-    //     .attr("y", 0)
-    //     //.attr("width", this.width)
-    //     .attr("height", this.height);
-
+    //let defs = svg.append("defs");
+    //backgroundImage(self, defs, "UKR");
     this.svg = svg.append("g");
-    this.setZoom();
-
-    this.linkGroupsSelector = null;
-
-    function clickCity(d) {
-        let fromCity = self.editorState.fromCity;
-        let toCity = {
-            name: d.properties.name,
-            coordinates: d.geometry.coordinates,
-        };
-
-        if (!fromCity) {
-            self.editorState.fromCity = fromCity = toCity;
-            self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", true);
-            return;
-        }
-
-        if (fromCity.name === toCity.name) {
-            self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", false);
-            self.editorState.fromCity = null;
-            return;
-        }
-
-        let scale = self.distanceScale(d3.geoDistance(fromCity.coordinates, toCity.coordinates));
-
-        let color = self.editorState.color;
-        let connectionType = self.editorState.connectionType;
-        self.buildLink(fromCity, toCity, scale, color, connectionType);
-
-        self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", false);
-        self.editorState.fromCity = null;
-    }
-
-    function hideCityDestinations() {
-        self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations").remove();
-    }
-
-    function showCityDestinations(d) {
-        //hideCityDestinations();
-        if (self.builtLinks.isEmpty()) {
-            return;
-        }
-
-        let fromCity = {
-            name: d.properties.name,
-            coordinates: d.geometry.coordinates,
-        };
-
-        let origin = self.builtLinks.findVertexById(fromCity.name);
-        let dijkstra = self.builtLinks.findDijkstraRoutes(fromCity);
-
-        let routes = randomUniqueRange(0, self.builtLinks.vertices.length - 1, random(1, 7)).map(d => {
-            return {
-                source: self.projection(origin.coordinates),
-                target: self.projection(self.builtLinks.vertices[d].coordinates),
-                targetName: self.builtLinks.vertices[d].name
-            };
-        });
-
-        let cityDestinationsSelection = self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations")
-            .data(routes, d => d.index);
-        cityDestinationsSelection
-            .enter()
-            .append("path")
-            .attr("class", "city-destinations")
-            .merge(cityDestinationsSelection)
-            .attr("id", (d, i) => `city-destination-${i}`)
-            .attr("d", d => {
-                let dx = d.target[0] - d.source[0];
-                let dy = d.target[1] - d.source[1],
-                    dr = Math.sqrt(dx * dx + dy * dy);
-                let invert = d.target[0] > d.source[0];
-
-                return `M${d.source[0]},${d.source[1]} A ${dr} ${dr} 0 0 ${+invert} ${d.target[0]},${d.target[1]}`;
-            })
-            .transition()
-            .duration(1500)
-            .ease(d3.easeCircleOut)
-            .attrTween("stroke-dasharray", function () {
-                let length = this.getTotalLength();
-                return t => d3.interpolateString(`0, ${length}`, `${length}, 0`)(t);
-            });
-        cityDestinationsSelection.exit().remove();
-
-        // let cityDestinationsLabelsSelection = self.svg.select(singleCityDestinationsSelector).selectAll(".city-destinations-labels")
-        //                         .data(routes, d => d.index);
-        //
-        // cityDestinationsLabelsSelection
-        //     .enter()
-        //     .append("text")
-        //     .attr("class", "city-destinations-labels")
-        //     .append("textPath")
-        //     .merge(cityDestinationsLabelsSelection.selectAll("textPath"))
-        //     .attr("xlink:href", (d, i) => `#city-destination-${i}`)
-        //     .text((d, i) => {
-        //         let res = dijkstra.distances[d.targetName];
-        //         let prefix = "--- --- ";
-        //         return d3.range(res).map(d => "").join(prefix) + `->  ${res}`;
-        //     });
-        //
-        // cityDestinationsLabelsSelection.exit().remove();
-
-    }
-
-    function hideCityLinks(state) {
-        d3.selectAll(".city-link-circles").classed("hidden", state);
-        d3.selectAll(".city-link-outline").classed("hidden", state);
-    }
-
-    function hideCityVoronoi(state) {
-        d3.selectAll(".city-voronoi-links").classed("hidden", state);
-        d3.selectAll(".city-voronoi").classed("hidden", state);
-    }
 
     this.path = d3.geoPath().projection(this.projection);
 
@@ -202,7 +217,7 @@ export default function TicketToRide(container) {
             self.buildViewerMenu();
 
             self.svg.selectAll(".city")
-                .on("click.destinations", showCityDestinations)
+                .on("click.destinations", d => showCityDestinations(d, self))
                 .on("click.builder", null);
             hideCityLinks(true);
 
@@ -210,27 +225,29 @@ export default function TicketToRide(container) {
             d3.select("#menu-map-mode").text("Viewer");
             self.svg.selectAll(".city")
                 .on("click.destinations", null)
-                .on("click.builder", clickCity);
+                .on("click.builder", function (d) {
+                    clickCity(d, self);
+                });
 
-            hideCityDestinations();
+            hideCityDestinations(self);
         }
     });
     d3.select("#menu-hide-links").on("click.map", () => {
         if (d3.select("#menu-hide-links").text() === "Hide links") {
             d3.select("#menu-hide-links").text("Show links");
-            hideCityLinks(true)
+            hideCityLinks(true, self)
         } else {
             d3.select("#menu-hide-links").text("Hide links");
-            hideCityLinks(false);
+            hideCityLinks(false, self);
         }
     });
     d3.select("#menu-hide-voronoi").on("click.map", () => {
         if (d3.select("#menu-hide-voronoi").text() === "Hide grid") {
             d3.select("#menu-hide-voronoi").text("Show grid");
-            hideCityVoronoi(true);
+            hideCityVoronoi(true, self);
         } else {
             d3.select("#menu-hide-voronoi").text("Hide grid");
-            hideCityVoronoi(false);
+            hideCityVoronoi(false, self);
         }
 
     });
@@ -238,11 +255,7 @@ export default function TicketToRide(container) {
         self.generateRandomLinks();
     });
     d3.select("#menu-reset").on("click.map", () => {
-        self.linkGroupsSelector.selectAll("g[name^='link-group']")
-            .remove();
-        this.builtLinks = null;
-        self.builtLinks = new Graph((d) => d.name);
-        linkGroup = 0;
+        self.resetEditor();
     });
     d3.select("#export").on("click.map", () => {
         let cfg = {
@@ -259,6 +272,11 @@ export default function TicketToRide(container) {
     d3.select("#dijkstra").on("click.map", () => {
         self.builtLinks.findDijkstraRoutes(self.builtLinks.vertices[0]);
     });
+    d3.select("#selector-map").on("change.map", function () {
+        self.resetEditor();
+        self.svg.selectAll("*").remove();
+        self.loadMap("static/" + Maps[this.value]);
+    });
     d3.select("#selector-connection-type").on("change.map", function () {
         self.editorState.connectionType = this.value;
     });
@@ -266,7 +284,18 @@ export default function TicketToRide(container) {
         self.editorState.color = colors[this.selectedIndex];
     });
 
-    d3.json("static/" + Maps.Ukraine2, function (error, topoMap) {
+    this.loadMap("static/" + Maps.Ukraine2);
+}
+TicketToRide.prototype.resetEditor = function () {
+    this.linkGroupsSelector.selectAll("g[name^='link-group']").remove();
+    this.builtLinks = null;
+    this.builtLinks = new Graph((d) => d.name);
+    linkGroup = 0;
+};
+
+TicketToRide.prototype.loadMap = function (url) {
+    let self = this;
+    d3.json(url, function (error, topoMap) {
         if (error) {
             return console.error(error);
         }
@@ -278,9 +307,9 @@ export default function TicketToRide(container) {
             .selectAll(".countries")
             .data(mapOutlines.features)
             .enter().append("path")
-            .attr("class", d => `countries ${d.properties.ADM0_A3}`)
+            .attr("class", d => `countries ${d.properties.id}`)
             .attr("d", self.path);
-        //.style("fill", "url(#background)");
+            //.style("fill", d => `url(#background-${d.properties.id})`);
         if (topoMap.objects.regions) {
             let regions = topojson.feature(topoMap, topoMap.objects.regions);
             self.svg.append("g").attr("id", "regions")
@@ -360,56 +389,29 @@ export default function TicketToRide(container) {
             });
 
 
-        self.svg.append("g")
-            .attr("id", "link-groups");
+        self.svg.append("g").attr("id", "link-groups");
         self.linkGroupsSelector = self.svg.select("g#link-groups");
-        self.svg.append("g")
-            .attr("id", "single-city-destinations");
-        self.svg.selectAll(".city")
-            .on("click.builder", clickCity);
-    });
-}
+        self.svg.append("g").attr("id", "single-city-destinations");
+        self.svg.selectAll(".city").on("click.builder", d => clickCity(d, self));
 
+        self.setZoom();
+    });
+};
 TicketToRide.prototype.setZoom = function () {
     let self = this;
-    let currentScale = 1;
-
-    function zoomRatio(power) {
-        return Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale * Math.pow(2, power)));
-    }
-
-    function zoomed() {
-        self.svg.attr("transform", d3.event.transform);
-        currentScale = d3.event.transform.k;
-    }
-
-    function zoomIn() {
-        if (currentScale < MAX_SCALE) {
-            self.svg.transition().duration(500).call(zoom.scaleTo, 1.5 * zoomRatio(0.2));
-        }
-    }
-
-    function zoomOut() {
-        if (currentScale > MIN_SCALE) {
-            self.svg.transition().duration(500).call(zoom.scaleTo, zoomRatio(-0.2) / 1.5);
-        }
-    }
-
-    function resetMap() {
-        self.svg.transition().duration(SCALE_DURATION).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
-    }
+    self.currentScale = 1;
 
     let zoom = d3.zoom()
         .scaleExtent([MIN_SCALE, MAX_SCALE])
-        .on("zoom", zoomed);
+        .on("zoom", () => zoomed(self));
 
     //Zoom buttons
     const resetButton = appendButton(d3.select(this.container), 'Reset', 'resetButton');
-    resetButton.on('click', resetMap);
+    resetButton.on('click', () => resetMap(self, zoom));
     const zoomInButton = appendButton(d3.select(this.container), '+', 'zoomInButton');
-    zoomInButton.on('click', zoomIn);
+    zoomInButton.on('click', () => zoomIn(self, zoom));
     const zoomOutButton = appendButton(d3.select(this.container), '-', 'zoomOutButton');
-    zoomOutButton.on('click', zoomOut);
+    zoomOutButton.on('click', () => zoomOut(self, zoom));
 
     self.svg.call(zoom);
 };
@@ -441,7 +443,10 @@ TicketToRide.prototype.buildViewerMenu = function () {
 
 function drawConnectionType(selection, connectionType, nameA, nameB, color) {
     let image = "#" + connectionTypes.getImage(connectionType);
-    let fillColor = connectionType === connectionTypes.ferriage ? d3.color(color).darker(1) : connectionTypes.getFillColor(connectionType);
+
+    let fillColor = connectionType === connectionTypes.ferriage
+        ? (color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(2))
+        : connectionTypes.getFillColor(connectionType);
 
     selection
         .enter().append("use")
@@ -780,8 +785,8 @@ TicketToRide.prototype.generateRandomLinks = function () {
         let from = link.source;
         let quantity = link.targets.length;
 
-        let linkColorIdxs = randomUniqueRange(0, colors.length, Math.max(quantity, maxLinks));
-        let randomLinksIdxs = randomUniqueRange(0, link.targets.length, link.targets.length);
+        let linkColorIdxs = randomUniqueRange(0, colors.length, Math.max(quantity, MAX_LINKS));
+        let randomLinksIdxs = randomUniqueRange(0, quantity, Math.min(quantity, MAX_LINKS));
 
         link.targets.forEach((destination, idx) => {
             if (randomLinksIdxs.includes(idx)) {

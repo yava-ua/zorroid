@@ -30,6 +30,6 @@ export function angleRad(p1, p2) {
 
 export function appendButton(selection, name, buttonClass) {
     return selection.append('div')
-        .classed(`map-button ${buttonClass}`, true)
+        .classed(`no-print map-button ${buttonClass}`, true)
         .text(name);
 }

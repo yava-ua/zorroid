@@ -1,5 +1,15 @@
 $strokeWidth: 0.5;
-
+#connection-colors {
+  $color1: #b11700;
+  $color2: #e17b0c;
+  $color3: #e5d331;
+  $color4: #7c9434;
+  $color5: #4591c5;
+  $color6: #e7a7ca;
+  $color7: #2a2126;
+  $color8: #f1f5f6;
+  $color9: #808080;
+}
 
 svg#ticket-to-ride {
   height: 100%;
@@ -122,10 +132,11 @@ svg#ticket-to-ride {
   .city-link-train {
     vector-effect: non-scaling-stroke;
     stroke: darkgrey;
-    stroke-width: 1px;
+    stroke-width: 0.5;
   }
 
   .city-link-train-carriage {
+    pointer-events: none;
     --fill-color: none;
     --stroke-color: white;
   }
