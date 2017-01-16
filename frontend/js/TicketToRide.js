@@ -1,13 +1,11 @@
 import * as d3 from "d3";
 import * as topojson from "topojson";
 import Randomer from "./Randomer";
-import {random, randomUniqueRange, angleRad, appendButton} from "./Utils";
+import {random, randomUniqueRange, angleRad} from "./Utils";
 import Exporter from "d3-save-svg";
 import Graph from "./Graph";
+import MapZoomer from "./MapZoomer";
 
-const SCALE_DURATION = 1000;
-const MIN_SCALE = 1;
-const MAX_SCALE = 8;
 const MAX_LINKS = 2;
 const CONNECTION_TYPES = ["track", "ferriage", "tunnel"];
 const CONNECTION_TYPE_IMAGES = ["", "train.svg", "tunnel-1.svg"];
@@ -19,7 +17,7 @@ const connectionTypes = {
     getImage: type => CONNECTION_TYPE_IMAGES[CONNECTION_TYPES.indexOf(type)],
     getFillColor: (type, color)=> {
         if (type === connectionTypes.ferriage) {
-           return color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(2);
+            return color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(2);
         }
         if (type === connectionTypes.tunnel) {
             return color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(2);
@@ -151,34 +149,13 @@ function showCityDestinations(d, self) {
     // cityDestinationsLabelsSelection.exit().remove();
 
 }
-function hideCityLinks(state, self) {
+function hideCityLinks(state) {
     d3.selectAll(".city-link-circles").classed("hidden", state);
     d3.selectAll(".city-link-outline").classed("hidden", state);
 }
-function hideCityVoronoi(state, self) {
+function hideCityVoronoi(state) {
     d3.selectAll(".city-voronoi-links").classed("hidden", state);
     d3.selectAll(".city-voronoi").classed("hidden", state);
-}
-
-function zoomRatio(power, currentScale) {
-    return Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale * Math.pow(2, power)));
-}
-function zoomed(self) {
-    self.svg.attr("transform", d3.event.transform);
-    self.currentScale = d3.event.transform.k;
-}
-function zoomIn(self, zoom) {
-    if (self.currentScale < MAX_SCALE) {
-        self.svg.transition().duration(500).call(zoom.scaleTo, 1.5 * zoomRatio(0.2, self.currentScale));
-    }
-}
-function zoomOut(self, zoom) {
-    if (self.currentScale > MIN_SCALE) {
-        self.svg.transition().duration(500).call(zoom.scaleTo, zoomRatio(-0.2, self.currentScale) / 1.5);
-    }
-}
-function resetMap(self, zoom) {
-    self.svg.transition().duration(SCALE_DURATION).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
 }
 
 function backgroundImage(self, defs, code) {
@@ -326,7 +303,7 @@ TicketToRide.prototype.loadMap = function (url) {
             .enter().append("path")
             .attr("class", d => `countries ${d.properties.id}`)
             .attr("d", self.path);
-            //.style("fill", d => `url(#background-${d.properties.id})`);
+        //.style("fill", d => `url(#background-${d.properties.id})`);
         if (topoMap.objects.regions) {
             let regions = topojson.feature(topoMap, topoMap.objects.regions);
             self.svg.append("g").attr("id", "regions")
@@ -411,26 +388,8 @@ TicketToRide.prototype.loadMap = function (url) {
         self.svg.append("g").attr("id", "single-city-destinations");
         self.svg.selectAll(".city").on("click.builder", d => clickCity(d, self));
 
-        self.setZoom();
+        new MapZoomer(self.container, self.svg);
     });
-};
-TicketToRide.prototype.setZoom = function () {
-    let self = this;
-    self.currentScale = 1;
-
-    let zoom = d3.zoom()
-        .scaleExtent([MIN_SCALE, MAX_SCALE])
-        .on("zoom", () => zoomed(self));
-
-    //Zoom buttons
-    const resetButton = appendButton(d3.select(this.container), 'Reset', 'resetButton');
-    resetButton.on('click', () => resetMap(self, zoom));
-    const zoomInButton = appendButton(d3.select(this.container), '+', 'zoomInButton');
-    zoomInButton.on('click', () => zoomIn(self, zoom));
-    const zoomOutButton = appendButton(d3.select(this.container), '-', 'zoomOutButton');
-    zoomOutButton.on('click', () => zoomOut(self, zoom));
-
-    self.svg.call(zoom);
 };
 TicketToRide.prototype.setScales = function () {
     let distances = this.cityVeronoi
@@ -474,7 +433,6 @@ function drawConnectionType(selection, connectionType, nameA, nameB, color) {
         .attr("height", trainCarriage.height)
         .attr("link:href", (d, i) => connectionType === connectionTypes.ferriage && i > 1 ? "" : image);
 }
-
 TicketToRide.prototype.drawLink = function (params) {
     let cityA = params.cityA;
     let cityB = params.cityB;
@@ -815,4 +773,8 @@ TicketToRide.prototype.generateRandomLinks = function () {
             }
         });
     });
+};
+
+TicketToRide.prototype.relinkEvents = function () {
+
 };
