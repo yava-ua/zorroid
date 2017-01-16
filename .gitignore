@@ -2,3 +2,4 @@
 .mvn/
 target/
 src/main/frontend/build/
+pathfinder.iml
