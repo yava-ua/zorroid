@@ -10,16 +10,33 @@ const MIN_SCALE = 1;
 const MAX_SCALE = 8;
 const MAX_LINKS = 2;
 const CONNECTION_TYPES = ["track", "ferriage", "tunnel"];
-const CONNECTION_TYPE_IMAGES = ["", "train.svg", "bridge.svg"];
-const CONNECTION_TYPE_IMAGE_FILL = ["", "none", "black"];
+const CONNECTION_TYPE_IMAGES = ["", "train.svg", "tunnel-1.svg"];
 const connectionTypes = {
     track: CONNECTION_TYPES[0],
     ferriage: CONNECTION_TYPES[1],
     tunnel: CONNECTION_TYPES[2],
     getByIndex: (i) => CONNECTION_TYPES[i],
     getImage: type => CONNECTION_TYPE_IMAGES[CONNECTION_TYPES.indexOf(type)],
-    getFillColor: type => CONNECTION_TYPE_IMAGE_FILL[CONNECTION_TYPES.indexOf(type)]
+    getFillColor: (type, color)=> {
+        if (type === connectionTypes.ferriage) {
+           return color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(2);
+        }
+        if (type === connectionTypes.tunnel) {
+            return color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(2);
+        }
+        return "black";
+    },
+    getStrokeColor: (type, color) => {
+        if (type === connectionTypes.ferriage) {
+            return "white";
+        }
+        if (type === connectionTypes.tunnel) {
+            return color === colors[6] ? d3.color(color).brighter(1) : d3.color(color).darker(1);
+        }
+        return "white";
+    }
 };
+
 const connectionTypeRandomer = new Randomer([45, 30, 25]);
 const colors = ["#b11700", "#e17b0c", "#e5d331", "#7c9434", "#4591c5", "#e7a7ca", "#2a2126", "#f1f5f6", "#808080"];
 const train = {
@@ -444,14 +461,14 @@ TicketToRide.prototype.buildViewerMenu = function () {
 function drawConnectionType(selection, connectionType, nameA, nameB, color) {
     let image = "#" + connectionTypes.getImage(connectionType);
 
-    let fillColor = connectionType === connectionTypes.ferriage
-        ? (color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(2))
-        : connectionTypes.getFillColor(connectionType);
+    let fillColor = connectionTypes.getFillColor(connectionType, color);
+    let strokeColor = connectionTypes.getStrokeColor(connectionType, color);
 
     selection
         .enter().append("use")
         .attr("class", "city-link-train-carriage")
         .style("--fill-color", fillColor)
+        .style("--stroke-color", strokeColor)
         .attr("name", `${nameA}${nameB}`)
         .attr("width", trainCarriage.width)
         .attr("height", trainCarriage.height)
