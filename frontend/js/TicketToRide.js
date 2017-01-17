@@ -409,7 +409,6 @@ TicketToRide.prototype.loadMap = function (url) {
         new MapZoomer(self.container, self.svg);
     });
 };
-
 TicketToRide.prototype.setScales = function () {
     let distances = this.cityVeronoi
         .links()
@@ -572,7 +571,6 @@ TicketToRide.prototype.drawLink = function (params) {
                 });
         }
     }
-
     // drag functions
     function dragStarted(d) {
         d3.select(this).raise().classed("selected", true);
@@ -635,16 +633,22 @@ TicketToRide.prototype.drawLink = function (params) {
             self.builtLinks.updateArcWeight(linkId, connections.length);
             self.drawLink(self.linkGroups[linkId]);
         });
-
 };
+
+function buildConnections(connectionCoords) {
+    let connections = [];
+    for (let i = 0; i < connectionCoords.length - 1; i++) {
+        connections.push({
+            sourceIdx: i,
+            targetIdx: i + 1,
+        });
+    }
+    return connections;
+}
 TicketToRide.prototype.createLinkGroup = function (cityA, cityB, initialSize, color, connectionType) {
     let self = this;
-    let nameA = cityA.name;
-    let nameB = cityB.name;
-
     let origin = [cityA.coordinates[0], cityA.coordinates[1]];
     let destination = [cityB.coordinates[0], cityB.coordinates[1]];
-
     let xD = (cityB.coordinates[0] - cityA.coordinates[0]) / (initialSize + 1);
     let yD = (cityB.coordinates[1] - cityA.coordinates[1]) / (initialSize + 1);
 
@@ -679,17 +683,6 @@ TicketToRide.prototype.createLinkGroup = function (cityA, cityB, initialSize, co
     return this.linkGroups[currentId];
 };
 
-function buildConnections(connectionCoords) {
-    let connections = [];
-    for (let i = 0; i < connectionCoords.length - 1; i++) {
-        connections.push({
-            sourceIdx: i,
-            targetIdx: i + 1,
-        });
-    }
-    return connections;
-}
-
 TicketToRide.prototype.generateRandomLinks = function () {
     let self = this;
 
@@ -699,7 +692,6 @@ TicketToRide.prototype.generateRandomLinks = function () {
         return xSort ? xSort : a.coordinates[1] - b.coordinates[1];
     });
     let allLinks = this.cityVeronoi.links();
-
     let filteredLinks = cities.map(currentCity => {
         let destinations = [].concat.apply([], allLinks.filter(l => l.source.name === currentCity.name || l.target.name === currentCity.name)
             .map(l => {
@@ -734,7 +726,6 @@ TicketToRide.prototype.generateRandomLinks = function () {
             }
         });
     });
-
     filteredLinks.forEach(link => {
         let from = link.source;
         let quantity = link.targets.length;
@@ -769,7 +760,6 @@ TicketToRide.prototype.import = function (json) {
             self.drawLink(linkGroup);
         });
 };
-
 TicketToRide.prototype.exportAsJson = function () {
     let self = this;
 
