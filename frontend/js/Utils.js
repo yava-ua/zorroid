@@ -33,3 +33,9 @@ export function appendButton(selection, name, buttonClass) {
         .classed(`no-print map-button ${buttonClass}`, true)
         .text(name);
 }
+
+export function download(el, cfg, data) {
+    el.setAttribute("href", `data:${cfg.format};charset=utf-8, ${encodeURIComponent(JSON.stringify(data))}`);
+    el.setAttribute("download", `${cfg.filename}.${cfg.extension}`);
+}
+

@@ -1,11 +1,9 @@
 import * as d3 from "d3";
 import * as topojson from "topojson";
 import Randomer from "./Randomer";
-import {random, randomUniqueRange, angleRad} from "./Utils";
-import Exporter from "d3-save-svg";
+import {random, randomUniqueRange, angleRad, download} from "./Utils";
 import Graph from "./Graph";
 import MapZoomer from "./MapZoomer";
-
 const MAX_LINKS = 2;
 const CONNECTION_TYPES = ["track", "ferriage", "tunnel"];
 const CONNECTION_TYPE_IMAGES = ["", "train.svg", "tunnel-1.svg"];
@@ -50,8 +48,6 @@ const Maps = {
     Ukraine: "ua.json",
     Ukraine2: "ua-2.json"
 };
-let linkGroup = 0;
-
 function clickCity(d, self) {
     let fromCity = self.editorState.fromCity;
     let toCity = {
@@ -75,7 +71,9 @@ function clickCity(d, self) {
 
     let color = self.editorState.color;
     let connectionType = self.editorState.connectionType;
-    self.buildLink(fromCity, toCity, scale, color, connectionType);
+
+    let linkGroup = self.createLinkGroup(fromCity, toCity, scale, color, connectionType);
+    self.drawLink(linkGroup);
 
     self.svg.select(`.city[name='${fromCity.name}']`).classed("selected", false);
     self.editorState.fromCity = null;
@@ -177,8 +175,11 @@ export default function TicketToRide(container) {
     this.width = 1240;
     this.height = 800;
 
+    this.linkGroupId = 0;
     this.cities = [];
     this.builtLinks = new Graph((d) => d.name);
+    this.linkGroups = {};
+
     this.distanceScale = null;
     this.cityVeronoi = null;
 
@@ -251,20 +252,37 @@ export default function TicketToRide(container) {
     d3.select("#menu-reset").on("click.map", () => {
         self.resetEditor();
     });
-    d3.select("#export").on("click.map", () => {
+    d3.select("#export").on("click.map", function () {
         let cfg = {
+            format: 'text/json',
             filename: 'TicketToRide',
+            extension: 'json'
         };
-        Exporter.embedRasterImages(d3.select('#ticket-to-ride').node());
-
-        setTimeout(() => {
-            //let rasterizing finish
-            Exporter.save(d3.select('#ticket-to-ride').node(), cfg);
-        }, 2000);
-
+        download(this, cfg, self.exportAsJson());
     });
     d3.select("#dijkstra").on("click.map", () => {
         self.builtLinks.findDijkstraRoutes(self.builtLinks.vertices[0]);
+    });
+    d3.select("#import").on("change.map", function () {
+        let selection = this;
+        let files = selection.files;
+        if (files.length <= 0) {
+            return;
+        }
+
+        var fr = new FileReader();
+        fr.readAsText(files.item(0));
+
+        fr.onload = function (e) {
+            let result = JSON.parse(e.target.result);
+            if (!result) {
+                console.log("Could not upload file");
+                return;
+            }
+            selection.value = "";
+            self.import(result);
+
+        }
     });
     d3.select("#selector-map").on("change.map", function () {
         self.resetEditor();
@@ -284,7 +302,7 @@ TicketToRide.prototype.resetEditor = function () {
     this.linkGroupsSelector.selectAll("g[name^='link-group']").remove();
     this.builtLinks = null;
     this.builtLinks = new Graph((d) => d.name);
-    linkGroup = 0;
+    this.linkGroupId = 0;
 };
 
 TicketToRide.prototype.loadMap = function (url) {
@@ -391,6 +409,7 @@ TicketToRide.prototype.loadMap = function (url) {
         new MapZoomer(self.container, self.svg);
     });
 };
+
 TicketToRide.prototype.setScales = function () {
     let distances = this.cityVeronoi
         .links()
@@ -434,49 +453,47 @@ function drawConnectionType(selection, connectionType, nameA, nameB, color) {
         .attr("link:href", (d, i) => connectionType === connectionTypes.ferriage && i > 1 ? "" : image);
 }
 TicketToRide.prototype.drawLink = function (params) {
+    let self = this;
+
     let cityA = params.cityA;
     let cityB = params.cityB;
     let color = params.color;
     let connectionType = params.connectionType;
-    let origin = params.origin;
-    let destination = params.destination;
     let connectionCoords = params.connectionCoords;
     let connections = params.connections;
     let linkId = params.linkId;
 
-
-    let self = this;
+    let origin = cityA.coordinates;
+    let destination = cityB.coordinates;
     let nameA = cityA.name;
     let nameB = cityB.name;
 
-
     let linkGroup = self.linkGroupsSelector.select(`g[name='link-group-${linkId}-${nameA}-${nameB}']`);
+    if (linkGroup.empty()) {
+        linkGroup = self.linkGroupsSelector.append("g").attr("name", `link-group-${linkId}-${nameA}-${nameB}`);
+    }
 
     // connection link ------------------------------------------------------------
     let connectionDotsSelection = linkGroup.selectAll(`.city-link-outline[name='${nameA}${nameB}']`)
         .data(connections, d => d.index);
-    let connectionDots = connectionDotsSelection
+    connectionDotsSelection
         .enter().append("path")
-        .attr("id", (d, i) => d.id)
         .attr("class", "city-link-outline")
-        .attr("name", `${nameA}${nameB}`)
-        .merge(connectionDotsSelection);
+        .attr("name", `${nameA}${nameB}`);
     connectionDotsSelection.exit().remove();
     // connection link end ------------------------------------------------------------
 
     // trains ------------------------------------------------------------
     let connectionTrainsSelection = linkGroup.selectAll(`.city-link-train[name='${nameA}${nameB}']`)
         .data(connections, d => d.index);
-    let connectionTrains = connectionTrainsSelection
+    connectionTrainsSelection
         .enter().append("rect")
         .attr("class", "city-link-train")
         .attr("name", `${nameA}${nameB}`)
         .style("fill", color)
         .attr("width", train.width)
-        .attr("height", train.height)
-        .merge(connectionTrainsSelection);
+        .attr("height", train.height);
     connectionTrainsSelection.exit().remove();
-
 
     let connectionTrainCarriagesSelection = linkGroup.selectAll(`.city-link-train-carriage[name='${nameA}${nameB}']`)
         .data(connections, d => d.index);
@@ -495,17 +512,16 @@ TicketToRide.prototype.drawLink = function (params) {
         .attr("r", d => 3)
         .merge(connectionPoints)
         .attr("cx", d => d.x)
-        .attr("cy", d => d.y)
+        .attr("cy", d => d.y);
+    connectionPoints.exit().remove();
+    // circles end ------------------------------------------------------------
+
+
+    linkGroup.selectAll(`.city-link-circles[name='${nameA}${nameB}']`)
         .call(d3.drag()
             .on("start.circle", dragStarted)
             .on("drag.circle", dragged)
             .on("end.circle", dragEnded));
-
-    connectionPoints.exit().remove();
-    // circles end ------------------------------------------------------------
-
-    let cityManualLinkSimulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(d => d.id));
 
     let start = connectionCoords[0];
     start.fx = start.x;
@@ -515,54 +531,47 @@ TicketToRide.prototype.drawLink = function (params) {
     end.fx = end.x;
     end.fy = end.y;
 
-    // d3.forceSimulation()
-    //     .force("center", d3.forceCenter((start.x + end.x) / 2, (start.y + end.y) / 2))
-    //     .force("x", d3.forceX((start.x + end.x) / 2 + 1))
-    //     .force("y", d3.forceY((start.y + end.y) / 2 + 1))
-    //     .force("collide", d3.forceCollide(30))
-    //     .force("charge", d3.forceManyBody().strength(-30))
-    //     .nodes(connectionCoords, d => d.index)
-    //     .on("tick", () => {
-    //         linkGroup.selectAll(`.city-link-circles[name='${nameA}${nameB}']`)
-    //             .attr("cx", d => d.x)
-    //             .attr("cy", d => d.y);
-    //     });
+    let cityManualLinkSimulation = d3.forceSimulation()
+        .force("link", d3.forceLink())
+        .nodes(connections)
+        .on("tick", tick);
 
-    cityManualLinkSimulation
-        .nodes(connections, d => d.id)
-        .on("tick", () => {
-            connectionDots
-                .attr("d", d => {
-                    let path = "M";
-                    if (d.source.first) {
-                        path += "" + self.projection(origin) + "L";
-                    }
-                    path += `${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
+    function tick() {
+        linkGroup.selectAll(`.city-link-outline[name='${nameA}${nameB}']`)
+            .attr("d", d => {
+                let s = connectionCoords[d.sourceIdx], t = connectionCoords[d.targetIdx];
+                let path = "M";
+                if (s.first) {
+                    path += "" + self.projection(origin) + "L";
+                }
+                path += `${s.x},${s.y}L${t.x},${t.y}`;
 
-                    if (d.target.last) {
-                        path += "L" + self.projection(destination);
-                    }
-                    return path;
-                });
-            connectionTrains
+                if (t.last) {
+                    path += "L" + self.projection(destination);
+                }
+                return path;
+            });
+        linkGroup.selectAll(`.city-link-train[name='${nameA}${nameB}']`)
+            .attr("transform", d => {
+                let s = connectionCoords[d.sourceIdx], t = connectionCoords[d.targetIdx];
+                let x = (s.x + t.x - train.width) / 2;
+                let y = (s.y + t.y - train.height) / 2;
+                let angle = angleRad(s, t);
+                return `translate(${x}, ${y}) rotate(${angle}, ${train.width / 2},${train.height / 2})`;
+            });
+
+        let connectionTrainCarriagesSelection = linkGroup.selectAll(`.city-link-train-carriage[name='${nameA}${nameB}']`);
+        if (!connectionTrainCarriagesSelection.empty()) {
+            connectionTrainCarriagesSelection
                 .attr("transform", d => {
-                    let x = (d.source.x + d.target.x - train.width) / 2;
-                    let y = (d.source.y + d.target.y - train.height) / 2;
-                    let angle = angleRad(d.source, d.target);
-                    return `translate(${x}, ${y}) rotate(${angle}, ${train.width / 2},${train.height / 2})`;
+                    let s = connectionCoords[d.sourceIdx], t = connectionCoords[d.targetIdx];
+                    let x = (s.x + t.x - trainCarriage.width) / 2;
+                    let y = (s.y + t.y - trainCarriage.height) / 2;
+                    let angle = angleRad(s, t);
+                    return `translate(${x}, ${y}) rotate(${angle}, ${trainCarriage.width / 2},${trainCarriage.height / 2})`;
                 });
-
-            let connectionTrainCarriagesSelection = linkGroup.selectAll(`.city-link-train-carriage[name='${nameA}${nameB}']`);
-            if (!connectionTrainCarriagesSelection.empty()) {
-                connectionTrainCarriagesSelection
-                    .attr("transform", d => {
-                        let x = (d.source.x + d.target.x - trainCarriage.width) / 2;
-                        let y = (d.source.y + d.target.y - trainCarriage.height) / 2;
-                        let angle = angleRad(d.source, d.target);
-                        return `translate(${x}, ${y}) rotate(${angle}, ${trainCarriage.width / 2},${trainCarriage.height / 2})`;
-                    });
-            }
-        });
+        }
+    }
 
     // drag functions
     function dragStarted(d) {
@@ -570,14 +579,13 @@ TicketToRide.prototype.drawLink = function (params) {
         d3.select(this).style("cursor", "move");
         cityManualLinkSimulation.alphaTarget(0.3).restart();
     }
-
     function dragEnded(d) {
         d3.select(this).classed("selected", false);
         d3.select(this).style("cursor", "pointer");
         cityManualLinkSimulation.alphaTarget(0);
     }
-
     function dragged(d) {
+        cityManualLinkSimulation.alphaTarget(0.3);
         d3.select(this)
             .attr("cx", d.x = d3.event.x)
             .attr("cy", d.y = d3.event.y);
@@ -588,34 +596,20 @@ TicketToRide.prototype.drawLink = function (params) {
             if (i === 0 && connections.length === 1) {
                 self.builtLinks.removeArc(linkId);
                 d3.select(this.parentNode).remove();
+                delete self.linkGroups[linkId];
                 return;
             }
 
-            //remove link
-            if (i !== 0) {
-                connections[i - 1].target = connections[i].target;
-            }
-
-            // regenerate id
-            //connections[i] = null;
-            connections.splice(i, 1);
             connectionCoords.splice(i, 1);
             if (i === 0) {
                 connectionCoords[0].first = true;
             }
 
+            connections.splice(0, connections.length);
+            connections.push.apply(connections, buildConnections(connectionCoords));
+
             self.builtLinks.updateArcWeight(linkId, connections.length);
-            self.drawLink({
-                cityA: cityA,
-                cityB: cityB,
-                color: color,
-                connectionType: connectionType,
-                origin: origin,
-                destination: destination,
-                connectionCoords: connectionCoords,
-                connections: connections,
-                linkId: linkId
-            });
+            self.drawLink(self.linkGroups[linkId]);
         });
 
     linkGroup.selectAll(`.city-link-circles[name='${nameA}${nameB}']`)
@@ -625,13 +619,10 @@ TicketToRide.prototype.drawLink = function (params) {
                 y: connectionCoords[i].y
             });
 
-            connections.splice(i, 0, {
-                source: connectionCoords[i],
-                target: connectionCoords[i + 1]
-            });
-            if (i > 0) {
-                connections[i - 1].target = connectionCoords[i];
-            } else {
+            connections.splice(0, connections.length);
+            connections.push.apply(connections, buildConnections(connectionCoords));
+
+            if (i === 0) {
                 connectionCoords[0].first = true;
                 delete connectionCoords[1].first;
 
@@ -639,25 +630,14 @@ TicketToRide.prototype.drawLink = function (params) {
                 connectionCoords[0].fy = connectionCoords[0].y;
                 connectionCoords[1].fx = null;
                 connectionCoords[1].fy = null;
-
             }
 
             self.builtLinks.updateArcWeight(linkId, connections.length);
-            self.drawLink({
-                cityA: cityA,
-                cityB: cityB,
-                color: color,
-                connectionType: connectionType,
-                origin: origin,
-                destination: destination,
-                connectionCoords: connectionCoords,
-                connections: connections,
-                linkId: linkId
-            });
+            self.drawLink(self.linkGroups[linkId]);
         });
 
 };
-TicketToRide.prototype.buildLink = function (cityA, cityB, initialSize, color, connectionType) {
+TicketToRide.prototype.createLinkGroup = function (cityA, cityB, initialSize, color, connectionType) {
     let self = this;
     let nameA = cityA.name;
     let nameB = cityB.name;
@@ -684,33 +664,32 @@ TicketToRide.prototype.buildLink = function (cityA, cityB, initialSize, color, c
         };
     });
 
-    let connections = [];
-    for (let i = 0; i < connectionCoords.length - 1; i++) {
-        connections.push({
-            source: connectionCoords[i],
-            target: connectionCoords[i + 1],
-        });
-    }
-    let linkGroupId = linkGroup++;
-
-    this.builtLinks.addArc(cityA, cityB, linkGroupId, connections.length);
-
-    self.linkGroupsSelector
-        .append("g")
-        .attr("name", `link-group-${linkGroupId}-${nameA}-${nameB}`);
-
-    this.drawLink({
+    let connections = buildConnections(connectionCoords);
+    let currentId = self.linkGroupId++;
+    this.builtLinks.addArc(cityA, cityB, currentId, connections.length);
+    this.linkGroups[currentId] = {
         cityA: cityA,
         cityB: cityB,
         color: color,
         connectionType: connectionType,
-        origin: origin,
-        destination: destination,
         connectionCoords: connectionCoords,
         connections: connections,
-        linkId: linkGroupId
-    });
+        linkId: currentId
+    };
+    return this.linkGroups[currentId];
 };
+
+function buildConnections(connectionCoords) {
+    let connections = [];
+    for (let i = 0; i < connectionCoords.length - 1; i++) {
+        connections.push({
+            sourceIdx: i,
+            targetIdx: i + 1,
+        });
+    }
+    return connections;
+}
+
 TicketToRide.prototype.generateRandomLinks = function () {
     let self = this;
 
@@ -769,12 +748,36 @@ TicketToRide.prototype.generateRandomLinks = function () {
                 let scale = self.distanceScale(d3.geoDistance(from.coordinates, to.coordinates));
 
                 let connectionType = connectionTypes.getByIndex([connectionTypeRandomer.pRandom()]);
-                self.buildLink(from, to, scale, colors[linkColorIdxs[idx]], connectionType);
+                let linkGroup = self.createLinkGroup(from, to, scale, colors[linkColorIdxs[idx]], connectionType);
+                self.drawLink(linkGroup);
             }
         });
     });
 };
 
-TicketToRide.prototype.relinkEvents = function () {
+TicketToRide.prototype.import = function (json) {
+    let self = this;
+    self.resetEditor();
+
+    self.linkGroupId = json.linkGroupId;
+    self.linkGroups = json.linkGroups;
+
+    Object.keys(self.linkGroups)
+        .forEach(d => {
+            let linkGroup = self.linkGroups[d];
+            self.builtLinks.addArc(linkGroup.cityA, linkGroup.cityB, d, linkGroup.connections.length);
+            self.drawLink(linkGroup);
+        });
+};
+
+TicketToRide.prototype.exportAsJson = function () {
+    let self = this;
+
+    return {
+        version: "0.1",
+        linkGroupId: self.linkGroupId,
+        linkGroups: self.linkGroups,
+        //cities: self.cities
+    }
 
 };
