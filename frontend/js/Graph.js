@@ -14,37 +14,52 @@ function arrMin(array, minByFn) {
 }
 
 export default class Graph {
-    constructor(vertexIdFn) {
+
+    constructor(tDoc) {
         this.vertices = [];
         this.arcs = [];
-        this.vertexIdFunction = vertexIdFn;
+    }
+
+    load(tDoc) {
+        let self = this;
+        tDoc.cities.map(d => {
+            return {
+                name: d.name
+            };
+        }).forEach(function (d) {
+            self.addVertex(d);
+        });
+        Object.keys(tDoc.linkGroups).map(d => tDoc.linkGroups[d])
+            .forEach(function (d) {
+                self.addArc(d.cityA, d.cityB, d, d.connections.length);
+            });
     }
 
     isEmpty() {
         return this.vertices.length === 0 || this.arcs.length === 0;
     }
 
-    findVertexById(vertexId) {
-        return this.vertices.find(el => this.vertexIdFunction(el) === vertexId);
+    findVertex(name) {
+        return this.vertices.find(el => el.name === name);
     }
 
-    findArcById(arcId) {
+    findArc(arcId) {
         return this.arcs.find(el => el.id === arcId);
     }
 
     findNeighborVertices(vertexA) {
         let verticesArr = this.arcs
-            .filter(el => this.vertexIdFunction(el.edge[0]) === this.vertexIdFunction(vertexA) || this.vertexIdFunction(el.edge[1]) === this.vertexIdFunction(vertexA))
+            .filter(el => el.edge[0].name === vertexA.name || el.edge[1].name === vertexA.name)
             .map(el => {
                 return [el.edge[0], el.edge[1]];
             })
             .reduce((a, b) => a.concat(b), [])
-            .filter(el => this.vertexIdFunction(el) !== this.vertexIdFunction(vertexA));
+            .filter(el => el.name !== vertexA.name);
 
         // remove duplicates
         let result = [];
         verticesArr.forEach(el => {
-            let found = result.find(el2 => this.vertexIdFunction(el) === this.vertexIdFunction(el2));
+            let found = result.find(el2 => el.name === el2.name);
             if (!found) {
                 result.push(el);
             }
@@ -54,8 +69,8 @@ export default class Graph {
 
     findArcsByVertices(vertexA, vertexB) {
         return this.arcs.filter(
-            el => (this.vertexIdFunction(el.edge[0]) === this.vertexIdFunction(vertexA) && this.vertexIdFunction(el.edge[1]) === this.vertexIdFunction(vertexB))
-            || (this.vertexIdFunction(el.edge[1]) === this.vertexIdFunction(vertexA) && this.vertexIdFunction(el.edge[0]) === this.vertexIdFunction(vertexB)));
+            el => (el.edge[0].name === vertexA.name && el.edge[1].name === vertexB.name)
+            || (el.edge[1].name === vertexA.name && el.edge[0].name === vertexB.name));
     }
 
     findMinArcByVertices(vertexA, vertexB) {
@@ -67,17 +82,18 @@ export default class Graph {
     }
 
     vertexExists(id) {
-        return !!this.findVertexById(id);
+        return !!this.findVertex(id);
     }
 
     arcExists(id) {
-        return !!this.findArcById(id);
+        return !!this.findArc(id);
     }
 
     addVertex(vertex) {
-        let found = this.findVertexById(this.vertexIdFunction(vertex));
+        let self = this;
+        let found = self.findVertex(vertex.name);
         if (!found) {
-            this.vertices.push(vertex);
+            self.vertices.push(vertex);
             found = vertex;
         }
         return found;
@@ -85,14 +101,13 @@ export default class Graph {
 
     addArc(vertexA, vertexB, arcId, arcWeight) {
         if (this.arcExists(arcId)) {
-            throw new Error("Arc already exists");
+            console.log("Arc already exists with id " + arcId);
+            return;
         }
 
-        // check if vertices exist
-        let source = this.addVertex(vertexA);
-        let target = this.addVertex(vertexB);
+        let source = this.findVertex(vertexA.name);
+        let target = this.findVertex(vertexB.name);
 
-        //
         let arc = {
             id: arcId,
             edge: [source, target],
@@ -101,15 +116,14 @@ export default class Graph {
         this.arcs.push(arc);
         return arc;
     }
-    
+
     updateArcWeight(arcId, weight) {
-        let arc = this.findArcById(arcId);
+        let arc = this.findArc(arcId);
         arc.weight = weight;
     }
 
     removeArc(arcId) {
         this.arcs = this.arcs.filter(el => el.id !== arcId);
-
     }
 
     findDijkstraRoutes(rootVertex) {
@@ -118,29 +132,27 @@ export default class Graph {
         let searchVertices = this.vertices.slice(0);
         let distances = {}, previous = {};
         searchVertices.forEach(el => {
-            distances[this.vertexIdFunction(el)] = self.vertexIdFunction(rootVertex) === self.vertexIdFunction(el) ? 0 : Infinity;
-            previous[this.vertexIdFunction(el)] = undefined;
+            distances[el.name] = rootVertex.name === el.name ? 0 : Infinity;
+            previous[el.name] = undefined;
         });
-        console.log(`distances: ${distances}`);
-        console.log(`previous: ${previous}`);
 
         while (searchVertices.length > 0) {
 
-            searchVertices.sort((a, b) => distances[self.vertexIdFunction(b)] - distances[self.vertexIdFunction(a)]);
+            searchVertices.sort((a, b) => distances[b.name] - distances[a.name]);
             let u = searchVertices.pop();
 
             let allNeighbors = this.findNeighborVertices(u);
             let uNeighbors = searchVertices.filter(el => {
-                let found = allNeighbors.find(el2 => self.vertexIdFunction(el) === self.vertexIdFunction(el2));
+                let found = allNeighbors.find(el2 => el.name === el2.name);
                 return !!found;
             });
 
 
             uNeighbors.forEach(neighbor => {
-                let alt = distances[self.vertexIdFunction(u)] + self.findMinArcByVertices(u, neighbor).weight;
-                if (alt < distances[self.vertexIdFunction(neighbor)]) {
-                    distances[self.vertexIdFunction(neighbor)] = alt;
-                    previous[self.vertexIdFunction(neighbor)] = u;
+                let alt = distances[u.name] + self.findMinArcByVertices(u, neighbor).weight;
+                if (alt < distances[neighbor.name]) {
+                    distances[neighbor.name] = alt;
+                    previous[neighbor.name] = u;
                 }
             });
         }

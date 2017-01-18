@@ -39,3 +39,9 @@ d3.select("#navigation-right-close").on("click", () => {
     closeRightNav();
 });
 
+d3.selectAll("#navigation-right a").on("click.close", () => {
+    closeRightNav();
+});
+d3.select("#import").on("change.close", () => {
+    closeRightNav();
+});

@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 
 export function randomUniqueRange(min, max, quantity) {
     if (quantity > max - min) {
@@ -39,3 +40,19 @@ export function download(el, cfg, data) {
     el.setAttribute("download", `${cfg.filename}.${cfg.extension}`);
 }
 
+export function displayTooltip(tooltipSelector, clientRect, {offsetX, offsetY}, html) {
+    let width = 200, height = 600;
+    let xPos = clientRect.left// - offsetX - width / 2;
+    let yPos = clientRect.top// - offsetY - clientRect.height / 2 - height;
+
+    d3.select(tooltipSelector)
+        .style("width", `${width}px`)
+        .style("height", `${height}px`)
+        .style('top', `${yPos}px`)
+        .style('left', `${xPos}px`)
+        .style('display', 'block')
+        .html(html);
+}
+export function hideTooltip(tooltipSelector) {
+    d3.select(tooltipSelector).style("display", "none");
+}
