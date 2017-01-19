@@ -2,36 +2,36 @@ import * as d3 from "d3";
 import {appendButton} from "./Utils";
 
 const SCALE_DURATION = 1000;
-const MIN_SCALE = -1;
+const MIN_SCALE = 0;
 const MAX_SCALE = 9;
 const DEFAULT_SCALE = 1;
 
-export default function MapZoomer(container, object) {
-    this.container = container;
+export default function MapZoomer(containerSelector, svgSelector, object) {
+    this.container = d3.select(containerSelector);
+    this.svg = this.container.select(svgSelector);
     this.object = object;
     this.currentScale = DEFAULT_SCALE;
     let self = this;
 
-    this.zoom = d3.zoom().scaleExtent([MIN_SCALE, MAX_SCALE]).on("zoom", function () {
+    this.zoom = d3.zoom().on("zoom", function () {
         //!important. do not use => function, otherwise "this" is not defined correctly
         self.zoomed();
     });
     this.appendMapButtons();
-    object.call(self.zoom)
-        .on("dblclick.zoom", null);
+    this.svg.call(self.zoom).on("dblclick.zoom", null);
 }
 
 MapZoomer.prototype.appendMapButtons = function () {
     let self = this;
-    const resetButton = appendButton(d3.select(this.container), 'Reset', 'resetButton');
+    const resetButton = appendButton(this.container, 'Reset', 'resetButton');
     resetButton.on('click', function () {
         self.resetMap();
     });
-    const zoomInButton = appendButton(d3.select(this.container), '+', 'zoomInButton');
+    const zoomInButton = appendButton(this.container, '+', 'zoomInButton');
     zoomInButton.on('click', function () {
         self.zoomIn();
     });
-    const zoomOutButton = appendButton(d3.select(this.container), '-', 'zoomOutButton');
+    const zoomOutButton = appendButton(this.container, '-', 'zoomOutButton');
     zoomOutButton.on('click', function () {
         self.zoomOut();
     });

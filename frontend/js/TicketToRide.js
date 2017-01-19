@@ -54,15 +54,15 @@ const MapConfig = {
 const Maps = {
     Ukraine: {
         file: "ua.json",
-        projection: d3.geoAlbers().center([49, 32]).rotate([-7.8, 4, -32]).parallels([42, 52]).translate([MapConfig.width / 2, MapConfig.height / 2]).scale(5700)
+        extentOffsets: [[3, 63], [3, 23]]
     },
     Ukraine2: {
         file: "ua-2.json",
-        projection: d3.geoAlbers().center([49, 32]).rotate([-7.8, 4, -32]).parallels([42, 52]).translate([MapConfig.width / 2, MapConfig.height / 2]).scale(5700)
+        extentOffsets: [[3, 63], [3, 23]]
     },
     BlackSea: {
         file: "black-sea.json",
-        projection: d3.geoMercator().center([43, 27]).rotate([16.7, -11.6, -12.5]).translate([MapConfig.width / 2, MapConfig.height / 2]).scale(2600)
+        extentOffsets: [[3, 3], [3, 3]]
     }
 };
 
@@ -290,12 +290,16 @@ TicketToRide.prototype.loadMap = function (mapObj) {
         if (error) {
             return console.error(error);
         }
-        self.projection = mapObj.projection;
+        self.projection = d3.geoMercator();
+        let mapOutlines = topojson.feature(topoMap, topoMap.objects.countries);
+        let citiesOutline = topojson.feature(topoMap, topoMap.objects.cities);
+        let regions = topoMap.objects.regions ? topojson.feature(topoMap, topoMap.objects.regions) : undefined;
+        self.projection.fitExtent([[mapObj.extentOffsets[0][0], mapObj.extentOffsets[0][1]], [self.width - mapObj.extentOffsets[1][0], self.height - mapObj.extentOffsets[1][1]]], citiesOutline);
+
         self.path = d3.geoPath().projection(self.projection);
         // draw map
-        let mapOutlines = topojson.feature(topoMap, topoMap.objects.countries);
-        //self.projection.fitExtent([[3, 3], [self.width - 3, self.height - 3]], mapOutlines);
-        //self.projection.fitExtent([[3, 3], [self.width - 3, self.height - 3]], mapOutlines.features.find(d => d.properties.name === "Ukraine"));
+
+
 
         self.svg.append("g").attr("id", "map")
             .selectAll(".countries")
@@ -305,8 +309,7 @@ TicketToRide.prototype.loadMap = function (mapObj) {
             .attr("d", self.path)
             //.style("fill", d => `url(#background-${d.properties.id})`);
             .style("fill", (d, i) => MapConfig.color(i));
-        if (topoMap.objects.regions) {
-            let regions = topojson.feature(topoMap, topoMap.objects.regions);
+        if (regions) {
             self.svg.append("g").attr("id", "regions")
                 .selectAll(".regions")
                 .data(regions.features)
@@ -316,7 +319,6 @@ TicketToRide.prototype.loadMap = function (mapObj) {
         }
 
         //draw cities and city labels
-        let citiesOutline = topojson.feature(topoMap, topoMap.objects.cities);
         self.cities = citiesOutline.features.map(d => {
             return {
                 name: d.properties.name,
@@ -329,7 +331,7 @@ TicketToRide.prototype.loadMap = function (mapObj) {
         self.cityVeronoi = d3.voronoi()
             .x(d=> d.coordinates[0])
             .y(d=> d.coordinates[1])
-            .size([self.width, self.height])
+            //.size([self.width, self.height])
             (self.cities.map(d => {
                 return {
                     coordinates: self.projection(d.coordinates),
@@ -401,7 +403,7 @@ TicketToRide.prototype.loadMap = function (mapObj) {
         self.svg.append("g").attr("id", "single-city-destinations");
         self.svg.selectAll(".city").on("click.builder", d => clickCity(d, self));
 
-        new MapZoomer(self.container, self.svg);
+        new MapZoomer(self.container, "#ticket-to-ride", self.svg);
     });
 };
 TicketToRide.prototype.setScales = function () {
