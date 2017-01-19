@@ -2,13 +2,14 @@ import * as d3 from "d3";
 import {appendButton} from "./Utils";
 
 const SCALE_DURATION = 1000;
-const MIN_SCALE = 1;
-const MAX_SCALE = 8;
+const MIN_SCALE = -1;
+const MAX_SCALE = 9;
+const DEFAULT_SCALE = 1;
 
 export default function MapZoomer(container, object) {
     this.container = container;
     this.object = object;
-    this.currentScale = 1;
+    this.currentScale = DEFAULT_SCALE;
     let self = this;
 
     this.zoom = d3.zoom().scaleExtent([MIN_SCALE, MAX_SCALE]).on("zoom", function () {
@@ -62,5 +63,5 @@ MapZoomer.prototype.zoomOut = function () {
 MapZoomer.prototype.resetMap = function () {
     let self = this;
     this.object.transition().duration(SCALE_DURATION)
-        .call(self.zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
+        .call(self.zoom.transform, d3.zoomIdentity.translate(0, 0).scale(DEFAULT_SCALE));
 };

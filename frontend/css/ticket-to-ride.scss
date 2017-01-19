@@ -79,6 +79,7 @@ svg#ticket-to-ride {
     text-anchor: middle;
     fill: black;
     fill-opacity: 0.6;
+    cursor: pointer;
   }
 
   .city-voronoi {
@@ -190,4 +191,48 @@ svg#ticket-to-ride {
     right: 10px;
     bottom: 56px;
   }
+}
+
+table.destination-table {
+  border-spacing: 0;
+
+  th.rotate {
+    height: 140px;
+    white-space: nowrap;
+  }
+  th.rotate > div {
+    transform: translate(0.9em, 51px) rotate(315deg);
+    width: 30px;
+  }
+  th.rotate > div > span {
+    border-bottom: 1px solid #ccc;
+    padding: 5px 10px;
+  }
+
+  .destination-city {
+    text-align: right;
+    padding-right:5px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .destination-distance {
+    border: 1px dotted #eee;
+  }
+}
+
+.destination-tooltip {
+  width: 100%;
+  .destination-row {
+    width: 50%;
+    padding: 2px;
+    display: inline;
+
+    .left {
+      text-align: left;
+    }
+    .right {
+      text-align: right;
+    }
+  }
+
 }

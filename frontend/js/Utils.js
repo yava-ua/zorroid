@@ -41,18 +41,21 @@ export function download(el, cfg, data) {
 }
 
 export function displayTooltip(tooltipSelector, clientRect, {offsetX, offsetY}, html) {
-    let width = 200, height = 600;
-    let xPos = clientRect.left// - offsetX - width / 2;
-    let yPos = clientRect.top// - offsetY - clientRect.height / 2 - height;
+    let width = clientRect.width, height = clientRect.height;
+    let toTop = !!clientRect.top;
+    let toLeft = !!clientRect.left;
+    let xPos = toLeft ? clientRect.left: clientRect.right;
+    let yPos = toTop ? clientRect.top : clientRect.bottom;
 
     d3.select(tooltipSelector)
         .style("width", `${width}px`)
         .style("height", `${height}px`)
-        .style('top', `${yPos}px`)
-        .style('left', `${xPos}px`)
+        .style(toTop ? "top" : "bottom", `${yPos}px`)
+        .style(toLeft ? "left" : "right", `${xPos}px`)
         .style('display', 'block')
         .html(html);
 }
 export function hideTooltip(tooltipSelector) {
     d3.select(tooltipSelector).style("display", "none");
+    d3.select(tooltipSelector).selectAll("*").remove();
 }

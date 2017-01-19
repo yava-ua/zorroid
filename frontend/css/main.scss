@@ -102,6 +102,7 @@ html, body {
   }
 }
 
+
 .tooltip {
   display: none;
   z-index: 10;
@@ -113,25 +114,10 @@ html, body {
   text-align: center;
   padding: 5px;
   overflow-y: auto;
+  overflow-x: auto;
 
   .title {
     color: #456A96;
     font-size: 12px;
   }
-}
-.destination-tooltip {
-  width: 100%;
-  .destination-row {
-    width: 50%;
-    padding: 2px;
-    display: inline;
-
-    .left {
-      text-align: left;
-    }
-    .right {
-      text-align: right;
-    }
-  }
-
 }

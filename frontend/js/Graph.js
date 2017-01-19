@@ -158,6 +158,7 @@ export default class Graph {
         }
 
         return {
+            origin: rootVertex,
             distances: distances,
             paths: previous
         }

@@ -3,7 +3,7 @@ import * as topojson from "topojson";
 import Randomer from "./Randomer";
 import {random, randomUniqueRange, angleRad, download, displayTooltip, hideTooltip} from "./Utils";
 import MapZoomer from "./MapZoomer";
-import Graph from './Graph';
+import Graph from "./Graph";
 
 const MAX_LINKS = 2;
 const CONNECTION_TYPES = ["track", "ferriage", "tunnel"];
@@ -25,11 +25,12 @@ const connectionTypes = {
     },
     getStrokeColor: (type, color) => {
         if (type === connectionTypes.ferriage) {
-            return "white";
+            return d3.color(color).brighter(1);
         }
         if (type === connectionTypes.tunnel) {
             return color === colors[6] ? d3.color(color).brighter(1) : d3.color(color).darker(1);
         }
+
         return "white";
     }
 };
@@ -45,10 +46,26 @@ const trainCarriage = {
     height: 8
 };
 const singleCityDestinationsSelector = "g#single-city-destinations";
-const Maps = {
-    Ukraine: "ua.json",
-    Ukraine2: "ua-2.json"
+const MapConfig = {
+    width: 1240,
+    height: 800,
+    color: d3.scaleOrdinal(d3.schemeCategory20c)
 };
+const Maps = {
+    Ukraine: {
+        file: "ua.json",
+        projection: d3.geoAlbers().center([49, 32]).rotate([-7.8, 4, -32]).parallels([42, 52]).translate([MapConfig.width / 2, MapConfig.height / 2]).scale(5700)
+    },
+    Ukraine2: {
+        file: "ua-2.json",
+        projection: d3.geoAlbers().center([49, 32]).rotate([-7.8, 4, -32]).parallels([42, 52]).translate([MapConfig.width / 2, MapConfig.height / 2]).scale(5700)
+    },
+    BlackSea: {
+        file: "black-sea.json",
+        projection: d3.geoMercator().center([43, 27]).rotate([16.7, -11.6, -12.5]).translate([MapConfig.width / 2, MapConfig.height / 2]).scale(2600)
+    }
+};
+
 function clickCity(d, self) {
     let fromCity = self.editorState.fromCity;
     let toCity = {
@@ -117,17 +134,6 @@ function showCityDestinations(d, self) {
             return t => d3.interpolateString(`0, ${length}`, `${length}, 0`)(t);
         });
     cityDestinationsSelection.exit().remove();
-
-    let dijkstra = self.graph.findDijkstraRoutes(fromCity);
-
-    let html = `<div class="title">${fromCity.name}</div>`;
-    Object.keys(dijkstra.distances).forEach(d => {
-        html += `<div class="destination-tooltip">
-                    <div class="destination-row left">${d}</div>
-                    <div class="destination-row right">${dijkstra.distances[d]}</div>
-                 </div>`;
-    });
-    displayTooltip("#tooltip", {top: 40, left: 40}, {offsetX: 5, offsetY: 5}, html);
 }
 function hideCityLinks(state) {
     d3.selectAll(".city-link-circles").classed("hidden", state);
@@ -154,8 +160,9 @@ function backgroundImage(self, defs, code) {
 export default function TicketToRide(container) {
     let self = this;
     this.container = container;
-    this.width = 1240;
-    this.height = 800;
+    this.width = MapConfig.width;
+    this.height = MapConfig.height;
+
 
     this.linkGroupId = 0;
     this.cities = [];
@@ -163,12 +170,6 @@ export default function TicketToRide(container) {
 
     this.distanceScale = null;
     this.cityVeronoi = null;
-
-    this.projection = d3.geoAlbers()
-        .center([49, 32])
-        .rotate([-7.8, 4, -32])
-        .parallels([42, 52])
-        .translate([this.width / 2, this.height / 2]);
 
     this.editorState = {
         fromCity: null,
@@ -182,9 +183,10 @@ export default function TicketToRide(container) {
         .attr("viewBox", `0 0 ${this.width} ${this.height}`);
     //let defs = svg.append("defs");
     //backgroundImage(self, defs, "UKR");
+
     this.svg = svg.append("g");
 
-    this.path = d3.geoPath().projection(this.projection);
+    this.loadMap(Maps.BlackSea);
 
     d3.select("#menu-map-mode").on("click.map", function () {
         if (d3.select("#menu-map-mode").text() === "Viewer") {
@@ -195,6 +197,7 @@ export default function TicketToRide(container) {
                 .on("click.builder", null);
             hideCityLinks(true);
             hideTooltip("#tooltip");
+            self.displayDestinations();
 
         } else {
             d3.select("#menu-map-mode").text("Viewer");
@@ -202,6 +205,7 @@ export default function TicketToRide(container) {
                 .on("click.destinations", null)
                 .on("click.builder", d => clickCity(d, self));
             hideCityDestinations(self);
+
         }
     });
     d3.select("#menu-hide-links").on("click.map", () => {
@@ -228,6 +232,7 @@ export default function TicketToRide(container) {
     });
     d3.select("#menu-reset").on("click.map", () => {
         self.resetEditor();
+        hideTooltip("#tooltip");
     });
     d3.select("#export").on("click.map", function () {
         let cfg = {
@@ -263,7 +268,7 @@ export default function TicketToRide(container) {
     d3.select("#selector-map").on("change.map", function () {
         self.resetEditor();
         self.svg.selectAll("*").remove();
-        self.loadMap("static/" + Maps[this.value]);
+        self.loadMap(Maps[this.value]);
     });
     d3.select("#selector-connection-type").on("change.map", function () {
         self.editorState.connectionType = this.value;
@@ -272,30 +277,34 @@ export default function TicketToRide(container) {
         self.editorState.color = colors[this.selectedIndex];
     });
 
-    this.loadMap("static/" + Maps.Ukraine2);
 }
 TicketToRide.prototype.resetEditor = function () {
     this.linkGroupsSelector.selectAll("g[name^='link-group']").remove();
     this.linkGroupId = 0;
 };
 
-TicketToRide.prototype.loadMap = function (url) {
+TicketToRide.prototype.loadMap = function (mapObj) {
     let self = this;
+    let url = "static/" + mapObj.file;
     d3.json(url, function (error, topoMap) {
         if (error) {
             return console.error(error);
         }
-
+        self.projection = mapObj.projection;
+        self.path = d3.geoPath().projection(self.projection);
         // draw map
         let mapOutlines = topojson.feature(topoMap, topoMap.objects.countries);
-        self.projection.fitExtent([[3, 3], [self.width - 3, self.height - 3]], mapOutlines.features.find(d => d.properties.name === "Ukraine"));
+        //self.projection.fitExtent([[3, 3], [self.width - 3, self.height - 3]], mapOutlines);
+        //self.projection.fitExtent([[3, 3], [self.width - 3, self.height - 3]], mapOutlines.features.find(d => d.properties.name === "Ukraine"));
+
         self.svg.append("g").attr("id", "map")
             .selectAll(".countries")
             .data(mapOutlines.features)
             .enter().append("path")
             .attr("class", d => `countries ${d.properties.id}`)
-            .attr("d", self.path);
-        //.style("fill", d => `url(#background-${d.properties.id})`);
+            .attr("d", self.path)
+            //.style("fill", d => `url(#background-${d.properties.id})`);
+            .style("fill", (d, i) => MapConfig.color(i));
         if (topoMap.objects.regions) {
             let regions = topojson.feature(topoMap, topoMap.objects.regions);
             self.svg.append("g").attr("id", "regions")
@@ -320,7 +329,8 @@ TicketToRide.prototype.loadMap = function (url) {
         self.cityVeronoi = d3.voronoi()
             .x(d=> d.coordinates[0])
             .y(d=> d.coordinates[1])
-            .size([self.width, self.height])(self.cities.map(d => {
+            .size([self.width, self.height])
+            (self.cities.map(d => {
                 return {
                     coordinates: self.projection(d.coordinates),
                     name: d.name
@@ -335,7 +345,7 @@ TicketToRide.prototype.loadMap = function (url) {
             .data(self.cityVeronoi.polygons())
             .enter().append("path")
             .attr("class", "city-voronoi hidden")
-            .attr("d", d=> `M${d.join("L")}Z`);
+            .attr("d", d => `M${d.filter(e => !!e).join("L")}Z`);
 
         //draw all veronoi links
         self.svg.append("g").attr("id", "city-voronoi-links").selectAll(`.city-voronoi-links`)
@@ -354,10 +364,19 @@ TicketToRide.prototype.loadMap = function (url) {
             .enter().append("text")
             .attr("class", "city-label")
             .attr("transform", d => `translate( ${self.projection(d.geometry.coordinates)} )`)
-            .attr("dy", ".9em")
+            .attr("dy", "5")
             .text(function (d) {
                 return d.properties.label || d.properties.name;
-            });
+            })
+            .call(d3.drag().on("drag", dragLabel));
+
+        function dragLabel(d) {
+            let selection = d3.select(this);
+            selection
+                .attr("dx", d3.event.x - d.x)
+                .attr("dy", 5 + d3.event.y - d.y);
+        }
+
         self.svg.append("g").attr("id", "city-circles")
             .selectAll(".city")
             .data(citiesOutline.features)
@@ -399,11 +418,12 @@ TicketToRide.prototype.setScales = function () {
         .range(d3.range(0, 8));
 };
 
-function drawConnectionType(selection, connectionType, nameA, nameB, color) {
+function drawConnectionType(selection, connectionType, nameA, nameB, color, connectionOptions) {
     let image = "#" + connectionTypes.getImage(connectionType);
 
     let fillColor = connectionTypes.getFillColor(connectionType, color);
     let strokeColor = connectionTypes.getStrokeColor(connectionType, color);
+    let ferriageLength = connectionOptions.ferriageLength || 2;
 
     selection
         .enter().append("use")
@@ -413,7 +433,7 @@ function drawConnectionType(selection, connectionType, nameA, nameB, color) {
         .attr("name", `${nameA}${nameB}`)
         .attr("width", trainCarriage.width)
         .attr("height", trainCarriage.height)
-        .attr("link:href", (d, i) => connectionType === connectionTypes.ferriage && i > 1 ? "" : image);
+        .attr("link:href", (d, i) => connectionType === connectionTypes.ferriage && i > ferriageLength - 1 ? "" : image);
 }
 TicketToRide.prototype.drawLink = function (params) {
     let self = this;
@@ -423,6 +443,7 @@ TicketToRide.prototype.drawLink = function (params) {
     let color = params.color;
     let connectionType = params.connectionType;
     let connectionCoords = params.connectionCoords;
+    let connectionOptions = params.connectionOptions || {};
     let connections = params.connections;
     let linkId = params.linkId;
 
@@ -460,7 +481,7 @@ TicketToRide.prototype.drawLink = function (params) {
 
     let connectionTrainCarriagesSelection = linkGroup.selectAll(`.city-link-train-carriage[name='${nameA}${nameB}']`)
         .data(connections, d => d.index);
-    drawConnectionType(connectionTrainCarriagesSelection, connectionType, nameA, nameB, color);
+    drawConnectionType(connectionTrainCarriagesSelection, connectionType, nameA, nameB, color, connectionOptions);
     connectionTrainCarriagesSelection.exit().remove();
     // trains end ------------------------------------------------------------
 
@@ -563,7 +584,9 @@ TicketToRide.prototype.drawLink = function (params) {
                 delete self.linkGroups[linkId];
                 return;
             }
-
+            if (connectionType === connectionTypes.ferriage && i > 0 && i < connectionOptions.ferriageLength) {
+                connectionOptions.ferriageLength = connectionOptions.ferriageLength - 1;
+            }
             connectionCoords.splice(i, 1);
             if (i === 0) {
                 connectionCoords[0].first = true;
@@ -634,11 +657,20 @@ TicketToRide.prototype.createLinkGroup = function (cityA, cityB, initialSize, co
 
     let connections = buildConnections(connectionCoords);
     let currentId = self.linkGroupId++;
+    let connectionOptions = {};
+    if (connectionType === connectionTypes.ferriage) {
+        connectionOptions.ferriageLength = 1;
+        if (connections.length > 4) {
+            connectionOptions.ferriageLength = 2;
+        }
+    }
+
     this.linkGroups[currentId] = {
         cityA: cityA,
         cityB: cityB,
         color: color,
         connectionType: connectionType,
+        connectionOptions: {},
         connectionCoords: connectionCoords,
         connections: connections,
         linkId: currentId
@@ -723,15 +755,54 @@ TicketToRide.prototype.import = function (json) {
             let linkGroup = self.linkGroups[d];
             self.drawLink(linkGroup);
         });
+
+    if (json.cityLabels) {
+        let sel = self.svg.select("#city-labels").selectAll(".city-label");
+        sel
+            .attr("dx", (d, i) => json.cityLabels[i].dx)
+            .attr("dy", (d, i) => json.cityLabels[i].dy);
+    }
+
 };
 TicketToRide.prototype.exportAsJson = function () {
     let self = this;
+    let cityLabels = self.svg.select("#city-labels").selectAll(".city-label")
+        .nodes()
+        .map((d, i) => {
+            let sel = d3.select(d);
+            return {
+                name: self.cities[i].name,
+                dx: sel.attr("dx") ? Number(sel.attr("dx")) : 0,
+                dy: sel.attr("dy") ? Number(sel.attr("dy")) : 0,
+            }
+        });
+
 
     return {
         version: "0.1",
         linkGroupId: self.linkGroupId,
         linkGroups: self.linkGroups,
-        cities: self.cities
+        cities: self.cities,
+        cityLabels: cityLabels
     }
 
+};
+
+TicketToRide.prototype.displayDestinations = function () {
+    let self = this;
+    let dijkstra = self.cities.map(function (el) {
+        return self.graph.findDijkstraRoutes(el);
+    });
+
+    let html = `<table class="destination-table">
+                <tr class="destination-header">
+                    <th>${self.cities.length}</th>
+                    ${self.cities.map(el => `<th class="rotate"><div><span>${el.label}</span></div></th>`).join("")}                                                    
+                </tr>
+                ${self.cities.map((el, i) => {
+        return `<tr><td class="destination-city">${el.label}</td>${self.cities.map(el => `<td class="destination-distance">${dijkstra[i].distances[el.name]}</td>`).join("")}</tr>`;
+    }).join("")}                
+            </table>`;
+
+    displayTooltip("#tooltip", {left: 40, bottom: 10, width: 600, height: 430}, {offsetX: 5, offsetY: 5}, html);
 };
