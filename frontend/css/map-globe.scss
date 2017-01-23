@@ -1,0 +1,35 @@
+svg#map-globe {
+  height: 100%;
+  padding: 5px 0;
+
+  text {
+    user-select: none;
+  }
+
+  .countries {
+    fill-opacity: 0.9;
+    stroke: #6e6e6e;
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .graticule {
+    //fill-opacity: 0.6;
+    fill: none;
+    stroke: #8e8e8e;
+
+    &.line {
+      stroke-opacity: 0.6;
+      stroke-width: 1px;
+      vector-effect: non-scaling-stroke;
+    }
+
+    &.outline {
+      fill-opacity: 0.4;
+      fill: rgb(0, 118, 172);
+      stroke-opacity: 1;
+      stroke-width: 2px;
+      vector-effect: non-scaling-stroke;
+    }
+  }
+}

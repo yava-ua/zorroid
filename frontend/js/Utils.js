@@ -56,6 +56,6 @@ export function displayTooltip(tooltipSelector, clientRect, {offsetX, offsetY}, 
         .html(html);
 }
 export function hideTooltip(tooltipSelector) {
-    d3.select(tooltipSelector).style("display", "none");
     d3.select(tooltipSelector).selectAll("*").remove();
+    d3.select(tooltipSelector).style("display", "none");
 }

@@ -63,6 +63,10 @@ const Maps = {
     BlackSea: {
         file: "black-sea.json",
         extentOffsets: [[3, 3], [3, 3]]
+    },
+    Globe: {
+        file: "globe-black-sea_simplified.json",
+        extentOffsets: [[3, 3], [3, 3]]
     }
 };
 
@@ -196,16 +200,14 @@ export default function TicketToRide(container) {
                 .on("click.destinations", d => showCityDestinations(d, self))
                 .on("click.builder", null);
             hideCityLinks(true);
-            hideTooltip("#tooltip");
             self.displayDestinations();
-
         } else {
             d3.select("#menu-map-mode").text("Viewer");
             self.svg.selectAll(".city")
                 .on("click.destinations", null)
                 .on("click.builder", d => clickCity(d, self));
             hideCityDestinations(self);
-
+            hideTooltip("#tooltip");
         }
     });
     d3.select("#menu-hide-links").on("click.map", () => {
