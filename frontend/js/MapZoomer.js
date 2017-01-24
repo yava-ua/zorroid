@@ -13,7 +13,7 @@ export default function MapZoomer(containerSelector, svgSelector, object) {
     this.currentScale = DEFAULT_SCALE;
     let self = this;
 
-    this.zoom = d3.zoom().on("zoom", function () {
+    this.zoom = d3.zoom().on("zoom.zoomer", function () {
         //!important. do not use => function, otherwise "this" is not defined correctly
         self.zoomed();
     });

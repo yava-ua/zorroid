@@ -1,5 +1,6 @@
 svg#map-globe {
   height: 100%;
+  width: 100%;
   padding: 5px 0;
 
   text {
@@ -31,5 +32,22 @@ svg#map-globe {
       stroke-width: 2px;
       vector-effect: non-scaling-stroke;
     }
+  }
+
+  .city {
+    stroke-width: 0;
+    fill: #aa4518;
+    &:hover {
+      fill: #ff007f;
+      cursor: pointer;
+    }
+  }
+  .city-label {
+    font-size: 6px;
+    font-weight: normal;
+    text-anchor: middle;
+    fill: black;
+    fill-opacity: 1;
+    cursor: pointer;
   }
 }

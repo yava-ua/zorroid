@@ -8,26 +8,21 @@ const MapConfig = {
     color: d3.scaleOrdinal(d3.schemeCategory20c),
     sensitivity: 0.25,
     Globe: {
-        file: "globe-black-sea_simplified.json",
+        file: "globe_black-sea_simplified_quantized.json",
         extentOffsets: [[3, 3], [3, 3]]
     }
 };
 
 export default function MapGlobe(container) {
-    let self = this;
     this.container = container;
-    this.width = MapConfig.width;
-    this.height = MapConfig.height;
 
-    this.projection = d3.geoOrthographic()
-        .rotate([-32, -49, 0]);
+    this.projection = d3.geoOrthographic().rotate([-32, -49, 0]);
     this.path = d3.geoPath().projection(this.projection);
-
 
     let svg = d3.select(container)
         .append("svg")
         .attr("id", "map-globe")
-        .attr("viewBox", `0 0 ${this.width} ${this.height}`);
+        .attr("viewBox", `0 0 ${MapConfig.width} ${MapConfig.height}`);
 
     this.svg = svg.append("g")
         .attr("transform", `translate(0,0)`);
@@ -60,6 +55,25 @@ MapGlobe.prototype.loadMap = function (mapObj) {
             .append("path").datum(graticule)
             .attr("class", "graticule line").attr("d", self.path);
 
+        let citiesOutline = topojson.feature(topoMap, topoMap.objects.cities);
+        self.svg.append("g").attr("id", "city-labels")
+            .selectAll(".city-label")
+            .data(citiesOutline.features.filter(d => d.properties.scalerank <= 1), d => d.properties.name)
+            .enter().append("text")
+            .attr("class", "city-label")
+            .attr("transform", d => `translate(${self.projection(d.geometry.coordinates)})`)
+            .attr("dy", "0.5em")
+            .text(d => d.properties.name);
+
+        self.svg.append("g").attr("id", "city-circles")
+            .selectAll(".city")
+            .data(citiesOutline.features.filter(d => d.properties.scalerank <= 1), d => d.properties.name)
+            .enter()
+            .append("circle")
+            .attr("class", "city")
+            .attr("transform", d => `translate( ${self.projection(d.geometry.coordinates)} )`)
+            .attr("r", d => 1)
+            .attr("name", d => d.properties.name);
 
         self.svg.call(d3.drag()
             .subject(function () {
@@ -75,7 +89,34 @@ MapGlobe.prototype.loadMap = function (mapObj) {
                 self.redrawMap();
             }));
 
-        new MapZoomer(self.container, "#map-globe", self.svg);
+        let zoomer = self.zoomer = new MapZoomer(self.container, "#map-globe", self.svg);
+        zoomer.zoom.on("zoom.labels", function () {
+            let cityLabelSelection = self.svg.select("#city-labels").selectAll("text.city-label")
+                .data(citiesOutline.features.filter(d => zoomer.currentScale > 0.5 && d.properties.scalerank <= zoomer.currentScale), d => d.properties.name);
+
+            cityLabelSelection.enter().append("text")
+                .attr("class", "city-label")
+                .attr("transform", d => `translate(${self.projection(d.geometry.coordinates)})`)
+                .text(d => d.properties.name)
+                .merge(cityLabelSelection)
+                .attr("dy", "0.5em")
+                .style("font-size", 6 / zoomer.currentScale);
+            cityLabelSelection.exit().remove();
+
+
+            let cityCircleSelection = self.svg.select("#city-circles").selectAll("circle.city")
+                .data(citiesOutline.features.filter(d => zoomer.currentScale > 0.5 && d.properties.scalerank <= zoomer.currentScale), d => d.properties.name);
+
+            cityCircleSelection.enter().append("circle")
+                .attr("class", "city")
+                .attr("transform", d => `translate( ${self.projection(d.geometry.coordinates)} )`)
+                .attr("name", d => d.properties.name)
+                .merge(cityCircleSelection)
+                .attr("r", 1 / zoomer.currentScale);
+            cityCircleSelection.exit().remove();
+        });
+
+
     });
 };
 
@@ -83,4 +124,15 @@ MapGlobe.prototype.redrawMap = function () {
     let self = this;
     self.svg.selectAll("path.countries").attr("d", self.path);
     self.svg.selectAll("path.graticule.line").attr("d", self.path);
+    self.svg.selectAll("text.city-label")
+        .attr("transform", d => `translate(${self.projection(d.geometry.coordinates)})`)
+        .text(d => isProjectedCoordinate(self.path, d.geometry.coordinates) ? d.properties.name : "");
+
+    self.svg.selectAll("circle.city")
+        .attr("transform", d => `translate(${self.projection(d.geometry.coordinates)})`)
+        .attr("r", d => isProjectedCoordinate(self.path, d.geometry.coordinates) ? 1 / self.zoomer.currentScale : 0);
+};
+
+function isProjectedCoordinate(path, coordinates) {
+    return path({type: "MultiPoint", coordinates: [coordinates]}) !== undefined;
 }
