@@ -8,7 +8,7 @@
 
 <body>
 <svg style="display: none; width: 0; height: 0; overflow: hidden" xmlns="http://www.w3.org/2000/svg">
-    <title>Train</title>
+    <title>Definitions</title>
     <defs>
         <filter
                 id="filter5589"
@@ -604,59 +604,12 @@
     </defs>
 </svg>
 
-<span id="menu-open" class="menu-button left no-print">&#9776; Menu</span>
-<span id="menu-sub" class="menu-button right no-print">&#9776; Viewer</span>
-
-<div class="editor-tools no-print">
-    <label for="selector-map"></label>
-    <select id="selector-map">
-        <option>BlackSea</option>
-        <option>Ukraine</option>
-        <option>Ukraine2</option>
-        <option>Globe</option>
-    </select>
-
-    <label for="selector-connection-type"></label>
-    <select id="selector-connection-type">
-        <option>track</option>
-        <option>ferriage</option>
-        <option>tunnel</option>
-    </select>
-
-    <label for="selector-color"></label>
-    <select id="selector-color">
-        <option>firebrick</option>
-        <option>chockolate</option>
-        <option>goldenrod</option>
-        <option>olivedrab</option>
-        <option>steelblue</option>
-        <option>plum</option>
-        <option>darkslategrey</option>
-        <option>whitesmoke</option>
-        <option>grey</option>
-    </select>
+<span id="menu-open" class="menu-button no-print">&#9776; Menu</span>
+<div id="navigation-left" class="menu sidenav closed no-print">
 </div>
 
-<div id="navigation-left" class="sidenav left no-print">
-    <a href="#" id="menu-close" class="closebtn">&times;</a>
-    <a href="#" id="menu-map-mode">Viewer</a>
-    <a href="#" id="menu-hide-links">Hide links</a>
-    <a href="#" id="menu-hide-voronoi">Show grid</a>
-    <a href="#" id="menu-generate-links">Generate links</a>
-    <a href="#" id="menu-reset">Reset</a>
+<div id="container" class="container wide">
 </div>
-<div id="navigation-right" class="sidenav right no-print">
-    <a href="#" id="navigation-right-close" class="closebtn">&times;</a>
-    <div>
-        <input type="file" accept=".json" id="import" class="menu-import"/>
-    </div>
-    <a href="#" id="dijkstra">Dijkstra</a>
-    <a href="#" id="export">Export</a>
-    <div id="menu-right-cities" class="menu-right-cities"></div>
-</div>
-
-
-<div id="container" class="container"></div>
 
 <div id="tooltip" class="tooltip"></div>
 

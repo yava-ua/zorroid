@@ -1,7 +1,6 @@
 svg#map-globe {
   height: 100%;
   width: 100%;
-  padding: 5px 0;
 
   text {
     user-select: none;
@@ -42,8 +41,9 @@ svg#map-globe {
       cursor: pointer;
     }
   }
+
   .city-label {
-    font-size: 6px;
+    font-size: 8px;
     font-weight: normal;
     text-anchor: middle;
     fill: black;

@@ -12,82 +12,44 @@ html, body {
   background: $bg-color;
 }
 
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.no-select {
+  user-select: none;
+}
+
 .menu-button {
   top: 5px;
   position: absolute;
   font-size: 30px;
   cursor: pointer;
-
-  &.left {
-    left: 5px;
-  }
-
-  &.right {
-    right: 5px;
-  }
+  left: 5px;
+  z-index: 100;
 }
-.menu-import {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
+
+.sidenav {
+  height: 100%;
+  width: 160px;
+  float: left;
+  z-index: 1000;
+
+  &.closed {
+    width: 0;
+  }
 }
 
 .container {
-  width: 100%;
+  width: calc(100% - 160px);
   height: 100%;
-  &.inactive {
-    margin-left: 250px;
-    opacity: 0.7;
-    width: calc(100% - 250px)
+  position:absolute;
+  right:0;
+
+  &.wide {
+    width: 100%;
   }
-}
-
-/* The side navigation menu */
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 100;
-  top: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  padding-top: 60px;
-
-  &.left {
-    left: 0;
-  }
-
-  &.right {
-    right: 0;
-  }
-
-  &.active {
-    width: 250px;
-  }
-}
-
-.sidenav a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s
-}
-
-.sidenav a:hover, .offcanvas a:focus {
-  color: #f1f1f1;
-}
-
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
 }
 
 .editor-tools {
@@ -95,13 +57,6 @@ html, body {
   top: 40px;
   right: 20px;
 }
-
-@media print {
-  .no-print, .no-print * {
-    display: none !important;
-  }
-}
-
 
 .tooltip {
   display: none;
@@ -119,5 +74,11 @@ html, body {
   .title {
     color: #456A96;
     font-size: 12px;
+  }
+}
+
+@media print {
+  .no-print, .no-print * {
+    display: none !important;
   }
 }
