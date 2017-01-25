@@ -1,0 +1,5305 @@
+{
+  "version": "0.1",
+  "linkGroupId": 130,
+  "linkGroups": {
+    "2": {
+      "cityA": {
+        "name": "Florence",
+        "coordinates": [
+          11.250000364841299,
+          43.780000833199324
+        ],
+        "label": "Florence",
+        "country": "ITA"
+      },
+      "cityB": {
+        "name": "Venice",
+        "coordinates": [
+          12.334998737241506,
+          45.4386592804716
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 73.15660895998366,
+          "y": 405.7718949301732,
+          "first": true,
+          "fx": 73.15660895998366,
+          "fy": 405.7718949301732
+        },
+        {
+          "x": 68.94103278810866,
+          "y": 361.6782975180638,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 102.41393256053311,
+          "y": 338.86382037908265,
+          "first": false,
+          "last": true,
+          "fx": 102.41393256053311,
+          "fy": 338.86382037908265
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 2
+    },
+    "4": {
+      "cityA": {
+        "name": "Munich",
+        "coordinates": [
+          11.573047588912061,
+          48.131887894629244
+        ],
+        "label": "Munich",
+        "country": "DEU"
+      },
+      "cityB": {
+        "name": "Prague",
+        "coordinates": [
+          14.464033917048539,
+          50.08528287347832
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 88.64260317593124,
+          "y": 188.66962856023883,
+          "first": true,
+          "last": false,
+          "fx": 88.64260317593124,
+          "fy": 188.66962856023883
+        },
+        {
+          "x": 105.39441543600509,
+          "y": 143.71314765726402
+        },
+        {
+          "x": 140.21642929098556,
+          "y": 129.29191352640464,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 186.86593137039534,
+          "y": 92.10209993330523,
+          "first": false,
+          "last": true,
+          "fx": 186.86593137039534,
+          "fy": 92.10209993330523
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 4
+    },
+    "5": {
+      "cityA": {
+        "name": "Munich",
+        "coordinates": [
+          11.573047588912061,
+          48.131887894629244
+        ],
+        "label": "Munich",
+        "country": "DEU"
+      },
+      "cityB": {
+        "name": "Ljubljana",
+        "coordinates": [
+          14.51496903347413,
+          46.0552883087945
+        ]
+      },
+      "color": "#2a2126",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 92.51172091274765,
+          "y": 200.62871974676227,
+          "first": true,
+          "last": false,
+          "fx": 92.51172091274765,
+          "fy": 200.62871974676227
+        },
+        {
+          "x": 135.126973539304,
+          "y": 222.80295613955377
+        },
+        {
+          "x": 171.70767727465557,
+          "y": 257.2732472772491,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 184.42522482308698,
+          "y": 295.99483231774116,
+          "first": false,
+          "last": true,
+          "fx": 184.42522482308698,
+          "fy": 295.99483231774116
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 5
+    },
+    "10": {
+      "cityA": {
+        "name": "Palermo",
+        "coordinates": [
+          13.348081361705624,
+          38.126968867896494
+        ],
+        "label": "Palermo",
+        "country": "ITA"
+      },
+      "cityB": {
+        "name": "Naples",
+        "coordinates": [
+          14.243065492568519,
+          40.841971105863195
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 148.32857682708726,
+          "y": 667.9271719143808,
+          "first": true,
+          "last": false,
+          "fx": 148.32857682708726,
+          "fy": 667.9271719143808
+        },
+        {
+          "x": 149.43957486582195,
+          "y": 629.8914352563631
+        },
+        {
+          "x": 188.42570462656414,
+          "y": 606.2213302758944
+        },
+        {
+          "x": 180.99977078867352,
+          "y": 563.0580612329256,
+          "first": false,
+          "last": true,
+          "fx": 180.99977078867352,
+          "fy": 563.0580612329256
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 10
+    },
+    "13": {
+      "cityA": {
+        "name": "Naples",
+        "coordinates": [
+          14.243065492568519,
+          40.841971105863195
+        ],
+        "label": "Naples",
+        "country": "ITA"
+      },
+      "cityB": {
+        "name": "Tirana",
+        "coordinates": [
+          19.81888301461521,
+          41.327540709491586
+        ]
+      },
+      "color": "#b11700",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 191.34518399668133,
+          "y": 557.4362960962069,
+          "first": true,
+          "last": false,
+          "fx": 191.34518399668133,
+          "fy": 557.4362960962069
+        },
+        {
+          "x": 249.1551895124628,
+          "y": 557.4357373483736,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 306.58990511125216,
+          "y": 548.9880087663348
+        },
+        {
+          "x": 362.28436311906466,
+          "y": 534.6002524186786,
+          "first": false,
+          "last": true,
+          "fx": 362.28436311906466,
+          "fy": 534.6002524186786
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 13
+    },
+    "15": {
+      "cityA": {
+        "name": "Prague",
+        "coordinates": [
+          14.464033917048539,
+          50.08528287347832
+        ],
+        "label": "Prague",
+        "country": "CZE"
+      },
+      "cityB": {
+        "name": "Vienna",
+        "coordinates": [
+          16.364693096743736,
+          48.20196113681686
+        ]
+      },
+      "color": "#4591c5",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 190.73505673660628,
+          "y": 99.84032777754351,
+          "first": true,
+          "fx": 190.73505673660628,
+          "fy": 99.84032777754351
+        },
+        {
+          "x": 210.43236813797347,
+          "y": 136.4210391422896,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 247.31262521804751,
+          "y": 183.9425621581322,
+          "first": false,
+          "last": true,
+          "fx": 247.31262521804751,
+          "fy": 183.9425621581322
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 15
+    },
+    "16": {
+      "cityA": {
+        "name": "Ljubljana",
+        "coordinates": [
+          14.51496903347413,
+          46.0552883087945
+        ],
+        "label": "Ljubljana",
+        "country": "SVN"
+      },
+      "cityB": {
+        "name": "Vienna",
+        "coordinates": [
+          16.364693096743736,
+          48.20196113681686
+        ]
+      },
+      "color": "#e17b0c",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 194.62560324105573,
+          "y": 292.82915238610053,
+          "first": true,
+          "last": false,
+          "fx": 194.62560324105573,
+          "fy": 292.82915238610053
+        },
+        {
+          "x": 219.4861329084772,
+          "y": 244.31977468254627
+        },
+        {
+          "x": 242.1123993879694,
+          "y": 200.27938466789783,
+          "first": false,
+          "last": true,
+          "fx": 242.1123993879694,
+          "fy": 200.27938466789783
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 16
+    },
+    "17": {
+      "cityA": {
+        "name": "Ljubljana",
+        "coordinates": [
+          14.51496903347413,
+          46.0552883087945
+        ],
+        "label": "Ljubljana",
+        "country": "SVN"
+      },
+      "cityB": {
+        "name": "Zagreb",
+        "coordinates": [
+          15.999994668245677,
+          45.80000673327254
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 196.0325551453526,
+          "y": 302.67781571617866,
+          "first": true,
+          "last": false,
+          "fx": 196.0325551453526,
+          "fy": 302.67781571617866
+        },
+        {
+          "x": 235.5309188813129,
+          "y": 311.98722697309586,
+          "first": false,
+          "last": true,
+          "fx": 235.5309188813129,
+          "fy": 311.98722697309586
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 17
+    },
+    "22": {
+      "cityA": {
+        "name": "Vienna",
+        "coordinates": [
+          16.364693096743736,
+          48.20196113681686
+        ],
+        "label": "Vienna",
+        "country": "AUT"
+      },
+      "cityB": {
+        "name": "Krakow",
+        "coordinates": [
+          19.958065492591288,
+          50.061925126082315
+        ]
+      },
+      "color": "#2a2126",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 258.65845041336,
+          "y": 188.72436147453845,
+          "first": true,
+          "last": false,
+          "fx": 258.65845041336,
+          "fy": 188.72436147453845
+        },
+        {
+          "x": 300.32703922673113,
+          "y": 175.84429404810749
+        },
+        {
+          "x": 329.8219733087624,
+          "y": 151.60187766627155
+        },
+        {
+          "x": 332.24625919743426,
+          "y": 105.9452996023067,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 370.7963024785789,
+          "y": 93.7780791049081,
+          "first": false,
+          "last": true,
+          "fx": 370.7963024785789,
+          "fy": 93.7780791049081
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 22
+    },
+    "23": {
+      "cityA": {
+        "name": "Vienna",
+        "coordinates": [
+          16.364693096743736,
+          48.20196113681686
+        ],
+        "label": "Vienna",
+        "country": "AUT"
+      },
+      "cityB": {
+        "name": "Budapest",
+        "coordinates": [
+          19.081374818759684,
+          47.50195218499135
+        ]
+      },
+      "color": "#7c9434",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 257.99444894851626,
+          "y": 202.16726308586658,
+          "first": true,
+          "fx": 257.99444894851626,
+          "fy": 202.16726308586658
+        },
+        {
+          "x": 293.26764230789126,
+          "y": 223.9809380126244,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 337.09869122727514,
+          "y": 228.265890430931,
+          "first": false,
+          "last": true,
+          "fx": 337.09869122727514,
+          "fy": 228.265890430931
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 23
+    },
+    "24": {
+      "cityA": {
+        "name": "Sarajevo",
+        "coordinates": [
+          18.383001666953305,
+          43.850022398954934
+        ],
+        "label": "Sarajevo",
+        "country": "BIH"
+      },
+      "cityB": {
+        "name": "Belgrade",
+        "coordinates": [
+          20.466044822020535,
+          44.82059130444674
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 327.5431420650509,
+          "y": 405.4582495136531,
+          "first": true,
+          "fx": 327.5431420650509,
+          "fy": 405.4582495136531
+        },
+        {
+          "x": 345.22325681114467,
+          "y": 363.5507177753718,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 390.012648883362,
+          "y": 364.0498475278075,
+          "first": false,
+          "last": true,
+          "fx": 390.012648883362,
+          "fy": 364.0498475278075
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 24
+    },
+    "27": {
+      "cityA": {
+        "name": "Budapest",
+        "coordinates": [
+          19.081374818759684,
+          47.50195218499135
+        ],
+        "label": "Budapest",
+        "country": "HUN"
+      },
+      "cityB": {
+        "name": "Belgrade",
+        "coordinates": [
+          20.466044822020535,
+          44.82059130444674
+        ]
+      },
+      "color": "#2a2126",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 351.7185032389939,
+          "y": 236.15595085573568,
+          "first": true,
+          "last": false,
+          "fx": 351.7185032389939,
+          "fy": 236.15595085573568
+        },
+        {
+          "x": 366.5695860709435,
+          "y": 282.2260402412751
+        },
+        {
+          "x": 400.6901915396935,
+          "y": 307.8164943428376,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 397.0946190982057,
+          "y": 357.56867687351064,
+          "first": false,
+          "last": true,
+          "fx": 397.0946190982057,
+          "fy": 357.56867687351064
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 27
+    },
+    "31": {
+      "cityA": {
+        "name": "Krakow",
+        "coordinates": [
+          19.958065492591288,
+          50.061925126082315
+        ],
+        "label": "Krakow",
+        "country": "POL"
+      },
+      "cityB": {
+        "name": "Lviv",
+        "coordinates": [
+          24.029995482079983,
+          49.834980081270544
+        ]
+      },
+      "color": "#b11700",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 386.55390135553205,
+          "y": 90.94978625822841,
+          "first": true,
+          "last": false,
+          "fx": 386.55390135553205,
+          "fy": 90.94978625822841
+        },
+        {
+          "x": 431.4463085216073,
+          "y": 84.59483279540132,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 468.25787462322955,
+          "y": 106.10413622281317
+        },
+        {
+          "x": 511.8942881974483,
+          "y": 103.27585863492254,
+          "first": false,
+          "last": true,
+          "fx": 511.8942881974483,
+          "fy": 103.27585863492254
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 31
+    },
+    "32": {
+      "cityA": {
+        "name": "Belgrade",
+        "coordinates": [
+          20.466044822020535,
+          44.82059130444674
+        ],
+        "label": "Belgrade",
+        "country": "SRB"
+      },
+      "cityB": {
+        "name": "Bucharest",
+        "coordinates": [
+          26.0980007953504,
+          44.43531766349457
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 403.06083613922135,
+          "y": 359.3249634946044,
+          "first": true,
+          "last": false,
+          "fx": 403.06083613922135,
+          "fy": 359.3249634946044
+        },
+        {
+          "x": 449.11547576965165,
+          "y": 355.32761969952344
+        },
+        {
+          "x": 497.4959078985579,
+          "y": 359.9206983128047
+        },
+        {
+          "x": 537.5175448614485,
+          "y": 371.61622443585156,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 584.5820721871913,
+          "y": 376.40770599571874,
+          "first": false,
+          "last": true,
+          "fx": 584.5820721871913,
+          "fy": 376.40770599571874
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 32
+    },
+    "33": {
+      "cityA": {
+        "name": "Belgrade",
+        "coordinates": [
+          20.466044822020535,
+          44.82059130444674
+        ],
+        "label": "Belgrade",
+        "country": "SRB"
+      },
+      "cityB": {
+        "name": "Pristina",
+        "coordinates": [
+          21.165984251599866,
+          42.666709614119384
+        ]
+      },
+      "color": "#e7a7ca",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 396.0283959536745,
+          "y": 373.26768200046376,
+          "first": true,
+          "fx": 396.0283959536745,
+          "fy": 373.26768200046376
+        },
+        {
+          "x": 390.2329247622682,
+          "y": 423.17527477390126,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 414.6951120373168,
+          "y": 460.747806730192,
+          "first": false,
+          "last": true,
+          "fx": 414.6951120373168,
+          "fy": 460.747806730192
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 33
+    },
+    "38": {
+      "cityA": {
+        "name": "Thessaloniki",
+        "coordinates": [
+          22.88305491317601,
+          40.69805224193027
+        ],
+        "label": "Thessaloniki",
+        "country": "GRC"
+      },
+      "cityB": {
+        "name": "Sofia",
+        "coordinates": [
+          23.314708152110086,
+          42.68529528393054
+        ]
+      },
+      "color": "#4591c5",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 486.3082185323706,
+          "y": 554.4509962952716,
+          "first": true,
+          "last": false,
+          "fx": 486.3082185323706,
+          "fy": 554.4509962952716
+        },
+        {
+          "x": 510.27397177232194,
+          "y": 518.6914197981473
+        },
+        {
+          "x": 498.63822958482194,
+          "y": 476.1288892805692,
+          "first": false,
+          "last": true,
+          "fx": 498.63822958482194,
+          "fy": 476.1288892805692
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 38
+    },
+    "39": {
+      "cityA": {
+        "name": "Thessaloniki",
+        "coordinates": [
+          22.88305491317601,
+          40.69805224193027
+        ],
+        "label": "Thessaloniki",
+        "country": "GRC"
+      },
+      "cityB": {
+        "name": "Istanbul",
+        "coordinates": [
+          29.008055727002613,
+          41.10694201243979
+        ]
+      },
+      "color": "#e17b0c",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 489.9826570089331,
+          "y": 561.1875075257403,
+          "first": true,
+          "last": false,
+          "fx": 489.9826570089331,
+          "fy": 561.1875075257403
+        },
+        {
+          "x": 538.0623787796244,
+          "y": 551.9262831769815
+        },
+        {
+          "x": 580.1799935257181,
+          "y": 556.1913588605753,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 632.3415024057848,
+          "y": 549.889054077084,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 684.5030112858512,
+          "y": 543.5737168718069,
+          "first": false,
+          "last": true,
+          "fx": 684.5030112858512,
+          "fy": 543.5737168718069
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 39
+    },
+    "42": {
+      "cityA": {
+        "name": "Athens",
+        "coordinates": [
+          23.731375225679358,
+          37.98527209055226
+        ],
+        "label": "Athens",
+        "country": "GRC"
+      },
+      "cityB": {
+        "name": "Izmir",
+        "coordinates": [
+          27.149848151849312,
+          38.43809554094969
+        ]
+      },
+      "color": "#e7a7ca",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 516.6209695791102,
+          "y": 678.6674763072513,
+          "first": true,
+          "fx": 516.6209695791102,
+          "fy": 678.6674763072513
+        },
+        {
+          "x": 547.5477273916102,
+          "y": 659.37664378772
+        },
+        {
+          "x": 583.679990575204,
+          "y": 682.34197581897
+        },
+        {
+          "x": 620.7308328603602,
+          "y": 667.6441608775638,
+          "first": false,
+          "last": true,
+          "fx": 620.7308328603602,
+          "fy": 667.6441608775638
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 42
+    },
+    "47": {
+      "cityA": {
+        "name": "Bucharest",
+        "coordinates": [
+          26.0980007953504,
+          44.43531766349457
+        ],
+        "label": "Bucharest",
+        "country": "ROU"
+      },
+      "cityB": {
+        "name": "Constanta",
+        "coordinates": [
+          28.609974323244046,
+          44.20266237291463
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 601.0593060739101,
+          "y": 380.4403903218906,
+          "first": true,
+          "fx": 601.0593060739101,
+          "fy": 380.4403903218906
+        },
+        {
+          "x": 642.1793011910976,
+          "y": 362.32045623985937,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 678.2911892176802,
+          "y": 390.9347708778396,
+          "first": false,
+          "last": true,
+          "fx": 678.2911892176802,
+          "fy": 390.9347708778396
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 47
+    },
+    "48": {
+      "cityA": {
+        "name": "Izmir",
+        "coordinates": [
+          27.149848151849312,
+          38.43809554094969
+        ],
+        "label": "Izmir",
+        "country": "TUR"
+      },
+      "cityB": {
+        "name": "Istanbul",
+        "coordinates": [
+          29.008055727002613,
+          41.10694201243979
+        ]
+      },
+      "color": "#7c9434",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 637.878232762704,
+          "y": 659.3765827525638,
+          "first": true,
+          "last": false,
+          "fx": 637.878232762704,
+          "fy": 659.3765827525638
+        },
+        {
+          "x": 678.3108307645119,
+          "y": 635.7119145912736,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 704.04567486007,
+          "y": 597.0912949968069
+        },
+        {
+          "x": 697.9215293522575,
+          "y": 552.0790879655569,
+          "first": false,
+          "last": true,
+          "fx": 697.9215293522575,
+          "fy": 552.0790879655569
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 48
+    },
+    "52": {
+      "cityA": {
+        "name": "Constanta",
+        "coordinates": [
+          28.609974323244046,
+          44.20266237291463
+        ],
+        "label": "Constanta",
+        "country": "ROU"
+      },
+      "cityB": {
+        "name": "Sevastapol",
+        "coordinates": [
+          33.46497513706561,
+          44.59997662259076
+        ]
+      },
+      "color": "#7c9434",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 688.1218166590864,
+          "y": 393.1990836219802,
+          "first": true,
+          "last": false,
+          "fx": 688.1218166590864,
+          "fy": 393.1990836219802
+        },
+        {
+          "x": 733.7686930487976,
+          "y": 389.15437607286003,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 788.304485454134,
+          "y": 391.1373405512286
+        },
+        {
+          "x": 841.6378594775715,
+          "y": 376.9958915766192,
+          "first": false,
+          "last": true,
+          "fx": 841.6378594775715,
+          "fy": 376.9958915766192
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 52
+    },
+    "55": {
+      "cityA": {
+        "name": "Chisinau",
+        "coordinates": [
+          28.85771113965143,
+          47.005023619670624
+        ],
+        "label": "Chisinau",
+        "country": "MDA"
+      },
+      "cityB": {
+        "name": "Odesa",
+        "coordinates": [
+          30.708055320108315,
+          46.49196215406283
+        ]
+      },
+      "color": "#f1f5f6",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 702.5613549965165,
+          "y": 259.6599445054617,
+          "first": true,
+          "last": false,
+          "fx": 702.5613549965165,
+          "fy": 259.6599445054617
+        },
+        {
+          "x": 748.247741130192,
+          "y": 278.48823750008114,
+          "first": false,
+          "last": true,
+          "fx": 748.247741130192,
+          "fy": 278.48823750008114
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 55
+    },
+    "63": {
+      "cityA": {
+        "name": "Konya",
+        "coordinates": [
+          32.47306386503732,
+          37.876958288468416
+        ],
+        "label": "Konya",
+        "country": "TUR"
+      },
+      "cityB": {
+        "name": "Adana",
+        "coordinates": [
+          35.318058168434106,
+          36.99693448475409
+        ]
+      },
+      "color": "#e7a7ca",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 821.8338690243788,
+          "y": 693.8675093198779,
+          "first": true,
+          "last": false,
+          "fx": 821.8338690243788,
+          "fy": 693.8675093198779
+        },
+        {
+          "x": 859.5356274685066,
+          "y": 725.6244634812433
+        },
+        {
+          "x": 905.9477368435066,
+          "y": 725.6410040085871,
+          "first": false,
+          "last": true,
+          "fx": 905.9477368435066,
+          "fy": 725.6410040085871
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 63
+    },
+    "70": {
+      "cityA": {
+        "name": "Adana",
+        "coordinates": [
+          35.318058168434106,
+          36.99693448475409
+        ],
+        "label": "Adana",
+        "country": "TUR"
+      },
+      "cityB": {
+        "name": "Batumi",
+        "coordinates": [
+          41.6000046988,
+          41.6300064685
+        ]
+      },
+      "color": "#e7a7ca",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 927.5811596950691,
+          "y": 723.4075445359308,
+          "first": true,
+          "last": false,
+          "fx": 927.5811596950691,
+          "fy": 723.4075445359308
+        },
+        {
+          "x": 970.133702148042,
+          "y": 701.5852246996171
+        },
+        {
+          "x": 1004.538731444917,
+          "y": 681.2404981371171,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 1036.6072040736713,
+          "y": 646.3365182483915
+        },
+        {
+          "x": 1068.1673847377338,
+          "y": 625.915253599954
+        },
+        {
+          "x": 1114.7502704799213,
+          "y": 598.6736764515165,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 1146.880693792269,
+          "y": 564.4321048541872,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 1139.673470620242,
+          "y": 524.1130363184827,
+          "first": false,
+          "last": true,
+          "fx": 1139.673470620242,
+          "fy": 524.1130363184827
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 4,
+          "targetIdx": 5,
+          "index": 4,
+          "x": -19.694269706308575,
+          "y": -3.4836390075862327,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 5,
+          "targetIdx": 6,
+          "index": 5,
+          "x": 18.866941955758957,
+          "y": -12.001604111035421,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 6,
+          "targetIdx": 7,
+          "index": 6,
+          "x": -6.358980820385529,
+          "y": 23.65509169134563,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 70
+    },
+    "83": {
+      "cityA": {
+        "name": "Batumi",
+        "coordinates": [
+          41.6000046988,
+          41.6300064685
+        ],
+        "label": "Batumi",
+        "country": "GEO"
+      },
+      "cityB": {
+        "name": "Yerevan",
+        "coordinates": [
+          44.51160553175208,
+          40.18309659414189
+        ]
+      },
+      "color": "#7c9434",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 1142.6682215968044,
+          "y": 518.5436393458265,
+          "first": true,
+          "last": false,
+          "fx": 1142.6682215968044,
+          "fy": 518.5436393458265
+        },
+        {
+          "x": 1201.9011884351212,
+          "y": 534.0824384999501,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 1232.822998046875,
+          "y": 574.78193142181,
+          "first": false,
+          "last": true,
+          "fx": 1232.822998046875,
+          "fy": 574.78193142181
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 83
+    },
+    "88": {
+      "cityA": {
+        "name": "Venice",
+        "coordinates": [
+          12.334998737241506,
+          45.4386592804716
+        ]
+      },
+      "cityB": {
+        "name": "Ljubljana",
+        "coordinates": [
+          14.51496903347413,
+          46.0552883087945
+        ]
+      },
+      "color": "#e7a7ca",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 115.97556280955655,
+          "y": 326.1741841486139,
+          "first": true,
+          "fx": 115.97556280955655,
+          "fy": 326.1741841486139
+        },
+        {
+          "x": 138.83848547801358,
+          "y": 297.33168536931703,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 181.25956015023542,
+          "y": 303.0295613216474,
+          "first": false,
+          "last": true,
+          "fx": 181.25956015023542,
+          "fy": 303.0295613216474
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 88
+    },
+    "90": {
+      "cityA": {
+        "name": "Florence",
+        "coordinates": [
+          11.250000364841299,
+          43.780000833199324
+        ]
+      },
+      "cityB": {
+        "name": "Rome",
+        "coordinates": [
+          12.481312562873995,
+          41.89790148509894
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 72.68203010256178,
+          "y": 426.4862503989232,
+          "first": true,
+          "last": false,
+          "fx": 72.68203010256178,
+          "fy": 426.4862503989232
+        },
+        {
+          "x": 85.08327072053692,
+          "y": 468.8616725186
+        },
+        {
+          "x": 108.28930251985332,
+          "y": 500.4218531826625,
+          "first": false,
+          "last": true,
+          "fx": 108.28930251985332,
+          "fy": 500.4218531826625
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 90
+    },
+    "91": {
+      "cityA": {
+        "name": "Catania",
+        "coordinates": [
+          15.079999144153533,
+          37.49997072249721
+        ]
+      },
+      "cityB": {
+        "name": "Athens",
+        "coordinates": [
+          23.731375225679358,
+          37.98527209055226
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 215.12985709073098,
+          "y": 707.397111021764,
+          "first": true,
+          "last": false,
+          "fx": 215.12985709073098,
+          "fy": 707.397111021764
+        },
+        {
+          "x": 266.8351819411705,
+          "y": 714.2963303743177,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 322.2149605269616,
+          "y": 714.450240897746,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 384.9436771010339,
+          "y": 710.308557970309,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 435.4241636946375,
+          "y": 704.9331792487098
+        },
+        {
+          "x": 498.50247180010626,
+          "y": 688.3980840338661,
+          "first": false,
+          "last": true,
+          "fx": 498.50247180010626,
+          "fy": 688.3980840338661
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 4,
+          "targetIdx": 5,
+          "index": 4,
+          "x": -19.694269706308575,
+          "y": -3.4836390075862327,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 91
+    },
+    "92": {
+      "cityA": {
+        "name": "Milan",
+        "coordinates": [
+          9.203063051142124,
+          45.47192105705352
+        ]
+      },
+      "cityB": {
+        "name": "Venice",
+        "coordinates": [
+          12.334998737241506,
+          45.4386592804716
+        ]
+      },
+      "color": "#4591c5",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 8.569444179535026,
+          "y": 329.0063658921804,
+          "first": true,
+          "fx": 8.569444179535026,
+          "fy": 329.0063658921804
+        },
+        {
+          "x": 60.08682775497448,
+          "y": 323.4369078843679,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 103.17576575145108,
+          "y": 330.1994527033014,
+          "first": false,
+          "last": true,
+          "fx": 103.17576575145108,
+          "fy": 330.1994527033014
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 92
+    },
+    "93": {
+      "cityA": {
+        "name": "Budapest",
+        "coordinates": [
+          19.081374818759684,
+          47.50195218499135
+        ]
+      },
+      "cityB": {
+        "name": "Krakow",
+        "coordinates": [
+          19.958065492591288,
+          50.061925126082315
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 352.27801251633764,
+          "y": 222.72948296022787,
+          "first": true,
+          "last": false,
+          "fx": 352.27801251633764,
+          "fy": 222.72948296022787
+        },
+        {
+          "x": 376.48665090566135,
+          "y": 186.39262317689395
+        },
+        {
+          "x": 389.0118889427707,
+          "y": 138.31184314759707,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 380.8973156621727,
+          "y": 101.4548369174081,
+          "first": false,
+          "last": true,
+          "fx": 380.8973156621727,
+          "fy": 101.4548369174081
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 93
+    },
+    "94": {
+      "cityA": {
+        "name": "Tirana",
+        "coordinates": [
+          19.81888301461521,
+          41.327540709491586
+        ]
+      },
+      "cityB": {
+        "name": "Pristina",
+        "coordinates": [
+          21.165984251599866,
+          42.666709614119384
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 371.88027986711154,
+          "y": 522.6616537858661,
+          "first": true,
+          "last": false,
+          "fx": 371.88027986711154,
+          "fy": 522.6616537858661
+        },
+        {
+          "x": 365.6467721935668,
+          "y": 476.20871371261387
+        },
+        {
+          "x": 409.8969247814574,
+          "y": 469.27792757980137,
+          "first": false,
+          "last": true,
+          "fx": 409.8969247814574,
+          "fy": 469.27792757980137
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 94
+    },
+    "95": {
+      "cityA": {
+        "name": "Tirana",
+        "coordinates": [
+          19.81888301461521,
+          41.327540709491586
+        ]
+      },
+      "cityB": {
+        "name": "Skopje",
+        "coordinates": [
+          21.4334614651425,
+          42.00000612290586
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 379.34414705461154,
+          "y": 528.5260947038348,
+          "first": true,
+          "last": false,
+          "fx": 379.34414705461154,
+          "fy": 528.5260947038348
+        },
+        {
+          "x": 424.0431864216637,
+          "y": 504.5301424130814,
+          "first": false,
+          "last": true,
+          "fx": 424.0431864216637,
+          "fy": 504.5301424130814
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 95
+    },
+    "97": {
+      "cityA": {
+        "name": "Skopje",
+        "coordinates": [
+          21.4334614651425,
+          42.00000612290586
+        ]
+      },
+      "cityB": {
+        "name": "Sofia",
+        "coordinates": [
+          23.314708152110086,
+          42.68529528393054
+        ]
+      },
+      "color": "#f1f5f6",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 439.0145304158043,
+          "y": 502.7146822080033,
+          "first": true,
+          "last": false,
+          "fx": 439.0145304158043,
+          "fy": 502.7146822080033
+        },
+        {
+          "x": 492.51411459458757,
+          "y": 478.5785047590848,
+          "first": false,
+          "last": true,
+          "fx": 492.51411459458757,
+          "fy": 478.5785047590848
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 97
+    },
+    "99": {
+      "cityA": {
+        "name": "Skopje",
+        "coordinates": [
+          21.4334614651425,
+          42.00000612290586
+        ]
+      },
+      "cityB": {
+        "name": "Sofia",
+        "coordinates": [
+          23.314708152110086,
+          42.68529528393054
+        ]
+      },
+      "color": "#7c9434",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 434.1891214802574,
+          "y": 493.25664387792517,
+          "first": true,
+          "last": false,
+          "fx": 434.1891214802574,
+          "fy": 493.25664387792517
+        },
+        {
+          "x": 489.14582846177507,
+          "y": 468.4737379133817,
+          "first": false,
+          "last": true,
+          "fx": 489.14582846177507,
+          "fy": 468.4737379133817
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 99
+    },
+    "100": {
+      "cityA": {
+        "name": "Pristina",
+        "coordinates": [
+          21.165984251599866,
+          42.666709614119384
+        ]
+      },
+      "cityB": {
+        "name": "Sofia",
+        "coordinates": [
+          23.314708152110086,
+          42.68529528393054
+        ]
+      },
+      "color": "#4591c5",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 424.89622287716054,
+          "y": 463.8262979411295,
+          "first": true,
+          "last": false,
+          "fx": 424.89622287716054,
+          "fy": 463.8262979411295
+        },
+        {
+          "x": 457.6779939891188,
+          "y": 431.94865246416293
+        },
+        {
+          "x": 490.4188081981032,
+          "y": 460.84745617510043,
+          "first": false,
+          "last": true,
+          "fx": 490.4188081981032,
+          "fy": 460.84745617510043
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 100
+    },
+    "101": {
+      "cityA": {
+        "name": "Rome",
+        "coordinates": [
+          12.481312562873995,
+          41.89790148509894
+        ]
+      },
+      "cityB": {
+        "name": "Naples",
+        "coordinates": [
+          14.243065492568519,
+          40.841971105863195
+        ]
+      },
+      "color": "#2a2126",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 124.99763076692363,
+          "y": 505.0630580166469,
+          "first": true,
+          "last": false,
+          "fx": 124.99763076692363,
+          "fy": 505.0630580166469
+        },
+        {
+          "x": 169.86088529062664,
+          "y": 505.97123872316
+        },
+        {
+          "x": 177.75093045664227,
+          "y": 545.4215255883944,
+          "first": false,
+          "last": true,
+          "fx": 177.75093045664227,
+          "fy": 545.4215255883944
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 101
+    },
+    "102": {
+      "cityA": {
+        "name": "Rome",
+        "coordinates": [
+          12.481312562873995,
+          41.89790148509894
+        ]
+      },
+      "cityB": {
+        "name": "Sarajevo",
+        "coordinates": [
+          18.383001666953305,
+          43.850022398954934
+        ]
+      },
+      "color": "#7c9434",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 123.14115493684551,
+          "y": 495.78064834867814,
+          "first": true,
+          "last": false,
+          "fx": 123.14115493684551,
+          "fy": 495.78064834867814
+        },
+        {
+          "x": 163.58259998706768,
+          "y": 475.2810694147795,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 211.45000176336396,
+          "y": 473.0244469231402
+        },
+        {
+          "x": 252.29260735418427,
+          "y": 450.74664540946833
+        },
+        {
+          "x": 275.49863152410614,
+          "y": 414.08114858329645,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 315.9400842037228,
+          "y": 411.0277075214656,
+          "first": false,
+          "last": true,
+          "fx": 315.9400842037228,
+          "fy": 411.0277075214656
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 4,
+          "targetIdx": 5,
+          "index": 4,
+          "x": -19.694269706308575,
+          "y": -3.4836390075862327,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 102
+    },
+    "104": {
+      "cityA": {
+        "name": "Belgrade",
+        "coordinates": [
+          20.466044822020535,
+          44.82059130444674
+        ]
+      },
+      "cityB": {
+        "name": "Bucharest",
+        "coordinates": [
+          26.0980007953504,
+          44.43531766349457
+        ]
+      },
+      "color": "#b11700",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 405.5998376040651,
+          "y": 371.0376099789794,
+          "first": true,
+          "last": false,
+          "fx": 405.5998376040651,
+          "fy": 371.0376099789794
+        },
+        {
+          "x": 448.7927828985579,
+          "y": 366.97141852764844
+        },
+        {
+          "x": 495.74975311340165,
+          "y": 372.0716077366328
+        },
+        {
+          "x": 535.8478060919173,
+          "y": 383.67896857647656,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 585.7237958200038,
+          "y": 388.19887420860937,
+          "first": false,
+          "last": true,
+          "fx": 585.7237958200038,
+          "fy": 388.19887420860937
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 104
+    },
+    "105": {
+      "cityA": {
+        "name": "Lviv",
+        "coordinates": [
+          24.029995482079983,
+          49.834980081270544
+        ]
+      },
+      "cityB": {
+        "name": "Kiev",
+        "coordinates": [
+          30.514682110472165,
+          50.43531318760722
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 527.3113414201046,
+          "y": 103.25046038052801,
+          "first": true,
+          "last": false,
+          "fx": 527.3113414201046,
+          "fy": 103.25046038052801
+        },
+        {
+          "x": 575.7126311586569,
+          "y": 97.34606093239267
+        },
+        {
+          "x": 629.6047820375632,
+          "y": 94.89642256569346
+        },
+        {
+          "x": 683.4969329164694,
+          "y": 88.77231520485361,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 738.0223071276778,
+          "y": 76.02871950215604,
+          "first": false,
+          "last": true,
+          "fx": 738.0223071276778,
+          "fy": 76.02871950215604
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 105
+    },
+    "106": {
+      "cityA": {
+        "name": "Zagreb",
+        "coordinates": [
+          15.999994668245677,
+          45.80000673327254
+        ]
+      },
+      "cityB": {
+        "name": "Budapest",
+        "coordinates": [
+          19.081374818759684,
+          47.50195218499135
+        ]
+      },
+      "color": "#f1f5f6",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 247.74017791451604,
+          "y": 311.21513224653336,
+          "first": true,
+          "last": false,
+          "fx": 247.74017791451604,
+          "fy": 311.21513224653336
+        },
+        {
+          "x": 290.9110574957002,
+          "y": 300.94546353887586
+        },
+        {
+          "x": 322.4712381597627,
+          "y": 276.81115567754773,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 342.90020489915014,
+          "y": 237.31622917604818,
+          "first": false,
+          "last": true,
+          "fx": 342.90020489915014,
+          "fy": 237.31622917604818
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 106
+    },
+    "107": {
+      "cityA": {
+        "name": "Izmir",
+        "coordinates": [
+          27.149848151849312,
+          38.43809554094969
+        ]
+      },
+      "cityB": {
+        "name": "Konya",
+        "coordinates": [
+          32.47306386503732,
+          37.876958288468416
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 642.2902200673915,
+          "y": 667.53435863147,
+          "first": true,
+          "fx": 642.2902200673915,
+          "fy": 667.53435863147
+        },
+        {
+          "x": 684.061094090829,
+          "y": 664.7496296275638,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 718.6025108544789,
+          "y": 681.885294455137
+        },
+        {
+          "x": 765.4787315576039,
+          "y": 685.134073752012,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 806.0537176571913,
+          "y": 688.2981123472216,
+          "first": false,
+          "last": true,
+          "fx": 806.0537176571913,
+          "fy": 688.2981123472216
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 107
+    },
+    "108": {
+      "cityA": {
+        "name": "Batumi",
+        "coordinates": [
+          41.6000046988,
+          41.6300064685
+        ]
+      },
+      "cityB": {
+        "name": "Stavropol",
+        "coordinates": [
+          41.980010944391324,
+          45.050000833204535
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 1130.0686122218044,
+          "y": 507.5661308009046,
+          "first": true,
+          "last": false,
+          "fx": 1130.0686122218044,
+          "fy": 507.5661308009046
+        },
+        {
+          "x": 1130.2196608885026,
+          "y": 459.0140316329812
+        },
+        {
+          "x": 1130.3916579588151,
+          "y": 412.2136471114968,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 1141.6297427583256,
+          "y": 358.4405594478442,
+          "first": false,
+          "last": true,
+          "fx": 1141.6297427583256,
+          "fy": 358.4405594478442
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 108
+    },
+    "109": {
+      "cityA": {
+        "name": "Batumi",
+        "coordinates": [
+          41.6000046988,
+          41.6300064685
+        ]
+      },
+      "cityB": {
+        "name": "Stavropol",
+        "coordinates": [
+          41.980010944391324,
+          45.050000833204535
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 1141.2758876124294,
+          "y": 508.3329459864515,
+          "first": true,
+          "last": false,
+          "fx": 1141.2758876124294,
+          "fy": 508.3329459864515
+        },
+        {
+          "x": 1140.9546462400651,
+          "y": 457.9175045333718
+        },
+        {
+          "x": 1141.4185134275651,
+          "y": 412.8978206954812,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 1151.7719546723881,
+          "y": 362.4869766841723,
+          "first": false,
+          "last": true,
+          "fx": 1151.7719546723881,
+          "fy": 362.4869766841723
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 109
+    },
+    "110": {
+      "cityA": {
+        "name": "Lviv",
+        "coordinates": [
+          24.029995482079983,
+          49.834980081270544
+        ]
+      },
+      "cityB": {
+        "name": "Iasi",
+        "coordinates": [
+          27.574947060870272,
+          47.1683469839291
+        ]
+      },
+      "color": "#4591c5",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 525.474061146667,
+          "y": 115.19246172330145,
+          "first": true,
+          "last": false,
+          "fx": 525.474061146667,
+          "fy": 115.19246172330145
+        },
+        {
+          "x": 560.4742993445878,
+          "y": 143.59815459507763
+        },
+        {
+          "x": 595.9941357703691,
+          "y": 171.1566415335542
+        },
+        {
+          "x": 637.0256909461503,
+          "y": 188.91654448765576,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 645.3860976011024,
+          "y": 240.5801376751565,
+          "first": false,
+          "last": true,
+          "fx": 645.3860976011024,
+          "fy": 240.5801376751565
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 110
+    },
+    "111": {
+      "cityA": {
+        "name": "Bucharest",
+        "coordinates": [
+          26.0980007953504,
+          44.43531766349457
+        ]
+      },
+      "cityB": {
+        "name": "Iasi",
+        "coordinates": [
+          27.574947060870272,
+          47.1683469839291
+        ]
+      },
+      "color": "#2a2126",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 592.8496503121913,
+          "y": 375.18288299767187,
+          "first": true,
+          "last": false,
+          "fx": 592.8496503121913,
+          "fy": 375.18288299767187
+        },
+        {
+          "x": 594.1620634097719,
+          "y": 330.4626637537581
+        },
+        {
+          "x": 610.6971586246157,
+          "y": 287.90010271860183,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 639.8744398862586,
+          "y": 251.9097275189065,
+          "first": false,
+          "last": true,
+          "fx": 639.8744398862586,
+          "fy": 251.9097275189065
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 111
+    },
+    "112": {
+      "cityA": {
+        "name": "Kiev",
+        "coordinates": [
+          30.514682110472165,
+          50.43531318760722
+        ]
+      },
+      "cityB": {
+        "name": "Kharkiv",
+        "coordinates": [
+          36.24807892039098,
+          50.00192878819132
+        ]
+      },
+      "color": "#f1f5f6",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 757.1032397448653,
+          "y": 71.11017854756619,
+          "first": true,
+          "last": false,
+          "fx": 757.1032397448653,
+          "fy": 71.11017854756619
+        },
+        {
+          "x": 804.8460676477985,
+          "y": 75.54693244371128
+        },
+        {
+          "x": 848.937498311861,
+          "y": 88.54230521592808
+        },
+        {
+          "x": 897.6701032923297,
+          "y": 86.22171042833043,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 941.6999795351064,
+          "y": 91.99705536582223,
+          "first": false,
+          "last": true,
+          "fx": 941.6999795351064,
+          "fy": 91.99705536582223
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 112
+    },
+    "113": {
+      "cityA": {
+        "name": "Kharkiv",
+        "coordinates": [
+          36.24807892039098,
+          50.00192878819132
+        ]
+      },
+      "cityB": {
+        "name": "Dnipro",
+        "coordinates": [
+          34.99807769968277,
+          48.481918208758316
+        ]
+      },
+      "color": "#7c9434",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 940.3075845155752,
+          "y": 102.20772583701364,
+          "first": true,
+          "fx": 940.3075845155752,
+          "fy": 102.20772583701364
+        },
+        {
+          "x": 911.5320718202627,
+          "y": 126.80613739707223,
+          "last": false,
+          "fx": null,
+          "fy": null
+        },
+        {
+          "x": 905.90363960799,
+          "y": 169.66164472111245,
+          "first": false,
+          "last": true,
+          "fx": 905.90363960799,
+          "fy": 169.66164472111245
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 113
+    },
+    "114": {
+      "cityA": {
+        "name": "Rostov",
+        "coordinates": [
+          39.710709942540234,
+          47.236593705172595
+        ]
+      },
+      "cityB": {
+        "name": "Volgograd",
+        "coordinates": [
+          44.498014630059345,
+          48.711955847105685
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 1075.7109429265643,
+          "y": 239.17443861898892,
+          "first": true,
+          "last": false,
+          "fx": 1075.7109429265643,
+          "fy": 239.17443861898892
+        },
+        {
+          "x": 1119.9166219346025,
+          "y": 217.64394970838498
+        },
+        {
+          "x": 1148.2279012314775,
+          "y": 183.76315136854123
+        },
+        {
+          "x": 1189.070552598665,
+          "y": 192.11730786268186,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 1229.5630968410783,
+          "y": 169.57244828085732,
+          "first": false,
+          "last": true,
+          "fx": 1229.5630968410783,
+          "fy": 169.57244828085732
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 114
+    },
+    "115": {
+      "cityA": {
+        "name": "Rostov",
+        "coordinates": [
+          39.710709942540234,
+          47.236593705172595
+        ]
+      },
+      "cityB": {
+        "name": "Donetsk",
+        "coordinates": [
+          37.82803416128263,
+          48.00194750563139
+        ]
+      },
+      "color": "#e7a7ca",
+      "connectionType": "tunnel",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 1061.3232476140643,
+          "y": 237.3179627889108,
+          "first": true,
+          "last": false,
+          "fx": 1061.3232476140643,
+          "fy": 237.3179627889108
+        },
+        {
+          "x": 1013.6261654579212,
+          "y": 209.2371139217803,
+          "first": false,
+          "last": true,
+          "fx": 1013.6261654579212,
+          "fy": 209.2371139217803
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 115
+    },
+    "116": {
+      "cityA": {
+        "name": "Dnipro",
+        "coordinates": [
+          34.99807769968277,
+          48.481918208758316
+        ]
+      },
+      "cityB": {
+        "name": "Donetsk",
+        "coordinates": [
+          37.82803416128263,
+          48.00194750563139
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 909.6165912681463,
+          "y": 184.0494010687687,
+          "first": true,
+          "last": false,
+          "fx": 909.6165912681463,
+          "fy": 184.0494010687687
+        },
+        {
+          "x": 950.5058651649524,
+          "y": 205.98827358974904
+        },
+        {
+          "x": 995.9895687782337,
+          "y": 204.13179775967092,
+          "first": false,
+          "last": true,
+          "fx": 995.9895687782337,
+          "fy": 204.13179775967092
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 116
+    },
+    "117": {
+      "cityA": {
+        "name": "Samsun",
+        "coordinates": [
+          36.34366247431666,
+          41.279998391783124
+        ]
+      },
+      "cityB": {
+        "name": "Batumi",
+        "coordinates": [
+          41.6000046988,
+          41.6300064685
+        ]
+      },
+      "color": "#e17b0c",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 958.2211369228876,
+          "y": 539.9163124088045,
+          "first": true,
+          "last": false,
+          "fx": 958.2211369228876,
+          "fy": 539.9163124088045
+        },
+        {
+          "x": 1003.9957046504712,
+          "y": 557.7952450730684
+        },
+        {
+          "x": 1049.7215347285962,
+          "y": 565.5334042527559
+        },
+        {
+          "x": 1098.6131362910962,
+          "y": 555.3330258347871,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 1131.0214930811794,
+          "y": 521.1327506739515,
+          "first": false,
+          "last": true,
+          "fx": 1131.0214930811794,
+          "fy": 521.1327506739515
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 117
+    },
+    "118": {
+      "cityA": {
+        "name": "Istanbul",
+        "coordinates": [
+          29.008055727002613,
+          41.10694201243979
+        ]
+      },
+      "cityB": {
+        "name": "Sevastapol",
+        "coordinates": [
+          33.46497513706561,
+          44.59997662259076
+        ]
+      },
+      "color": "#2a2126",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 702.2083945866325,
+          "y": 533.7067124772757,
+          "first": true,
+          "last": false,
+          "fx": 702.2083945866325,
+          "fy": 533.7067124772757
+        },
+        {
+          "x": 736.9825716856953,
+          "y": 493.9100929177587
+        },
+        {
+          "x": 773.7272005919453,
+          "y": 458.6965003884618,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 811.5634504449147,
+          "y": 423.0891174176161,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 842.356975688509,
+          "y": 386.7093620356036,
+          "first": false,
+          "last": true,
+          "fx": 842.356975688509,
+          "fy": 386.7093620356036
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 118
+    },
+    "119": {
+      "cityA": {
+        "name": "Krasnodar",
+        "coordinates": [
+          39.0000377998482,
+          45.01997682604281
+        ]
+      },
+      "cityB": {
+        "name": "Stavropol",
+        "coordinates": [
+          41.980010944391324,
+          45.050000833204535
+        ]
+      },
+      "color": "#b11700",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 1054.5054629492665,
+          "y": 352.5568854189953,
+          "first": true,
+          "last": false,
+          "fx": 1054.5054629492665,
+          "fy": 352.5568854189953
+        },
+        {
+          "x": 1097.6087466645756,
+          "y": 338.8099747310473
+        },
+        {
+          "x": 1139.7264224458256,
+          "y": 349.2060623775317,
+          "first": false,
+          "last": true,
+          "fx": 1139.7264224458256,
+          "fy": 349.2060623775317
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 119
+    },
+    "120": {
+      "cityA": {
+        "name": "Rostov",
+        "coordinates": [
+          39.710709942540234,
+          47.236593705172595
+        ]
+      },
+      "cityB": {
+        "name": "Stavropol",
+        "coordinates": [
+          41.980010944391324,
+          45.050000833204535
+        ]
+      },
+      "color": "#f1f5f6",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 1077.7432915593768,
+          "y": 247.15248122152798,
+          "first": true,
+          "last": false,
+          "fx": 1077.7432915593768,
+          "fy": 247.15248122152798
+        },
+        {
+          "x": 1116.5986875690073,
+          "y": 266.60566434490966
+        },
+        {
+          "x": 1141.3894590533823,
+          "y": 299.39350614178466,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 1148.7897769380131,
+          "y": 344.1412735591723,
+          "first": false,
+          "last": true,
+          "fx": 1148.7897769380131,
+          "fy": 344.1412735591723
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 120
+    },
+    "121": {
+      "cityA": {
+        "name": "Krasnodar",
+        "coordinates": [
+          39.0000377998482,
+          45.01997682604281
+        ]
+      },
+      "cityB": {
+        "name": "Rostov",
+        "coordinates": [
+          39.710709942540234,
+          47.236593705172595
+        ]
+      },
+      "color": "#7c9434",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 1045.1756289648915,
+          "y": 344.0267340518078,
+          "first": true,
+          "last": false,
+          "fx": 1045.1756289648915,
+          "fy": 344.0267340518078
+        },
+        {
+          "x": 1047.8879448796893,
+          "y": 297.0005342000436
+        },
+        {
+          "x": 1063.3487603093768,
+          "y": 253.28352370199673,
+          "first": false,
+          "last": true,
+          "fx": 1063.3487603093768,
+          "fy": 253.28352370199673
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 121
+    },
+    "122": {
+      "cityA": {
+        "name": "Sevastapol",
+        "coordinates": [
+          33.46497513706561,
+          44.59997662259076
+        ]
+      },
+      "cityB": {
+        "name": "Krasnodar",
+        "coordinates": [
+          39.0000377998482,
+          45.01997682604281
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "ferriage",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 858.927776469759,
+          "y": 379.6448173578692,
+          "first": true,
+          "last": false,
+          "fx": 858.927776469759,
+          "fy": 379.6448173578692
+        },
+        {
+          "x": 904.4695188794344,
+          "y": 395.4420876132731,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 954.2762149023915,
+          "y": 394.4079596377453
+        },
+        {
+          "x": 999.0596011328603,
+          "y": 393.6082770205578
+        },
+        {
+          "x": 1034.5130313086415,
+          "y": 364.55242985258906,
+          "first": false,
+          "last": true,
+          "fx": 1034.5130313086415,
+          "fy": 364.55242985258906
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 122
+    },
+    "124": {
+      "cityA": {
+        "name": "Kiev",
+        "coordinates": [
+          30.514682110472165,
+          50.43531318760722
+        ]
+      },
+      "cityB": {
+        "name": "Odesa",
+        "coordinates": [
+          30.708055320108315,
+          46.49196215406283
+        ]
+      },
+      "color": "#4591c5",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 747.1173999011153,
+          "y": 82.111841755574,
+          "first": true,
+          "last": false,
+          "fx": 747.1173999011153,
+          "fy": 82.111841755574
+        },
+        {
+          "x": 748.0343466387005,
+          "y": 126.92232332917274
+        },
+        {
+          "x": 748.0342856035443,
+          "y": 172.99994478913368
+        },
+        {
+          "x": 750.4965048418255,
+          "y": 223.650167567454,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 754.579039958317,
+          "y": 267.93611347664364,
+          "first": false,
+          "last": true,
+          "fx": 754.579039958317,
+          "fy": 267.93611347664364
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 124
+    },
+    "125": {
+      "cityA": {
+        "name": "Iasi",
+        "coordinates": [
+          27.574947060870272,
+          47.1683469839291
+        ]
+      },
+      "cityB": {
+        "name": "Chisinau",
+        "coordinates": [
+          28.85771113965143,
+          47.005023619670624
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 645.0798842221961,
+          "y": 246.39803928648462,
+          "first": true,
+          "last": false,
+          "fx": 645.0798842221961,
+          "fy": 246.39803928648462
+        },
+        {
+          "x": 689.9112695472977,
+          "y": 254.78117558456324,
+          "first": false,
+          "last": true,
+          "fx": 689.9112695472977,
+          "fy": 254.78117558456324
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 125
+    },
+    "126": {
+      "cityA": {
+        "name": "Odesa",
+        "coordinates": [
+          30.708055320108315,
+          46.49196215406283
+        ]
+      },
+      "cityB": {
+        "name": "Sevastapol",
+        "coordinates": [
+          33.46497513706561,
+          44.59997662259076
+        ]
+      },
+      "color": "#f1f5f6",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 761.7763666184733,
+          "y": 277.75157368172177,
+          "first": true,
+          "last": false,
+          "fx": 761.7763666184733,
+          "fy": 277.75157368172177
+        },
+        {
+          "x": 808.8860070909909,
+          "y": 268.8513282983281
+        },
+        {
+          "x": 841.6737878527097,
+          "y": 286.44477312254685
+        },
+        {
+          "x": 869.6633508409909,
+          "y": 324.8304847924687,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 855.7289849658528,
+          "y": 366.04987717232234,
+          "first": false,
+          "last": true,
+          "fx": 855.7289849658528,
+          "fy": 366.04987717232234
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 3,
+          "targetIdx": 4,
+          "index": 3,
+          "x": 10.538470205147267,
+          "y": 13.745568221620495,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 126
+    },
+    "127": {
+      "cityA": {
+        "name": "Ankara",
+        "coordinates": [
+          32.862445782356644,
+          39.929184444075474
+        ]
+      },
+      "cityB": {
+        "name": "Konya",
+        "coordinates": [
+          32.47306386503732,
+          37.876958288468416
+        ]
+      },
+      "color": "#e5d331",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 822.3982074858775,
+          "y": 597.940419333361,
+          "first": true,
+          "last": false,
+          "fx": 822.3982074858775,
+          "fy": 597.940419333361
+        },
+        {
+          "x": 815.4563055478163,
+          "y": 641.8335127378466
+        },
+        {
+          "x": 810.4058294735976,
+          "y": 676.9850019956591,
+          "first": false,
+          "last": true,
+          "fx": 810.4058294735976,
+          "fy": 676.9850019956591
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 127
+    },
+    "128": {
+      "cityA": {
+        "name": "Konya",
+        "coordinates": [
+          32.47306386503732,
+          37.876958288468416
+        ]
+      },
+      "cityB": {
+        "name": "Ankara",
+        "coordinates": [
+          32.862445782356644,
+          39.929184444075474
+        ]
+      },
+      "color": "#2a2126",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 822.3250189267226,
+          "y": 679.6112837339404,
+          "first": true,
+          "last": false,
+          "fx": 822.3250189267226,
+          "fy": 679.6112837339404
+        },
+        {
+          "x": 827.8527362944712,
+          "y": 643.3948871067985
+        },
+        {
+          "x": 834.115370571815,
+          "y": 600.7686053685172,
+          "first": false,
+          "last": true,
+          "fx": 834.115370571815,
+          "fy": 600.7686053685172
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 128
+    },
+    "129": {
+      "cityA": {
+        "name": "Palermo",
+        "coordinates": [
+          13.348081361705624,
+          38.126968867896494
+        ]
+      },
+      "cityB": {
+        "name": "Catania",
+        "coordinates": [
+          15.079999144153533,
+          37.49997072249721
+        ]
+      },
+      "color": "#e17b0c",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 155.13717057708726,
+          "y": 681.249986855787,
+          "first": true,
+          "last": false,
+          "fx": 155.13717057708726,
+          "fy": 681.249986855787
+        },
+        {
+          "x": 202.73676016690285,
+          "y": 701.3111124866077,
+          "first": false,
+          "last": true,
+          "fx": 202.73676016690285,
+          "fy": 701.3111124866077
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 129
+    },
+    "153": {
+      "cityA": {
+        "name": "Ankara",
+        "coordinates": [
+          32.862445782356644,
+          39.929184444075474
+        ],
+        "label": "Ankara",
+        "country": "TUR"
+      },
+      "cityB": {
+        "name": "Samsun",
+        "coordinates": [
+          36.34366247431666,
+          41.279998391783124
+        ]
+      },
+      "color": "#808080",
+      "connectionType": "track",
+      "connectionOptions": {},
+      "connectionCoords": [
+        {
+          "x": 833.0610492827525,
+          "y": 589.533436911486,
+          "first": true,
+          "last": false,
+          "fx": 833.0610492827525,
+          "fy": 589.533436911486
+        },
+        {
+          "x": 861.1625164426637,
+          "y": 557.1100403303824
+        },
+        {
+          "x": 901.7576092161012,
+          "y": 537.7689148421011,
+          "first": false,
+          "last": false
+        },
+        {
+          "x": 944.3117741299188,
+          "y": 533.2991249088045,
+          "first": false,
+          "last": true,
+          "fx": 944.3117741299188,
+          "fy": 533.2991249088045
+        }
+      ],
+      "connections": [
+        {
+          "sourceIdx": 0,
+          "targetIdx": 1,
+          "index": 0,
+          "x": 0,
+          "y": 0,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 1,
+          "targetIdx": 2,
+          "index": 1,
+          "x": -7.373688780783198,
+          "y": 6.754902942615239,
+          "vy": 0,
+          "vx": 0
+        },
+        {
+          "sourceIdx": 2,
+          "targetIdx": 3,
+          "index": 2,
+          "x": 1.2363864559502138,
+          "y": -14.087985964343622,
+          "vy": 0,
+          "vx": 0
+        }
+      ],
+      "linkId": 153
+    }
+  },
+  "cities": [
+    {
+      "name": "Lviv",
+      "coordinates": [
+        24.029995482079983,
+        49.834980081270544
+      ],
+      "label": "Lviv",
+      "country": "UKR"
+    },
+    {
+      "name": "Odesa",
+      "coordinates": [
+        30.708055320108315,
+        46.49196215406283
+      ],
+      "label": "Odesa",
+      "country": "UKR"
+    },
+    {
+      "name": "Dnipro",
+      "coordinates": [
+        34.99807769968277,
+        48.481918208758316
+      ],
+      "label": "Dnipro",
+      "country": "UKR"
+    },
+    {
+      "name": "Donetsk",
+      "coordinates": [
+        37.82803416128263,
+        48.00194750563139
+      ],
+      "label": "Donetsk",
+      "country": "UKR"
+    },
+    {
+      "name": "Kharkiv",
+      "coordinates": [
+        36.24807892039098,
+        50.00192878819132
+      ],
+      "label": "Kharkiv",
+      "country": "UKR"
+    },
+    {
+      "name": "Izmir",
+      "coordinates": [
+        27.149848151849312,
+        38.43809554094969
+      ],
+      "label": "Izmir",
+      "country": "TUR"
+    },
+    {
+      "name": "Samsun",
+      "coordinates": [
+        36.34366247431666,
+        41.279998391783124
+      ],
+      "label": "Samsun",
+      "country": "TUR"
+    },
+    {
+      "name": "Konya",
+      "coordinates": [
+        32.47306386503732,
+        37.876958288468416
+      ],
+      "label": "Konya",
+      "country": "TUR"
+    },
+    {
+      "name": "Adana",
+      "coordinates": [
+        35.318058168434106,
+        36.99693448475409
+      ],
+      "label": "Adana",
+      "country": "TUR"
+    },
+    {
+      "name": "Constanta",
+      "coordinates": [
+        28.609974323244046,
+        44.20266237291463
+      ],
+      "label": "Constanta",
+      "country": "ROU"
+    },
+    {
+      "name": "Iasi",
+      "coordinates": [
+        27.574947060870272,
+        47.1683469839291
+      ],
+      "label": "Iasi",
+      "country": "ROU"
+    },
+    {
+      "name": "Ljubljana",
+      "coordinates": [
+        14.51496903347413,
+        46.0552883087945
+      ],
+      "label": "Ljubljana",
+      "country": "SVN"
+    },
+    {
+      "name": "Stavropol",
+      "coordinates": [
+        41.980010944391324,
+        45.050000833204535
+      ],
+      "label": "Stavropol",
+      "country": "RUS"
+    },
+    {
+      "name": "Rostov",
+      "coordinates": [
+        39.710709942540234,
+        47.236593705172595
+      ],
+      "label": "Rostov",
+      "country": "RUS"
+    },
+    {
+      "name": "Krasnodar",
+      "coordinates": [
+        39.0000377998482,
+        45.01997682604281
+      ],
+      "label": "Krasnodar",
+      "country": "RUS"
+    },
+    {
+      "name": "Krakow",
+      "coordinates": [
+        19.958065492591288,
+        50.061925126082315
+      ],
+      "label": "Krakow",
+      "country": "POL"
+    },
+    {
+      "name": "Florence",
+      "coordinates": [
+        11.250000364841299,
+        43.780000833199324
+      ],
+      "label": "Florence",
+      "country": "ITA"
+    },
+    {
+      "name": "Batumi",
+      "coordinates": [
+        41.6000046988,
+        41.6300064685
+      ],
+      "label": "Batumi",
+      "country": "GEO"
+    },
+    {
+      "name": "Catania",
+      "coordinates": [
+        15.079999144153533,
+        37.49997072249721
+      ],
+      "label": "Catania",
+      "country": "ITA"
+    },
+    {
+      "name": "Pristina",
+      "coordinates": [
+        21.165984251599866,
+        42.666709614119384
+      ],
+      "label": "Pristina",
+      "country": "KOS"
+    },
+    {
+      "name": "Skopje",
+      "coordinates": [
+        21.4334614651425,
+        42.00000612290586
+      ],
+      "label": "Skopje",
+      "country": "MKD"
+    },
+    {
+      "name": "Venice",
+      "coordinates": [
+        12.334998737241506,
+        45.4386592804716
+      ],
+      "label": "Venice",
+      "country": "ITA"
+    },
+    {
+      "name": "Sevastapol",
+      "coordinates": [
+        33.46497513706561,
+        44.59997662259076
+      ],
+      "label": "Sevastapol",
+      "country": "UKR"
+    },
+    {
+      "name": "Chisinau",
+      "coordinates": [
+        28.85771113965143,
+        47.005023619670624
+      ],
+      "label": "Chisinau",
+      "country": "MDA"
+    },
+    {
+      "name": "Volgograd",
+      "coordinates": [
+        44.498014630059345,
+        48.711955847105685
+      ],
+      "label": "Volgograd",
+      "country": "RUS"
+    },
+    {
+      "name": "Palermo",
+      "coordinates": [
+        13.348081361705624,
+        38.126968867896494
+      ],
+      "label": "Palermo",
+      "country": "ITA"
+    },
+    {
+      "name": "Zagreb",
+      "coordinates": [
+        15.999994668245677,
+        45.80000673327254
+      ],
+      "label": "Zagreb",
+      "country": "HRV"
+    },
+    {
+      "name": "Thessaloniki",
+      "coordinates": [
+        22.88305491317601,
+        40.69805224193027
+      ],
+      "label": "Thessaloniki",
+      "country": "GRC"
+    },
+    {
+      "name": "Belgrade",
+      "coordinates": [
+        20.466044822020535,
+        44.82059130444674
+      ],
+      "label": "Belgrade",
+      "country": "SRB"
+    },
+    {
+      "name": "Tirana",
+      "coordinates": [
+        19.81888301461521,
+        41.327540709491586
+      ],
+      "label": "Tirana",
+      "country": "ALB"
+    },
+    {
+      "name": "Yerevan",
+      "coordinates": [
+        44.51160553175208,
+        40.18309659414189
+      ],
+      "label": "Yerevan",
+      "country": "ARM"
+    },
+    {
+      "name": "Sofia",
+      "coordinates": [
+        23.314708152110086,
+        42.68529528393054
+      ],
+      "label": "Sofia",
+      "country": "BGR"
+    },
+    {
+      "name": "Sarajevo",
+      "coordinates": [
+        18.383001666953305,
+        43.850022398954934
+      ],
+      "label": "Sarajevo",
+      "country": "BIH"
+    },
+    {
+      "name": "Ankara",
+      "coordinates": [
+        32.862445782356644,
+        39.929184444075474
+      ],
+      "label": "Ankara",
+      "country": "TUR"
+    },
+    {
+      "name": "Budapest",
+      "coordinates": [
+        19.081374818759684,
+        47.50195218499135
+      ],
+      "label": "Budapest",
+      "country": "HUN"
+    },
+    {
+      "name": "Bucharest",
+      "coordinates": [
+        26.0980007953504,
+        44.43531766349457
+      ],
+      "label": "Bucharest",
+      "country": "ROU"
+    },
+    {
+      "name": "Naples",
+      "coordinates": [
+        14.243065492568519,
+        40.841971105863195
+      ],
+      "label": "Naples",
+      "country": "ITA"
+    },
+    {
+      "name": "Milan",
+      "coordinates": [
+        9.203063051142124,
+        45.47192105705352
+      ],
+      "label": "Milan",
+      "country": "ITA"
+    },
+    {
+      "name": "Munich",
+      "coordinates": [
+        11.573047588912061,
+        48.131887894629244
+      ],
+      "label": "Munich",
+      "country": "DEU"
+    },
+    {
+      "name": "Prague",
+      "coordinates": [
+        14.464033917048539,
+        50.08528287347832
+      ],
+      "label": "Prague",
+      "country": "CZE"
+    },
+    {
+      "name": "Kiev",
+      "coordinates": [
+        30.514682110472165,
+        50.43531318760722
+      ],
+      "label": "Kiev",
+      "country": "UKR"
+    },
+    {
+      "name": "Athens",
+      "coordinates": [
+        23.731375225679358,
+        37.98527209055226
+      ],
+      "label": "Athens",
+      "country": "GRC"
+    },
+    {
+      "name": "Vienna",
+      "coordinates": [
+        16.364693096743736,
+        48.20196113681686
+      ],
+      "label": "Vienna",
+      "country": "AUT"
+    },
+    {
+      "name": "Istanbul",
+      "coordinates": [
+        29.008055727002613,
+        41.10694201243979
+      ],
+      "label": "Istanbul",
+      "country": "TUR"
+    },
+    {
+      "name": "Rome",
+      "coordinates": [
+        12.481312562873995,
+        41.89790148509894
+      ],
+      "label": "Rome",
+      "country": "ITA"
+    }
+  ],
+  "cityLabels": [
+    {
+      "name": "Lviv",
+      "dx": -13.737426757812504,
+      "dy": 7.424247741699217
+    },
+    {
+      "name": "Odesa",
+      "dx": -26.390136718750004,
+      "dy": 2.6008911132812518
+    },
+    {
+      "name": "Dnipro",
+      "dx": 17.777770996093746,
+      "dy": -2.272720336914065
+    },
+    {
+      "name": "Donetsk",
+      "dx": 20.885375976562504,
+      "dy": -1.0335693359374987
+    },
+    {
+      "name": "Kharkiv",
+      "dx": 9.292907714843746,
+      "dy": 9.848487854003903
+    },
+    {
+      "name": "Izmir",
+      "dx": -2.4242553710937473,
+      "dy": 9.040405273437496
+    },
+    {
+      "name": "Samsun",
+      "dx": 18.993835449218746,
+      "dy": -5.200378417968748
+    },
+    {
+      "name": "Konya",
+      "dx": 13.737365722656246,
+      "dy": -0.6565551757812527
+    },
+    {
+      "name": "Adana",
+      "dx": -17.777770996093746,
+      "dy": -11.969726562499998
+    },
+    {
+      "name": "Constanta",
+      "dx": -2.2550048828125027,
+      "dy": 8.221496582031252
+    },
+    {
+      "name": "Iasi",
+      "dx": -19.345581054687496,
+      "dy": -6.959075927734378
+    },
+    {
+      "name": "Ljubljana",
+      "dx": -22.222213745117188,
+      "dy": 9.040405273437502
+    },
+    {
+      "name": "Stavropol",
+      "dx": -32.3232421875,
+      "dy": 7.020202636718747
+    },
+    {
+      "name": "Rostov",
+      "dx": -28.522766113281246,
+      "dy": 1.8011932373046848
+    },
+    {
+      "name": "Krasnodar",
+      "dx": -33.13134765625,
+      "dy": -7.121215820312498
+    },
+    {
+      "name": "Krakow",
+      "dx": 0,
+      "dy": 5
+    },
+    {
+      "name": "Florence",
+      "dx": 18.58586120605469,
+      "dy": -8.737396240234373
+    },
+    {
+      "name": "Batumi",
+      "dx": -26.918945312500004,
+      "dy": -6.138916015625001
+    },
+    {
+      "name": "Catania",
+      "dx": -25.05049133300781,
+      "dy": 7.828308105468747
+    },
+    {
+      "name": "Pristina",
+      "dx": 0.8081054687499964,
+      "dy": 9.040405273437502
+    },
+    {
+      "name": "Skopje",
+      "dx": 0.6123962402343723,
+      "dy": 8.980682373046871
+    },
+    {
+      "name": "Venice",
+      "dx": 1.2121200561523473,
+      "dy": 8.636383056640625
+    },
+    {
+      "name": "Sevastapol",
+      "dx": 26.390197753906246,
+      "dy": -3.5301513671874982
+    },
+    {
+      "name": "Chisinau",
+      "dx": 20.049072265625004,
+      "dy": -4.1451721191406286
+    },
+    {
+      "name": "Volgograd",
+      "dx": -39.19189453125,
+      "dy": -4.696975708007811
+    },
+    {
+      "name": "Palermo",
+      "dx": -13.333328247070316,
+      "dy": 9.848510742187496
+    },
+    {
+      "name": "Zagreb",
+      "dx": 16.161621093750004,
+      "dy": 4.595947265624997
+    },
+    {
+      "name": "Thessaloniki",
+      "dx": 0,
+      "dy": 5
+    },
+    {
+      "name": "Belgrade",
+      "dx": -27.878784179687504,
+      "dy": -13.181793212890629
+    },
+    {
+      "name": "Tirana",
+      "dx": 0,
+      "dy": 5
+    },
+    {
+      "name": "Yerevan",
+      "dx": -13.459472656250004,
+      "dy": 7.784729003906252
+    },
+    {
+      "name": "Sofia",
+      "dx": 12.525238037109379,
+      "dy": 1.7676696777343714
+    },
+    {
+      "name": "Sarajevo",
+      "dx": 5.252532958984377,
+      "dy": 9.040405273437502
+    },
+    {
+      "name": "Ankara",
+      "dx": 15.757568359374996,
+      "dy": 2.5758056640624964
+    },
+    {
+      "name": "Budapest",
+      "dx": 22.97396850585938,
+      "dy": 0.12673950195312145
+    },
+    {
+      "name": "Bucharest",
+      "dx": 12.563842773437496,
+      "dy": 8.865814208984377
+    },
+    {
+      "name": "Naples",
+      "dx": 15.757568359374996,
+      "dy": -8.333312988281254
+    },
+    {
+      "name": "Milan",
+      "dx": 3.6363630294799796,
+      "dy": 9.444458007812502
+    },
+    {
+      "name": "Munich",
+      "dx": 20.75251770019531,
+      "dy": -2.0347595214843786
+    },
+    {
+      "name": "Prague",
+      "dx": 16.96971130371094,
+      "dy": -2.2727279663085973
+    },
+    {
+      "name": "Kiev",
+      "dx": 8.484802246093746,
+      "dy": 8.232322692871096
+    },
+    {
+      "name": "Athens",
+      "dx": 0,
+      "dy": 5
+    },
+    {
+      "name": "Vienna",
+      "dx": -29.703720092773434,
+      "dy": -2.193862915039061
+    },
+    {
+      "name": "Istanbul",
+      "dx": 17.853332519531246,
+      "dy": 3.5122070312500018
+    },
+    {
+      "name": "Rome",
+      "dx": 7.272727966308596,
+      "dy": 9.848449707031246
+    }
+  ]
+}

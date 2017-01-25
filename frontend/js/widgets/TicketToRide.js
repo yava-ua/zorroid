@@ -236,7 +236,9 @@ export default class TicketToRide extends Widget {
                 <li>
                     <input type="file" accept=".json" id="import" class="menu-import"/>
                 </li>
-                <li  id="export" class="menu-submenu-item">Export</li>               
+                <li class="menu-submenu-item">
+                    <a id="export">Export</a>
+                </li>               
                 <li class="menu-submenu-item">
                     <select id="selector-map">
                         <option>BlackSea</option>
