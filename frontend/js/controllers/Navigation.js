@@ -21,7 +21,7 @@ const widgets = [
     }, {
         id: "d3-modules",
         title: "D3 Modules",
-        icon: ""
+        icon: "star-empty.svg"
     }
 ];
 
