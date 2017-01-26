@@ -1,0 +1,15 @@
+svg#d3-modules {
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+
+  text {
+    user-select: none;
+  }
+
+  rect {
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
