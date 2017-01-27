@@ -94,4 +94,34 @@ $menu_item_height: 38px;
   &:hover {
     background-color: #325682;
   }
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  select {
+    width: 100px;
+  }
+
+  .input-wrapper {
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+
+    .fileInput {
+      cursor: pointer;
+      height: 100%;
+      position:absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .hidden-input-file {
+      opacity: 0;
+      -moz-opacity: 0;
+      filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0)
+    }
+  }
+
 }

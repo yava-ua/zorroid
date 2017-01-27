@@ -53,10 +53,6 @@ const MapConfig = {
     color: d3.scaleOrdinal(d3.schemeCategory20c)
 };
 const Maps = {
-    Ukraine: {
-        file: "ua.json",
-        extentOffsets: [[3, 63], [3, 23]]
-    },
     Ukraine2: {
         file: "ua-2.json",
         extentOffsets: [[3, 63], [3, 23]]
@@ -66,7 +62,7 @@ const Maps = {
         extentOffsets: [[3, 3], [3, 3]]
     },
     Globe: {
-        file: "globe-black-sea_simplified.json",
+        file: "globe_black-sea_simplified_quantized.json",
         extentOffsets: [[3, 3], [3, 3]]
     }
 };
@@ -227,26 +223,25 @@ export default class TicketToRide extends Widget {
     buildMenu() {
         let self = this;
         let html = `
+                <li class="menu-submenu-item">
+                    <span class="input-wrapper">Import<input class="fileInput hidden-input-file" type="file" accept=".json" id="import" class="menu-import"/>
+                    </span>
+                </li>
+                <li class="menu-submenu-item">
+                    <a id="export">Export</a>
+                </li>  
+                <li class="menu-submenu-item">
+                    <select id="selector-map">
+                        <option>BlackSea</option>
+                        <option>Ukraine2</option>
+                        <option>Globe</option>
+                    </select>
+                </li>  
                 <li id="menu-map-mode" class="menu-submenu-item">Viewer</li>
                 <li id="menu-hide-links" class="menu-submenu-item">Hide links</li>
                 <li  id="menu-hide-voronoi" class="menu-submenu-item">Show grid</li>
                 <li id="menu-generate-links" class="menu-submenu-item">Generate links</li>
                 <li id="menu-reset" class="menu-submenu-item">Reset</li>
-                <li  id="dijkstra" class="menu-submenu-item">Dijkstra</li>
-                <li>
-                    <input type="file" accept=".json" id="import" class="menu-import"/>
-                </li>
-                <li class="menu-submenu-item">
-                    <a id="export">Export</a>
-                </li>               
-                <li class="menu-submenu-item">
-                    <select id="selector-map">
-                        <option>BlackSea</option>
-                        <option>Ukraine</option>
-                        <option>Ukraine2</option>
-                        <option>Globe</option>
-                    </select>
-                </li>                
                 <li class="menu-submenu-item">
                     <select id="selector-connection-type">
                         <option>track</option>
@@ -267,8 +262,6 @@ export default class TicketToRide extends Widget {
                         <option>grey</option>
                     </select>
                 </li>`;
-
-
         d3.select(self.menuContainer).html(html);
 
         d3.select("#menu-map-mode").on("click.map", function () {
@@ -315,7 +308,6 @@ export default class TicketToRide extends Widget {
             self.resetEditor();
             hideTooltip("#tooltip");
         });
-
         d3.select("#export").on("click.map", function () {
             let cfg = {
                 format: 'text/json',
@@ -323,8 +315,6 @@ export default class TicketToRide extends Widget {
                 extension: 'json'
             };
             download(this, cfg, self.exportAsJson());
-        });
-        d3.select("#dijkstra").on("click.map", () => {
         });
         d3.select("#import").on("change.map", function () {
             let selection = this;
@@ -347,7 +337,6 @@ export default class TicketToRide extends Widget {
 
             }
         });
-
         d3.select("#selector-map").on("change.map", function () {
             self.resetEditor();
             self.svg.selectAll("*").remove();

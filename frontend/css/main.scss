@@ -28,6 +28,10 @@ ul {
   cursor: pointer;
   left: 5px;
   z-index: 100;
+
+  &.selected {
+    color: #fff;
+  }
 }
 
 .sidenav {

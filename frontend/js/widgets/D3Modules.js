@@ -57,12 +57,10 @@ export default class D3Modules extends Widget {
                     .then(r => r)
                     .catch(e => e);
             })).then((d) => {
-
                 d.map(d1 => d1.all.reduce((a, b) => a + b, 0))
                     .forEach((d1, i) => {
                         self.root.children[i].commits = d1;
                     });
-                console.log(self.root.children);
             }).catch(r => {
                 console.log(r);
             });

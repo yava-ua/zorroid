@@ -36,11 +36,10 @@ function resetWidget() {
 
 }
 function openWidget(widget) {
-    const submenu = d3.select(`#menu-widget-${widget.id}`).select('.menu-submenu');
-    const isOpen = submenu.classed('open');
-    submenu.classed('open', !isOpen);
-
     if (selectedMenu && selectedMenu.id === widget.id) {
+        const submenu = d3.select(`#menu-widget-${widget.id}`).select('.menu-submenu');
+        const isOpen = submenu.classed('open');
+        submenu.classed('open', !isOpen);
         return;
     }
 
@@ -64,6 +63,7 @@ function openWidget(widget) {
 
     selectedMenu = widget;
     currentWidget.buildMenu();
+    d3.select(`#menu-widget-${widget.id}`).select('.menu-submenu').classed("open", true);
 }
 
 function buildWidgetsMenu() {
@@ -98,10 +98,12 @@ function buildWidgetsMenu() {
 function openLeftNav() {
     d3.select("#navigation-left").classed("closed", false);
     d3.select("#container").classed("wide", false);
+    d3.select("#menu-open").classed("selected", true);
 }
 function closeLeftNav() {
     d3.select("#navigation-left").classed("closed", true);
     d3.select("#container").classed("wide", true);
+    d3.select("#menu-open").classed("selected", false);
 }
 
 buildWidgetsMenu();
