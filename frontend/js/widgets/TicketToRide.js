@@ -511,7 +511,7 @@ export default class TicketToRide extends Widget {
         let color = params.color;
         let connectionType = params.connectionType;
         let connectionCoords = params.connectionCoords;
-        let connectionOptions = params.connectionOptions || {};
+        let connectionOptions = params.connectionOptions;
         let connections = params.connections;
         let linkId = params.linkId;
 
@@ -570,6 +570,10 @@ export default class TicketToRide extends Widget {
 
         linkGroup.selectAll(`.city-link-circles[name='${nameA}${nameB}']`)
             .on("dblclick", function (d, i) {
+                if (connectionType === connectionTypes.ferriage && i == 0 && connectionOptions.ferriageLength < 2) {
+                    connectionOptions.ferriageLength = connectionOptions.ferriageLength + 1;
+                }
+
                 connectionCoords.splice(i, 0, {
                     x: connectionCoords[i].x,
                     y: connectionCoords[i].y
@@ -651,11 +655,13 @@ export default class TicketToRide extends Widget {
             //d3.select(this).style("cursor", "move");
             cityManualLinkSimulation.alphaTarget(0.3).restart();
         }
+
         function dragEnded(d) {
             d3.select(this).classed("selected", false);
             //d3.select(this).style("cursor", "pointer");
             cityManualLinkSimulation.alphaTarget(0);
         }
+
         function dragged(d) {
             cityManualLinkSimulation.alphaTarget(0.3);
             d3.select(this)
@@ -723,7 +729,7 @@ export default class TicketToRide extends Widget {
             cityB: cityB,
             color: color,
             connectionType: connectionType,
-            connectionOptions: {},
+            connectionOptions: connectionOptions,
             connectionCoords: connectionCoords,
             connections: connections,
             linkId: currentId

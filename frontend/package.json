@@ -5,7 +5,9 @@
   "main": "app.js",
   "dependencies": {
     "d3": "4.4.3",
-    "d3-save-svg": "0.0.2"
+    "d3-save-svg": "0.0.2",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.18.2",

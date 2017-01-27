@@ -36,6 +36,10 @@ function resetWidget() {
 
 }
 function openWidget(widget) {
+    const submenu = d3.select(`#menu-widget-${widget.id}`).select('.menu-submenu');
+    const isOpen = submenu.classed('open');
+    submenu.classed('open', !isOpen);
+
     if (selectedMenu && selectedMenu.id === widget.id) {
         return;
     }
@@ -43,16 +47,16 @@ function openWidget(widget) {
     resetWidget();
     switch (widget.id) {
         case "ticket-to-ride":
-            currentWidget = new TicketToRide("#container", "#menu-widget-ticket-to-ride .menu-submenu");
+            currentWidget = new TicketToRide("#container", `#menu-widget-${widget.id} .menu-submenu`);
             break;
         case "map-ukraine":
-            currentWidget = new MapUkraine("#container");
+            currentWidget = new MapUkraine("#container", `#menu-widget-${widget.id} .menu-submenu`);
             break;
         case "map-globe":
-            currentWidget = new MapGlobe("#container");
+            currentWidget = new MapGlobe("#container", `#menu-widget-${widget.id} .menu-submenu`);
             break;
         case "d3-modules":
-            currentWidget = new D3Modules("#container");
+            currentWidget = new D3Modules("#container", `#menu-widget-${widget.id} .menu-submenu`);
             break;
         default:
             return;
@@ -80,23 +84,14 @@ function buildWidgetsMenu() {
     menuSelection.select(".menu-item-title")
         .on("click.menu-item", d => {
             openWidget(d);
-
-            const submenu = d3.select(`#menu-widget-${d.id}`).select('.menu-submenu');
-            const isOpen = submenu.classed('open');
-            submenu.classed('open', !isOpen);
         });
-
-
-
 
     d3.select("#menu-open").on("click", () => {
         openLeftNav();
     });
-
     d3.select("#menu-close").on("click", () => {
         closeLeftNav();
     });
-
 }
 
 
@@ -111,7 +106,6 @@ function closeLeftNav() {
 
 buildWidgetsMenu();
 openWidget(widgets[3]);
-
 
 d3.select("#menu-open").on("click", () => {
     let menu = d3.select("#navigation-left");
