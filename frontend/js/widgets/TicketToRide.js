@@ -20,7 +20,7 @@ const connectionTypes = {
             return color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(2);
         }
         if (type === connectionTypes.tunnel) {
-            return color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(2);
+            return color === colors[6] ? d3.color(color).brighter(4) : d3.color(color).darker(2);
         }
         return "black";
     },
@@ -29,7 +29,7 @@ const connectionTypes = {
             return d3.color(color).brighter(1);
         }
         if (type === connectionTypes.tunnel) {
-            return color === colors[6] ? d3.color(color).brighter(1) : d3.color(color).darker(1);
+            return color === colors[6] ? d3.color(color).brighter(2) : d3.color(color).darker(1);
         }
 
         return "white";

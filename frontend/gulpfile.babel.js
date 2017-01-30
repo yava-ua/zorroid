@@ -36,6 +36,7 @@ gulp.task('build-scss', (callback) => {
 
 
 gulp.task('copy', () => {
+    gulp.src(['favicon.ico']).pipe(gulp.dest('build'));
     gulp.src(['index.html']).pipe(gulp.dest('build'));
     gulp.src(['static/*.*']).pipe(gulp.dest('build/static'));
     gulp.src(['fonts/*.*']).pipe(gulp.dest('build/fonts'));

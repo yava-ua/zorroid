@@ -75,11 +75,12 @@ svg#ticket-to-ride {
 
   .city-label {
     font-size: 12px;
-    font-weight: normal;
+    font-weight: 700;
     text-anchor: middle;
     fill: black;
-    fill-opacity: 0.6;
+    fill-opacity: 0.9;
     cursor: pointer;
+
   }
 
   .city-voronoi {

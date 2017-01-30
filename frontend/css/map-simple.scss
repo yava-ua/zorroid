@@ -1,0 +1,53 @@
+svg#map-simple {
+  height: 100%;
+  width: 100%;
+
+  text {
+    user-select: none;
+  }
+
+  .countries {
+    fill-opacity: 0.9;
+    stroke: #6e6e6e;
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .graticule {
+    //fill-opacity: 0.6;
+    fill: none;
+    stroke: #8e8e8e;
+
+    &.line {
+      stroke-opacity: 0.6;
+      stroke-width: 1px;
+      vector-effect: non-scaling-stroke;
+    }
+
+    &.outline {
+      fill-opacity: 0.4;
+      fill: rgb(0, 118, 172);
+      stroke-opacity: 1;
+      stroke-width: 2px;
+      vector-effect: non-scaling-stroke;
+    }
+  }
+
+  .city {
+    stroke-width: 0;
+    fill: #aa4518;
+    &:hover {
+      fill: #ff007f;
+      cursor: pointer;
+    }
+  }
+
+  .city-label {
+    font-size: 8px;
+    font-weight: normal;
+    text-anchor: middle;
+    fill: black;
+    fill-opacity: 1;
+    cursor: pointer;
+  }
+}

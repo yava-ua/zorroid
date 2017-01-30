@@ -1,6 +1,7 @@
 import TicketToRide from "../widgets/TicketToRide";
 import MapUkraine from "../widgets/MapUkraine";
 import MapGlobe from "../widgets/MapGlobe";
+import MapSimple from "../widgets/MapSimple";
 import D3Modules from "../widgets/D3Modules";
 
 import * as d3 from "d3";
@@ -21,6 +22,11 @@ const widgets = [
     }, {
         id: "d3-modules",
         title: "D3 Modules",
+        icon: "star-empty.svg"
+    },
+    {
+        id: "map-simple",
+        title: "Map",
         icon: "star-empty.svg"
     }
 ];
@@ -56,6 +62,9 @@ function openWidget(widget) {
             break;
         case "d3-modules":
             currentWidget = new D3Modules("#container", `#menu-widget-${widget.id} .menu-submenu`);
+            break;
+        case "map-simple":
+            currentWidget = new MapSimple("#container", `#menu-widget-${widget.id} .menu-submenu`);
             break;
         default:
             return;
@@ -107,7 +116,7 @@ function closeLeftNav() {
 }
 
 buildWidgetsMenu();
-openWidget(widgets[3]);
+openWidget(widgets[0]);
 
 d3.select("#menu-open").on("click", () => {
     let menu = d3.select("#navigation-left");
