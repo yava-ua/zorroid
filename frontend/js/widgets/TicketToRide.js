@@ -39,12 +39,12 @@ const connectionTypes = {
 const connectionTypeRandomer = new Randomer([45, 30, 25]);
 const colors = ["#b11700", "#e17b0c", "#e5d331", "#7c9434", "#4591c5", "#e7a7ca", "#2a2126", "#f1f5f6", "#808080"];
 const train = {
-    width: 34,
-    height: 10
+    width: 42.5,
+    height: 12.5
 };
 const trainCarriage = {
-    width: 30,
-    height: 8
+    width: 37.5,
+    height: 10
 };
 const singleCityDestinationsSelector = "g#single-city-destinations";
 const MapConfig = {
